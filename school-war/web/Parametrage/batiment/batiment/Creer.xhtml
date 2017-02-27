@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BatimentCreerDlg" 
+                  widgetVar="BatimentCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue['Conv.Batiment']}" 
+                  closeOnEscape="true">
+
+            <h:form id="BatimentCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+
+                        <p:outputLabel value="#{langue['Conv.Code']}" for="code" />
+                        <h:panelGroup>
+                            <p:inputText id="code" value="#{batimentCtrl.batiment.code}" required="true" 
+                                         requiredMessage="#{langue['Conv.Code']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.nomBatiment}" for="nom" />
+                        <h:panelGroup>
+                            <p:inputText id="nom" value="#{batimentCtrl.batiment.nom}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{batimentCtrl.enregistrerBatiment()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:BatimentListerForm:datalist,:BatimentListerForm:growl, BatimentCreerForm" 
+                                     oncomplete="PF('BatimentCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('BatimentCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

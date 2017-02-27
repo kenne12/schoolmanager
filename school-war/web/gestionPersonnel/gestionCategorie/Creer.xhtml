@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CategoriePersoCreerDlg" 
+                  widgetVar="CategoriePersoCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: catégories de personnel" 
+                  closeOnEscape="true">
+
+            <h:form id="CategoriePersoCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue['Conv.Code']} categorie" for="code" />
+                        <h:panelGroup>
+                            <p:inputText id="code" value="#{categoriePersonnelCtrl.categoriePersonnel.codecategorie}" required="true" 
+                                         requiredMessage="#{langue['Conv.Code']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue['Conv.Nom']}" for="prix" />
+                        <h:panelGroup>
+                            <p:inputText id="prix" value="#{categoriePersonnelCtrl.categoriePersonnel.prixHeure}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+
+                        <p:outputLabel value="#{langue.active}" for="etat" />
+                        <h:panelGroup>
+                            <p:selectBooleanButton id="etat" value="#{categoriePersonnelCtrl.categoriePersonnel.etat}" onLabel="Active" offLabel="Inactive" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:90px">
+
+                            </p:selectBooleanButton>
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{categoriePersonnelCtrl.enregistrerTypeTranche()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:CategoriePersoListerForm:datalist,:CategoriePersoListerForm:growl, CategoriePersoCreerForm" 
+                                     oncomplete="PF('CategoriePersoCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('CategoriePersoCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,20 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/NoteTemplate/principalTemplate.xhtml">
+
+    <ui:define name="contenu">
+
+        <ui:include src="proces_note_seq/Action.xhtml"/>     
+        <ui:include src="proces_note_seq/Lister.xhtml"/>
+        <ui:include src="proces_note_seq/Imprimer.xhtml"/>
+    </ui:define>
+    
+    <ui:define name="scriptCollapse">
+        <script>
+            var el = document.getElementById("proces_verbal_note");
+            el.setAttribute("class", "sub-menu active");
+        </script>
+    </ui:define>
+
+</ui:composition>

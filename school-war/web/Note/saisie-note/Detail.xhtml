@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EvaluationDetailDlg" 
+                  widgetVar="EvaluationDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: #{langue.evaluation}" closeOnEscape="true">
+
+            <h:form id="EvaluationDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" style="width: 100%;" >
+                        <h:outputText value="#{langue.eleve}"/>
+                        <h:outputText value="#{evaluationCtrl.selectedEvaluation.eleve.nom} #{evaluationCtrl.selectedEvaluation.eleve.prenom}"/>
+
+                        <h:outputText value="#{langue.matiere}"/>
+                        <h:outputText value="#{evaluationCtrl.selectedEvaluation.planningEvaluation.elementEvaluation.elementevaluation.matiere.libelle}"/>
+
+
+                        <h:outputText value="Unité d'évalaution"/>
+                        <h:outputText value="#{evaluationCtrl.selectedEvaluation.planningEvaluation.elementEvaluation.elementevaluation.nom}"/>
+
+
+                        <h:outputText value="#{langue.sequence}"/>
+                        <h:outputText value="#{evaluationCtrl.selectedEvaluation.planningEvaluation.sequence.idsequence.nom}"/>
+
+
+
+                        <h:outputText value="Note"/>
+                        <h:outputText value="#{evaluationCtrl.selectedEvaluation.note}"/>
+
+                        <h:outputText value="#{langue.appreciation}"/>
+                        <h:outputText value="#{evaluationCtrl.selectedEvaluation.observation}"/>                       
+                    </p:panelGrid>
+                    <p:commandButton icon="ui-icon-close" value="#{langue['Conv.Fermer']}" onclick="PF('EvaluationDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

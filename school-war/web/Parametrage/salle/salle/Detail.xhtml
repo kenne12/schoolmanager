@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="SalleDetailDlg" 
+                  widgetVar="SalleDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: #{langue['Conv.Batiment']}" closeOnEscape="true">
+
+            <h:form id="SalleDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" style="width: 100%;" >
+                        <h:outputText value="#{langue['Conv.Code']}"/>
+                        <h:outputText value="#{salleCtrl.selectedSalle.code}"/>
+
+                        <h:outputText value="Batiment"/>
+                        <h:outputText value="#{salleCtrl.selectedSalle.idbatiment.nom} #{salleCtrl.selectedSalle.idbatiment.code}"/>
+
+                        <h:outputText value="Nombre de bancs"/>
+                        <h:outputText value="#{salleCtrl.selectedSalle.nombrebanc}"/>
+
+                        <h:outputText value="Nombre de places"/>
+                        <h:outputText value="#{salleCtrl.selectedSalle.nombreplace}"/> 
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('SalleDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

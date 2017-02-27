@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="EditeurCreerDlg" 
+                  widgetVar="EditeurCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue.editeur}" 
+                  closeOnEscape="true">
+
+            <h:form id="EditeurCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue.nom}" for="pays" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="pays" value="#{editeurCtrl.editeur.pays}" required="true">
+                                <f:selectItem itemLabel="#{langue.selectLe} pays" itemValue="" />
+                                <f:selectItems value="#{editeurCtrl.pays}" var="pay" 
+                                               itemLabel="#{pay}" 
+                                               itemValue="#{pay}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+
+                        <p:outputLabel value="#{langue.nom}" for="nom" />
+                        <h:panelGroup>
+                            <p:inputText id="nom" value="#{editeurCtrl.editeur.nom}" required="true" 
+                                         requiredMessage="#{langue['Conv.Description']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                    </p:panelGrid><br/>
+                    <p:commandButton actionListener="#{editeurCtrl.enregistrerEditeur}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:EditeurListerForm:datalist,:EditeurListerForm:growl, EditeurCreerForm" 
+                                     oncomplete="PF('EditeurCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('EditeurCreerDialog').hide()"/>
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

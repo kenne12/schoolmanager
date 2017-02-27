@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <!-- BEGIN SIDEBAR -->
+    <div class="sidebar-scroll">
+        <div id="sidebar" class="nav-collapse collapse">
+
+            <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+            <div class="navbar-inverse">
+                <form class="navbar-search visible-phone">
+                    <input type="text" class="search-query" placeholder="Search" />
+                </form>
+            </div>
+            <!-- END RESPONSIVE QUICK SEARCH FORM -->
+            <!-- BEGIN SIDEBAR MENU -->
+            <ul class="sidebar-menu">
+
+                <!--Accueil-->
+                <li class="sub-menu" id="menuIndex">
+                    <a class="" href="#{request.contextPath}/index.html">
+                        <span>#{langue.accueil}</span>
+                    </a>
+                </li>
+
+                <li class="sub-menu" id="etablissement">
+                    <a href="javascript:;" class="">
+                        <i class="icon-calendar"></i>
+                        <span>#{langue.etablissements}</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Parametrage/etablissement/etablissement.html">#{langue.etablissements}</a></li>                        
+                        <li><a class="" href="#{request.contextPath}/Parametrage/batiment/batiments.html">#{langue.batiments}</a></li>
+
+                        <li><a class="" href="#{request.contextPath}/Parametrage/branche/branche.html">Branches</a></li>
+                        <li><a class="" href="#{request.contextPath}/Parametrage/cycle/cycle.html">Cycles</a></li>
+
+                        <li><a class="" href="#{request.contextPath}/Parametrage/categorie/categorie.html">#{langue.categorie}</a></li>
+                        <li><a class="" href="#{request.contextPath}/Parametrage/classe-categorie/affectation.html">Classe-categorie</a></li>
+
+                        <li><a class="" href="#{request.contextPath}/Parametrage/salle/salle.html">Salles</a></li>
+
+                        <li><a class="" href="#{request.contextPath}/Parametrage/classe/classe.html">#{langue.classes}</a></li>                      
+                        <li><a class="" href="#{request.contextPath}/Parametrage/classe-salle/affectation.html">Classe-salle</a></li>
+
+                    </ul>
+                </li>
+
+
+                <li class="sub-menu" id="anneescolaire">
+                    <a href="javascript:;" class="">
+                        <i class="icon-calendar"></i>
+                        <span>Années Scolaires</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Parametrage/anneescolaire/Annee.html">#{langue.anneeScolaire}</a></li>
+                        <li><a class="" href="#{request.contextPath}/Parametrage/trimestre/trimestre.html">Trimestre</a></li>
+                        <li><a class="" href="#{request.contextPath}/Parametrage/sequence/sequence.html">Séquence</a></li>
+                        <li><a class="" href="#{request.contextPath}/Parametrage/trimestre/annee-trimestre.html">Année-Trimestre</a></li>
+                        <li><a class="" href="#{request.contextPath}/Parametrage/sequence/trimestre-sequence.html">Trimestre-Séquence</a></li>
+                    </ul>
+                </li>
+
+
+                <!--loyers-->
+                <li class="sub-menu" id="menuPayement">
+                    <a href="javascript:;" class="">
+                        <i class="icon-euro"></i> 
+                        <span>Planifier paiement</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Parametrage/parametragePension/type-tranche.html">Type tranche</a></li>
+                        <li><a class="" href="#{request.contextPath}/Parametrage/parametragePension/categorie-annee-montant.html">Montant /categorie</a></li>
+                        <li><a class="" href="#{request.contextPath}/Parametrage/parametragePension/annee-tranche-montant.html">Montant /tranche</a></li>
+                    </ul>
+                </li>
+
+
+                <!--Parametrage-->
+                <li class="sub-menu" id="menuMatiere1">
+                    <a href="javascript:;" class="">
+                        <i class="icon-book"></i> 
+                        <span>Affectation matière</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Parametrage/affectationMatiere/affecterAUneClasse.html">Affecter a une classe</a></li>
+                        <li><a class="" href="#{request.contextPath}/Parametrage/affectationMatiere/affecterApersonnel.html">Affecter a enseignant</a></li>                       
+                    </ul>
+                </li>
+            </ul>
+            <!-- END SIDEBAR MENU -->
+        </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+</ui:composition>

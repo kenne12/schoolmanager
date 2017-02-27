@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="EtablissementCreerDlg" 
+                  widgetVar="EtablissementCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="CREER / MODIFIER UN ETABLISSEMENT SCOLAIRE " 
+                  closeOnEscape="true">
+
+            <h:form id="EtablissementCreerForm">
+
+
+                <h:panelGroup id="display" >
+                    <p:tabView>
+                        <p:tab title="INFORMATIONS GENERALES">
+                            <p:panelGrid columns="2" columnClasses="column">
+
+                                <p:outputLabel value="Type : " for="type" />
+                                <p:selectOneMenu id="type" value="#{etablissementCtrl.typeEtablissement.id}" required="true">
+                                    <f:selectItem itemLabel="#{langue.choisir}"/>
+                                    <f:selectItems value="#{etablissementCtrl.typeEtablissements}" var="item" itemLabel="#{item.nom}" itemValue="#{item.id}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="#{langue.nom_ecole}" for="nom" />
+                                <p:inputText id="nom" value="#{etablissementCtrl.etablissement.nom}"/>
+
+                                <p:outputLabel value="#{langue.date_creation} " for="date" />
+                                <p:calendar id="date" value="#{etablissementCtrl.etablissement.datecreation}"/>
+
+                                <p:outputLabel value="#{langue.adresse}" for="adresse" />
+                                <p:inputText id="adresse" value="#{etablissementCtrl.adresse2.adresse}"/>
+
+                                <p:outputLabel value="#{langue.contact}" for="contact" />
+                                <p:inputText id="contact" value="#{etablissementCtrl.adresse2.contact}"/>
+
+                                <p:outputLabel value="#{langue.boite_postale} " for="bp" />
+                                <p:inputText id="bp" value="#{etablissementCtrl.adresse2.bp}"/>
+
+                                <p:outputLabel value="#{langue.email}" for="email" />
+                                <p:inputText id="email" value="#{etablissementCtrl.adresse2.email}"/>
+
+                                <p:outputLabel value="#{langue.site_web}" for="siteweb" />
+                                <p:inputText id="siteweb" value="#{etablissementCtrl.adresse2.siteweb}"/>
+
+                            </p:panelGrid>
+                        </p:tab>
+
+                        <p:tab title="PERSONNEL PRINCIPAL">
+
+
+                            <p:panelGrid columns="2" columnClasses="column">
+
+
+                                <h:outputLabel value="#{langue.fonction}" for="fonction" />
+                                <p:selectOneMenu id="fonction" value="#{etablissementCtrl.fonction.idfonction}" requiredMessage="#{langue.fonction} : Requis"  required="true">
+                                    <f:selectItem itemLabel="#{langue.choisir}"/>
+                                    <f:selectItems value="#{etablissementCtrl.fonctions}" var="item" itemLabel="#{item.nom}" itemValue="#{item.idfonction}"/>
+                                </p:selectOneMenu>
+
+
+                                <p:outputLabel value="Matricule" for="matricule" />
+                                <h:panelGroup>
+                                    <p:inputText id="matricule" value="#{etablissementCtrl.personnel.matriculepersonnel}" required="true" 
+                                                 requiredMessage="#{langue['Conv.Code']}: #{langue['Conv.ValeurRequise']}"/>
+                                </h:panelGroup>
+
+                                <p:outputLabel value="#{langue['Conv.Nom']}" for="nom1" />
+                                <h:panelGroup>
+                                    <p:inputText id="nom1" value="#{etablissementCtrl.personnel.nom}" required="true" 
+                                                 requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                                </h:panelGroup>
+
+                                <p:outputLabel value="#{langue.prenom}" for="prenom" />
+                                <h:panelGroup>
+                                    <p:inputText id="prenom" value="#{etablissementCtrl.personnel.prenom}" required="true" 
+                                                 requiredMessage="#{langue.prenom}: #{langue['Conv.ValeurRequise']}"/>
+                                </h:panelGroup>
+
+                                <p:outputLabel value="#{langue.adresse}" for="adresse1" />
+                                <h:panelGroup>
+                                    <p:inputText id="adresse1" value="#{etablissementCtrl.personnel.adresse}"/>                                               
+                                </h:panelGroup>
+
+                                <p:outputLabel value="#{langue.contact}" for="telephone1" />
+                                <h:panelGroup>
+                                    <p:inputText id="telephone1" value="#{etablissementCtrl.personnel.telephone}" />
+                                </h:panelGroup>
+
+                                <p:outputLabel value="#{langue.email}" for="email1" />
+                                <h:panelGroup>
+                                    <p:inputText id="email1" value="#{etablissementCtrl.personnel.email}"/>
+                                </h:panelGroup>
+
+                                <p:outputLabel value="Date de recrutement" for="date1" />
+                                <h:panelGroup>
+                                    <p:calendar id="date1" navigator="true" value="#{etablissementCtrl.personnel.daterecrutement}"/>           
+                                </h:panelGroup>
+
+                            </p:panelGrid>
+
+                        </p:tab>
+
+                        <p:tab title="COMPTE UTILISATEUR">
+
+                            <p:panelGrid columns="2" columnClasses="column">
+
+                                <p:outputLabel for="login" value="#{langue.login}" />
+                                <p:inputText id="login" value="#{etablissementCtrl.compteUtilisateur.login}" required="true"/>
+
+                                <p:outputLabel for="password" value="#{langue.password}" />
+                                <p:inputText id="password" value="#{etablissementCtrl.compteUtilisateur.password}" required="true"/>
+
+                            </p:panelGrid>
+
+                        </p:tab>
+
+
+                        <p:tab title="ANNEE SCOLAIRE PAR DEFAUT">
+
+                            <p:panelGrid columns="2" columnClasses="column">
+
+                                <p:outputLabel value="#{langue.Anneedebut}" for="debut" />
+                                <h:panelGroup>
+                                    <p:inputText id="debut" value="#{etablissementCtrl.annee.code}" required="true" 
+                                                 requiredMessage="#{langue.Anneedebut} : #{langue['Conv.ValeurRequise']}"/>
+                                </h:panelGroup>
+
+                                <p:outputLabel value="#{langue.Anneefin}" for="fin" />
+                                <h:panelGroup>
+                                    <p:inputText id="fin" value="#{etablissementCtrl.annee.codefin}" required="true" 
+                                                 requiredMessage="#{langue.Anneefin} : #{langue['Conv.ValeurRequise']}"/>
+                                </h:panelGroup>
+
+                                <p:outputLabel value="#{langue.theme}" for="theme" />
+                                <h:panelGroup>
+                                    <p:inputText id="theme" value="#{etablissementCtrl.annee.theme}"/>                                         
+                                </h:panelGroup>
+
+                            </p:panelGrid>
+
+                        </p:tab>
+
+                    </p:tabView>
+                    <p:commandButton actionListener="#{etablissementCtrl.enregistrerEtablissement()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:EtablissementListerForm:datalist,:EtablissementListerForm:growl, EtablissementCreerForm" 
+                                     oncomplete="PF('EtablissementCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('EtablissementCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

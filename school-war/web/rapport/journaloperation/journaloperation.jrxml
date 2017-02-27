@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="journaloperation" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b6b6da47-285a-4e0e-bff4-5b436c9268ff">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     annee."idannee" AS annee_idannee,
+     annee."code" AS annee_code,
+     annee."codefin" AS annee_codefin,
+     etablissement."nom" AS etablissement_nom,
+     etablissement."logo" AS etablissement_logo,
+     type_etablissement."nom" AS type_etablissement_nom,
+     adresse."bp" AS adresse_bp,
+     adresse."contact" AS adresse_contact,
+     adresse."email" AS adresse_email,
+     adresse."adresse" AS adresse_adresse,
+     operation."debit" AS operation_debit,
+     operation."libelle" AS operation_libelle,
+     operation."credit" AS operation_credit,
+     compte."libelle" AS compte_libelle,
+     compte."idcompte" AS compte_idcompte,
+     compte."classe" AS compte_classe
+FROM
+     "public"."etablissement" etablissement INNER JOIN "public"."annee" annee ON etablissement."id" = annee."etablissement"
+     INNER JOIN "public"."type_etablissement" type_etablissement ON etablissement."type" = type_etablissement."id"
+     INNER JOIN "public"."adresse" adresse ON etablissement."adresse" = adresse."id"
+     INNER JOIN "public"."operation" operation ON etablissement."id" = operation."idetablissement"
+     INNER JOIN "public"."compte" compte ON etablissement."id" = compte."idetablissement"
+     AND compte."idcompte" = operation."idcompte"
+     AND annee."idannee" = operation."idannee"]]>
+	</queryString>
+	<field name="annee_idannee" class="java.lang.Integer"/>
+	<field name="annee_code" class="java.lang.Integer"/>
+	<field name="annee_codefin" class="java.lang.Integer"/>
+	<field name="etablissement_nom" class="java.lang.String"/>
+	<field name="etablissement_logo" class="java.lang.String"/>
+	<field name="type_etablissement_nom" class="java.lang.String"/>
+	<field name="adresse_bp" class="java.lang.String"/>
+	<field name="adresse_contact" class="java.lang.String"/>
+	<field name="adresse_email" class="java.lang.String"/>
+	<field name="adresse_adresse" class="java.lang.String"/>
+	<field name="operation_debit" class="java.lang.Double"/>
+	<field name="operation_libelle" class="java.lang.String"/>
+	<field name="operation_credit" class="java.lang.Double"/>
+	<field name="compte_libelle" class="java.lang.String"/>
+	<field name="compte_idcompte" class="java.lang.Long"/>
+	<field name="compte_classe" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="29" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="14" width="60" height="21" uuid="763e9048-78b3-4a2d-8d39-477a98af4450"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Compte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="60" y="14" width="147" height="21" uuid="ede9cd4d-c821-4bf3-a032-8b4ba0e99697"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Intitulé]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="207" y="14" width="228" height="21" uuid="dde5cdb8-00c2-4022-a39a-2566532246e4"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Libellé]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="435" y="14" width="60" height="21" uuid="bf3595be-307b-4b6e-87c6-e9fe95c888a7"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Débit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="495" y="14" width="60" height="21" uuid="7170e6fe-7fe8-4b59-9aa1-27622de47952"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Crédit]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="32" splitType="Stretch">
+			<textField>
+				<reportElement x="60" y="0" width="147" height="32" uuid="af95dffa-f247-4215-82a1-e901e4d83128"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{compte_libelle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="60" height="32" uuid="0f936cb6-cbba-46af-b357-212129f0cc82"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{compte_classe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="207" y="0" width="228" height="32" uuid="f50a8715-3a4f-4699-a5d8-fac29c0f0efc"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{operation_libelle}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="435" y="0" width="60" height="32" uuid="39810d7b-6843-4625-8d90-bd186a16795e"/>
+				<box rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{operation_debit}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)">
+				<reportElement x="495" y="0" width="60" height="32" uuid="a04b9136-9a9d-4aa7-9068-5f2738140543"/>
+				<box rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{operation_credit}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,22 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/ParametrageTemplate/principalTemplate.xhtml">
+
+    <ui:define name="contenu">
+        <ui:include src="trimestre-sequence/Action.xhtml"/>      
+        <ui:include src="trimestre-sequence/Lister.xhtml"/>
+        <ui:include src="trimestre-sequence/Detail.xhtml"/>
+        <ui:include src="trimestre-sequence/Modifier.xhtml"/>
+        <ui:include src="trimestre-sequence/Creer.xhtml"/>
+        <ui:include src="trimestre-sequence/Imprimer.xhtml"/>
+    </ui:define>
+
+    <ui:define name="scriptCollapse">
+        <script>
+            var el = document.getElementById("anneescolaire");
+            el.setAttribute("class", "sub-menu active");
+        </script>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,23 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/PrivilegeTemplate/principalTemplate.xhtml">
+
+    <ui:define name="contenu">
+
+        <ui:include src="affecterModule/Action.xhtml"/>      
+        <ui:include src="affecterModule/Lister.xhtml"/>
+        <ui:include src="affecterModule/Detail.xhtml"/>
+        <ui:include src="affecterModule/Modifier.xhtml"/>
+        <ui:include src="affecterModule/Creer.xhtml"/>
+        <ui:include src="affecterModule/Imprimer.xhtml"/>               
+    </ui:define>
+    
+    <ui:define name="scriptCollapse">
+        <script>
+            var el = document.getElementById("module1");
+            el.setAttribute("class", "sub-menu active");
+        </script>
+    </ui:define>
+
+</ui:composition>

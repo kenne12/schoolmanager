@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="AffecterMatiereCreerDlg" 
+                  widgetVar="AffecterMatiereCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)"
+                  footer="Cliquer sur la cellule du coefficient pour modifier celui par défaut"
+                  header="Formulaire d'affectation des unités d'évaluation par classes" 
+                  closeOnEscape="true">
+
+            <h:panelGroup >
+                <p:panelGrid  columns="2">
+
+                    <h:form id="AffecterMatiereCreerForm">
+                        <p:panelGrid  columns="2" columnClasses="column">
+
+                            <p:outputLabel value="#{langue.etablissement}" for="etablissement"/>
+                            <p:selectOneMenu id="etablissement" value="#{classeElementEvaluationCtrl.etablissement}" converter="etablissementConverter">
+                                <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
+                                <f:selectItems value="#{classeElementEvaluationCtrl.etablissements}" var="item" itemLabel="#{item.nom}" itemValue="#{item}"/>
+                                <p:ajax update="classe" listener="#{classeElementEvaluationCtrl.updateClasse()}" />
+                            </p:selectOneMenu>                        
+
+
+                            <p:outputLabel for="classe" value="#{langue.classeActive}" />
+                            <h:panelGroup>
+                                <p:selectOneMenu  id="classe" value="#{classeElementEvaluationCtrl.classe.idclasse}">
+                                    <f:selectItem itemLabel="#{langue.choisir}"/>
+                                    <f:selectItems value="#{classeElementEvaluationCtrl.categories}" var="item" itemLabel="#{item.idclasse.nom}" itemValue="#{item.idclasse.idclasse}"/>
+                                    <p:ajax update="matiere" listener="#{classeElementEvaluationCtrl.upadteMatiere()}" />
+                                </p:selectOneMenu>                        
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{langue.matiere}"/> 
+                            <p:pickList id="matiere" value="#{classeElementEvaluationCtrl.dualElements}" var="item" effect="bounce" required="true"
+                                        itemValue="#{item}" itemLabel="#{item.nom}" showSourceControls="true" showTargetControls="true" showCheckbox="false"
+                                        showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="elementEvaluationConverter">
+
+                                <f:facet name="sourceCaption">#{langue.matieres} disponibles</f:facet>
+                                <f:facet name="targetCaption">#{langue.matieres} selectionnés</f:facet>                            
+                            </p:pickList>
+
+
+                        </p:panelGrid>
+                        <br/>
+                        <p:commandButton actionListener="#{classeElementEvaluationCtrl.transfertEtape()}" value="TRANSFERER DANS LE TABLEAU" 
+                                         update=":ValidateForm:datalist1,:AffecterMatiereListerForm:growl, AffecterMatiereCreerForm"/> 
+                                         
+                    </h:form>
+
+                    <h:form id="ValidateForm" style="width: 500px">
+                        <p:dataTable id="datalist1"
+                                     value="#{classeElementEvaluationCtrl.classeElementevaluationTemp}"
+                                     var="item"
+                                     paginator="true"
+                                     editable="true"
+                                     editMode="cell"
+                                     rows="10"
+                                     style="text-align: center;"
+                                     rowsPerPageTemplate="10,20,30,40,50">
+                            <p:ajax event="cellEdit" update="datalist1" />
+
+                            <p:column filterBy="#{item.elementevaluation.nom}">
+                                <f:facet name="header">
+                                    <h:outputText value="Unité d'évaluation"/>
+                                </f:facet>
+                                <h:outputText value="#{item.elementevaluation.nom}"/>
+                            </p:column>
+
+                            <p:column headerText="#{langue.coefficientClasse}">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.coefficient}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{item.coefficient}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                        </p:dataTable>
+                        <br/>
+
+                        <p:commandButton actionListener="#{classeElementEvaluationCtrl.save()}" value="#{langue['Conv.Enregistrer']}" 
+                                         update=":AffecterMatiereListerForm:datalist,:AffecterMatiereListerForm:growl, :AffecterMatiereCreerForm" 
+                                         oncomplete="PF('AffecterMatiereCreerDialog').hide()"/>
+
+                        <p:commandButton value="#{langue.annuler}" onclick="PF('AffecterMatiereCreerDialog').hide()"/>
+
+                    </h:form>
+
+
+                </p:panelGrid>
+            </h:panelGroup>
+
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

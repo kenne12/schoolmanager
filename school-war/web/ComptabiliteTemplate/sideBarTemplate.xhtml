@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <!-- BEGIN SIDEBAR -->
+    <div class="sidebar-scroll">
+        <div id="sidebar" class="nav-collapse collapse">
+
+            <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+            <div class="navbar-inverse">
+                <form class="navbar-search visible-phone">
+                    <input type="text" class="search-query" placeholder="Search" />
+                </form>
+            </div>
+            <!-- END RESPONSIVE QUICK SEARCH FORM -->
+            <!-- BEGIN SIDEBAR MENU -->
+            <ul class="sidebar-menu">
+
+                <!--Accueil-->
+                <li class="sub-menu" id="menuIndex">
+                    <a class="" href="#{request.contextPath}/index.html">
+                        <span>#{langue.accueil}</span>
+                    </a>
+                </li>
+
+
+                <!-- Comptes -->
+                <li class="sub-menu" id="compte">
+                    <a href="javascript:;" class="">
+                        <i class="icon-building"></i>
+                        <span>Comptes</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Comptabilite/type-compte.html">Type de compte</a></li>
+                        <li><a class="" href="#{request.contextPath}/Comptabilite/sous-compte.html">Sous comptes</a></li>                       
+                    </ul>
+                </li>
+
+                <li class="sub-menu" id="menuPayement">
+                    <a href="javascript:;" class="">
+                        <i class="icon-euro"></i> 
+                        <span>Planifier paiement</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Comptabilite/type-tranche.html">Type de tranche</a></li>
+                        <li><a class="" href="#{request.contextPath}/Comptabilite/categorie-annee-montant.html">Montant /categorie</a></li>
+                        <li><a class="" href="#{request.contextPath}/Comptabilite/annee-tranche-montant.html">Montant /tranche</a></li>
+                    </ul>
+                </li>
+
+
+                <!--entres de caisse-->
+                <li class="sub-menu" id="entree-caisse">
+                    <a href="javascript:;" class="">
+                        <i class="icon-dollar"></i>
+                        <span>Entrées de caisse</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Comptabilite/payement-frais.html">Frais exigible</a></li> 
+                        <li><a class="" href="#{request.contextPath}/Comptabilite/entree-caisse.html">Autres Recettes</a></li>
+                    </ul>
+                </li>
+
+                <!--sorties de caisse-->
+                <li class="sub-menu" id="sortie-caisse">
+                    <a href="javascript:;" class="">
+                        <i class="icon-dollar"></i>
+                        <span>Sorties de caisse</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/gererInscription.html">Payement personnel</a></li> 
+                        <li><a class="" href="#{request.contextPath}/Comptabilite/depense.html">Autres dépenses</a></li>
+                    </ul>
+                </li>
+
+                <!--Habitants-->
+                <li class="sub-menu" id="menuSolvable">
+                    <a href="javascript:;" class="">
+                        <i class="icon-ok-circle"></i>
+                        <span>Rapport de solvabilité</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/listeInsolvable.html">Elèves Insolvables</a></li>     
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/listeSolvable.html">Elèves Solvables</a></li>                                           
+                    </ul>
+                </li>
+
+                <li class="sub-menu" id="rapport-comptable">
+                    <a href="javascript:;" class="">
+                        <i class="icon-ok-circle"></i>
+                        <span>Rapport comptable</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/listeInsolvable.html">Recouvrement</a></li>     
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/listeSolvable.html">Livre comptable</a></li>                                           
+                    </ul>
+                </li>
+
+            </ul>
+            <!-- END SIDEBAR MENU -->
+        </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+</ui:composition>

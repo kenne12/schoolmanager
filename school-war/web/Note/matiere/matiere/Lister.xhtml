@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="TypeMatiereListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} : #{langue.matieres}">
+            <p:contextMenu id="TypeMatiereDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{matiereCtrl.matieres}"
+                         var="item"
+                         rowKey="#{item.idmatiere}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{matiereCtrl.selected}">
+
+                <p:ajax event="rowSelect"   update=":TypeMatiereListerForm:TypeMatiereDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":TypeMatiereListerForm:TypeMatiereDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('TypeMatiereListerForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.idmatiere}" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.identifiant}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idmatiere}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.idnaturematiere.libelle}" filterBy="#{item.idnaturematiere.libelle}">
+                    <f:facet name="header">
+                        <h:outputText value="Nature Matiere"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idnaturematiere.libelle}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.libelle}" filterBy="#{item.libelle}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.nom}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.libelle}"/>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

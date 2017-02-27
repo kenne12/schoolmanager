@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="EvaluationCreerDlg" 
+                  widgetVar="EvaluationCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue['Conv.Batiment']}" 
+                  closeOnEscape="true">
+
+            <h:form id="EvaluationCreerForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="Eleve" for="eleve"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu id="eleve" value="#{evaluationCtrl.eleve.ideleve}">
+                                <f:selectItem itemLabel="Sélectionner l'élève" itemValue=""/> 
+                                <f:selectItems value="#{evaluationCtrl.eleves}" var="item" itemLabel="#{item.nom} #{item.prenom}" itemValue="#{item.ideleve}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Matière" for="matiere"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu id="matiere" value="#{evaluationCtrl.matiere.idmatiere}">
+                                <f:selectItem itemLabel="Sélectionner la matière" itemValue=""/> 
+                                <f:selectItems value="#{evaluationCtrl.personnelMatieres}" var="item" itemLabel="#{item.idmatiere.nom}" itemValue="#{item.idmatiere.idmatiere}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup> 
+
+                        <p:outputLabel value="Trimestre" for="trimestre"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu id="trimestre" value="#{evaluationCtrl.trimestre.idtrimestrean}">
+                                <f:selectItem itemLabel="Sélectionner le trimestre" itemValue=""/> 
+                                <f:selectItems value="#{evaluationCtrl.trimestres}" var="item" itemLabel="#{item.idtrimestre.nom} #{item.idannee.code}" itemValue="#{item.idtrimestrean}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup> 
+
+                        <p:outputLabel value="Séquence" for="sequence"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu id="sequence" value="#{evaluationCtrl.sequence.idsequencean}">
+                                <f:selectItem itemLabel="Sélectionner la séquence" itemValue=""/> 
+                                <f:selectItems value="#{evaluationCtrl.sequences}" var="item" itemLabel="#{item.idsequence.nom} #{item.idannee.code}" itemValue="#{item.idsequencean}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup> 
+
+
+                        <p:outputLabel value="Note : " for="note" />
+                        <h:panelGroup>
+                            <p:inputText id="note" value="#{evaluationCtrl.evaluation.note}" required="true" 
+                                         requiredMessage="Note: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Observation" for="observation"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu id="observation" value="#{evaluationCtrl.evaluation.observation}">
+                                <f:selectItem itemLabel="Sélectionner la mension" itemValue=""/> 
+                                <f:selectItems value="#{evaluationCtrl.observations}" var="item" itemLabel="#{item}" itemValue="#{item}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup> 
+
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{evaluationCtrl.enregistrerEvaluation()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:EvaluationListerForm:datalist,:EvaluationListerForm:growl, EvaluationCreerForm" 
+                                     oncomplete="PF('EvaluationCreerDialog').hide()"/>
+                    <p:commandButton value="Annuler" onclick="PF('EvaluationCreerDialog').hide()"/>
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

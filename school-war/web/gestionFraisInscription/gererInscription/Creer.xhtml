@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="InscriptionCreerDlg" 
+                  widgetVar="InscriptionCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)"
+                  footer="Cliquer sur les cellules 'Montant du mous pour remplir le montant' ; A titre de rappel les lignes non renseigné seront considerées comme non payées "
+                  header="Formulaire d'enregistrement des #{langue.fraisInscription}" 
+                  closeOnEscape="true">
+
+
+            <p:panelGrid  style="width: 80%;margin-left: 10%" layout="grid" columns="2" >
+
+                <h:form id="eleveInfo">
+
+
+                    <p:panelGrid columns="2">
+
+                        <p:panelGrid columns="2">
+
+                            <p:outputLabel value="#{langue.eleve}" />
+
+                            <p:selectOneMenu value="#{inscriptionCtrl.eleveanneeclasse.id}" filter="true" required="true" requiredMessage="#{langue.selectL} #{langue.eleve}">                               
+                                <f:selectItem itemLabel="#{langue.selectL} #{langue.eleve}" itemValue=""/>                                                               
+                                <f:selectItems value="#{inscriptionCtrl.eleveanneeclasses}" var="item" itemLabel="#{item.eleve.matricule}" itemValue="#{item.id}"/>
+                                <p:ajax update="matricule,nom,prenom,classe,:trancheAPayer,:InscriptionCreerForm" listener="#{inscriptionCtrl.updateAll()}"/> 
+                            </p:selectOneMenu>                            
+
+                            <p:outputLabel value="Matricule"/>
+                            <p:inputText id="matricule" disabled="true" value="#{inscriptionCtrl.eleveanneeclasse.eleve.matricule}"/>
+
+                            <p:outputLabel value="#{langue.nom}"/>
+                            <p:inputText id="nom" disabled="true" value="#{inscriptionCtrl.eleveanneeclasse.eleve.nom}"/>
+
+                            <p:outputLabel value="#{langue.prenom}"/>
+                            <p:inputText id="prenom" disabled="true" value="#{inscriptionCtrl.eleveanneeclasse.eleve.prenom}"/>
+
+                            <p:outputLabel value="#{langue.classe}"/>
+                            <p:inputText id="classe" disabled="true" value="#{inscriptionCtrl.eleveanneeclasse.idclasse.nom}"/>
+
+                        </p:panelGrid>
+                        <img src="#{request.contextPath}/photos/photo_personnels/#{loginBean.personnel.photo}" style="width:200px;height: 200px" alt="" />
+                    </p:panelGrid>
+
+                </h:form>
+
+                <p:dataTable id="trancheAPayer" var="car"
+                             value="#{inscriptionCtrl.tranches}"
+                             style="text-align: center">
+                    <f:facet name="header">
+                        Liste des Montant à payer par l'élève
+                    </f:facet>
+
+                    <p:column headerText="Libellé">
+                        <h:outputText value="#{car.nom}" />
+                    </p:column>
+
+                    <p:column headerText="Echeance">
+                        <h:outputText value="#{car.datefin}" />
+                    </p:column>
+
+
+                    <p:column headerText="Montant">
+                        <h:outputText value="#{car.prix}" >
+                            <f:convertNumber type="currency" currencySymbol="Fcfa" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:columnGroup type="footer">
+                        <p:row>
+                            <p:column colspan="2" style="text-align:right" footerText="Total à payer" />
+                            <p:column footerText="#{inscriptionCtrl.calculMontantApayer()}"/>                                
+                        </p:row>
+                    </p:columnGroup>
+
+                </p:dataTable>
+
+            </p:panelGrid>
+
+            <p:separator style="width: 80%;margin-left: 10%" />
+
+            <h:form id="InscriptionCreerForm">
+
+                <p:dataTable var="car" 
+                             value="#{inscriptionCtrl.pensionApayer}"
+                             editable="true"
+                             editMode="cell"
+                             style="width: 80%;margin-left: 10%; text-align: center">
+                    <p:column headerText="Nom">
+                        <h:outputText value="#{car.idtranche.nom}" />
+                    </p:column>
+
+                    <p:column headerText="Montant">
+                        <h:outputText value="#{car.idtranche.prix}" >
+                            <f:convertNumber type="currency" currencySymbol="Fcfa" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Payé">
+                        <h:outputText value="#{car.montantPaye}" >
+                            <f:convertNumber type="currency" currencySymbol="Fcfa" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Reste">
+                        <h:outputText value="#{car.reste}" >
+                            <f:convertNumber type="currency" currencySymbol="Fcfa" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Montant à payer">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{car.montant}">
+                                    <f:convertNumber type="currency" currencySymbol="Fcfa" />
+                                </h:outputText>   
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{car.montant}"/>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                </p:dataTable>
+                         
+
+                <h:panelGroup style="margin-left: 10%" id="display" >
+                    <p:commandButton icon="ui-icon-check" actionListener="#{inscriptionCtrl.save()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:InscriptionListerForm:datalist,:InscriptionListerForm:growl, InscriptionCreerForm" 
+                                     oncomplete="PF('InscriptionCreerDialog').hide()"/>
+                    <p:commandButton icon="ui-icon-close" value="#{langue.annuler}" onclick="PF('InscriptionCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

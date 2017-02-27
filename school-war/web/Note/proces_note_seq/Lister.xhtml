@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="SolvabiliteListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="PROCES VERBAL SEQUENTIEL DES NOTES">
+
+
+            <h:panelGroup id="display"> 
+                <p:panelGrid columns="7" >
+
+                    <h:outputLabel value="#{langue.classe}"/>
+                    <h:panelGroup>
+                        <p:selectOneMenu value="#{procesVerbalNoteSequentielCtrl.categorie.id}" filter="true">
+                            <f:selectItem itemLabel="#{langue.choisir}"/>
+                            <f:selectItems value="#{procesVerbalNoteSequentielCtrl.categories}" var="classe" itemLabel="#{classe.idclasse.nom}" itemValue="#{classe.id}"/>
+                            <p:ajax update="evaluation,display" listener="#{procesVerbalNoteSequentielCtrl.updateEvaluation()}"/> 
+                        </p:selectOneMenu>                        
+                    </h:panelGroup>
+
+                    <h:outputLabel value="#{langue.sequence}"/>
+                    <h:panelGroup>
+                        <p:selectOneMenu value="#{procesVerbalNoteSequentielCtrl.sequenceannee.idsequencean}" filter="true">
+                            <f:selectItem itemLabel="#{langue.choisir}"/> 
+                            <f:selectItems value="#{procesVerbalNoteSequentielCtrl.sequenceannees}" var="seq" itemLabel="#{seq.idsequence.nom}" itemValue="#{seq.idsequencean}"/>
+                            <p:ajax update="evaluation" listener="#{procesVerbalNoteSequentielCtrl.updateEvaluation()}" /> 
+                        </p:selectOneMenu>                        
+                    </h:panelGroup>
+
+                    <h:outputLabel value="Evaluation"/>
+                    <p:selectOneMenu id="evaluation" value="#{procesVerbalNoteSequentielCtrl.planningEvaluation.idplanning}" filter="true">
+                        <f:selectItem itemLabel="#{langue.choisir}"/> 
+                        <f:selectItems value="#{procesVerbalNoteSequentielCtrl.planningEvaluations}" var="devoir" itemLabel="#{devoir.elementEvaluation.elementevaluation.nom}" itemValue="#{devoir.idplanning}"/>
+                    </p:selectOneMenu>                        
+
+                    <p:commandButton   actionListener="#{procesVerbalNoteSequentielCtrl.findNote()}" value="#{langue.rechercher}" 
+                                       update=":actionsForm,display,:SolvabiliteListerForm:datalist,:SolvabiliteListerForm:growl"/> 
+                </p:panelGrid>
+            </h:panelGroup> 
+
+
+
+            <p:dataTable id="datalist"
+                         value="#{procesVerbalNoteSequentielCtrl.evaluations}"
+                         var="item"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50">
+
+
+                <p:column sortBy="#{item.eleve.matricule}" width="8%">
+                    <f:facet name="header">
+                        <h:outputText value="Matricule"/>
+                    </f:facet>
+                    <h:outputText value="#{item.eleve.matricule}"/>
+                </p:column>
+
+
+                <p:column filterBy="#{item.eleve.nom} #{item.eleve.prenom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.eleve}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.eleve.nom} #{item.eleve.prenom}"/>
+                </p:column>
+
+                <p:column  filterBy="#{item.note}">
+                    <f:facet name="header">
+                        <h:outputText value="Note"/>
+                    </f:facet>
+                    <h:outputText value="#{item.note}"/>
+                </p:column>
+
+
+                <p:column filterBy="#{item.observation}">
+                    <f:facet name="header">
+                        <h:outputText value="Observation"/>
+                    </f:facet>
+                    <h:outputText value="#{item.observation}"/>
+                </p:column>
+
+            </p:dataTable>
+
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

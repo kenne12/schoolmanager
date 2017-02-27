@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="AffecterMatiereCreerDlg" 
+                  widgetVar="AffecterMatiereCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="Formulaire de  définition enseignement par classes" 
+                  closeOnEscape="true">
+
+            <p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;">     
+            </p:ajaxStatus>
+
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                <img src="#{request.contextPath}/resources/img/ajaxloadingbar.gif" alt="" />               
+            </p:dialog>
+
+            <h:form id="AffecterMatiereCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue.etablissement}" for="etablissement"/>
+                        <p:selectOneMenu id="etablissement" value="#{affecterMatiereAClasseCtrl.etablissement}" converter="etablissementConverter">
+                            <f:selectItem itemLabel="#{langue.choisir}"/>
+                            <f:selectItems value="#{affecterMatiereAClasseCtrl.etablissements}" var="item" itemLabel="#{item.nom}" itemValue="#{item}"/>
+                            <p:ajax update="classe" listener="#{affecterMatiereAClasseCtrl.updateClasse()}" />
+                        </p:selectOneMenu>                        
+
+
+                        <p:outputLabel for="classe" value="#{langue.classeActive}" />
+                        <h:panelGroup>
+                            <p:selectOneMenu  id="classe" value="#{affecterMatiereAClasseCtrl.classe.idclasse}">
+                                <f:selectItem itemLabel="#{langue.choisir}"/>
+                                <f:selectItems value="#{affecterMatiereAClasseCtrl.categories}" var="item" itemLabel="#{item.idclasse.nom}" itemValue="#{item.idclasse.idclasse}"/>
+                                <p:ajax update="matiere" listener="#{affecterMatiereAClasseCtrl.handleClasseChange()}" />
+                            </p:selectOneMenu>                        
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.matiere}"/> 
+                        <p:pickList id="matiere" value="#{affecterMatiereAClasseCtrl.dualMatiere}" var="matiere" effect="bounce"
+                                    itemValue="#{matiere}" itemLabel="#{matiere.libelle}" showSourceControls="true" showTargetControls="true" showCheckbox="false"
+                                    showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="matiereConverter">
+
+                            <f:facet name="sourceCaption">#{langue.matieres} disponibles</f:facet>
+                            <f:facet name="targetCaption">#{langue.matieres} selectionnés</f:facet>                            
+                        </p:pickList> 
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{affecterMatiereAClasseCtrl.save()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:AffecterMatiereListerForm:datalist,:AffecterMatiereListerForm:growl, AffecterMatiereCreerForm" 
+                                     oncomplete="PF('AffecterMatiereCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('AffecterMatiereCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

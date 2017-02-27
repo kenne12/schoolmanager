@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="AffectationDetailDlg" 
+                  widgetVar="AffectationDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: #{langue['Conv.Batiment']}" closeOnEscape="true">
+
+            <h:form id="AffectationDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" style="width: 100%;" >
+                        <h:outputText value="#{langue.identifiant}"/>
+                        <h:outputText value="#{affecterClasseCtrl.selectedAffectation.id}"/>
+
+                        <h:outputText value="#{langue['Conv.Code']} de salle"/>
+                        <h:outputText value="#{affecterClasseCtrl.selectedAffectation.idsalle.code}"/>
+
+                        <h:outputText value="#{langue['Conv.Nom']} #{langue.classe}"/>
+                        <h:outputText value="#{affecterClasseCtrl.selectedAffectation.idclasse.nom}"/>
+
+                        <h:outputText value="#{langue.active}"/>
+                        <p:selectBooleanCheckbox value="#{affecterClasseCtrl.selectedAffectation.etat}" disabled="true"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('AffectationDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

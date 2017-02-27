@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="AffecterTrimestreCreerDlg" 
+                  widgetVar="AffecterTrimestreCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: Decoupage trimestriel" 
+                  closeOnEscape="true">
+
+            <h:form id="AffecterTrimestreCreerForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue.anneeScolaire}" for="annee"/>
+                        <p:selectOneMenu id="annee" value="#{affecterTrimCtrl.annee}" converter="anneeConverter">
+                            <f:selectItem itemLabel="#{langue.choisir}"/>
+                            <f:selectItems value="#{affecterTrimCtrl.annees}" var="item" itemLabel="#{item.code} - #{item.codefin}" itemValue="#{item}"/>
+                            <p:ajax listener="#{affecterTrimCtrl.updateTrimestre()}" update="trimestre" />
+                        </p:selectOneMenu>
+
+
+                        <p:outputLabel value="#{langue.trimestre}" for="trimestre"/> 
+                        <p:pickList id="trimestre" value="#{affecterTrimCtrl.dualsTrimestre}" var="trim" effect="bounce"
+                                    itemValue="#{trim}" itemLabel="#{trim.nom}" showSourceControls="true" showTargetControls="true" showCheckbox="false"
+                                    showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="trimestreConverter">
+
+                            <f:facet name="sourceCaption">#{langue.trimestre} disponibles</f:facet>
+                            <f:facet name="targetCaption">#{langue.trimestre} selectionnés</f:facet>                            
+                        </p:pickList> 
+
+
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{affecterTrimCtrl.enregistrerTrimestre()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:AffecterTrimestreListerForm:datalist,:AffecterTrimestreListerForm:growl, AffecterTrimestreCreerForm" 
+                                     oncomplete="PF('AffecterTrimestreCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('AffecterTrimestreCreerDialog').hide()"/>
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

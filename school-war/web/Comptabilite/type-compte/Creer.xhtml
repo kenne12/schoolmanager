@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="TypecompteCreerDlg" 
+                  widgetVar="TypecompteCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="CREER / MODIFIER UN TYPE DE COMPTE" 
+                  closeOnEscape="true">
+
+            <h:form id="TypecompteCreerForm">
+
+
+                <h:panelGroup id="display" >
+
+                    <p:panelGrid columns="2" columnClasses="column">
+
+
+                        <p:outputLabel value="Numero" for="classe" />
+                        <p:inputText required="true" requiredMessage="Numero : obligatoire" id="classe" value="#{typecompteCtrl.typecompte.classe}"/>
+
+
+                        <p:outputLabel value="Libellé" for="libelle" />
+                        <p:inputText required="true" requiredMessage="Numero : obligatoire" id="libelle" value="#{typecompteCtrl.typecompte.libelle}"/>
+                        
+                        <p:outputLabel value="Débit" for="debit" />
+                        <p:inputText id="debit" value="#{typecompteCtrl.typecompte.debit}"/>
+                        
+                        <p:outputLabel value="Crédit" for="credit" />
+                        <p:inputText id="credit" value="#{typecompteCtrl.typecompte.credit}"/>
+
+
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{typecompteCtrl.saveTypecompte()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:TypecompteListerForm:datalist,:TypecompteListerForm:growl, TypecompteCreerForm" 
+                                     oncomplete="PF('TypecompteCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('TypecompteCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

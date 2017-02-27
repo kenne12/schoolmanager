@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="TraceurListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} Actions utilisateurs">
+            <p:contextMenu id="TraceurDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{traceurCtrl.traceurs}"
+                         var="item"
+                         rowKey="#{item.id}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{traceurCtrl.selectedTraceur}">
+
+                <p:ajax event="rowSelect"   update=":TraceurListerForm:TraceurDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":TraceurListerForm:TraceurDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('TraceurListerForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.id}" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.identifiant}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.id}"/>
+                </p:column>
+
+
+
+                <p:column sortBy="#{item.personnel.nom}" filterBy="#{item.personnel.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.nom}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.personnel.nom}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.personnel.prenom}" filterBy="#{item.personnel.prenom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.prenom}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.personnel.prenom}"/>
+                </p:column> 
+
+                <p:column sortBy="#{item.action}" filterBy="#{item.action}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.action}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.action}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.dateaction}" filterBy="#{item.dateaction}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.date}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.dateaction}"/>
+                </p:column>
+
+            </p:dataTable>
+
+
+        </p:panel>
+        <ui:include src="/includes/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

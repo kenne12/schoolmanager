@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="EtablissementDetailDlg" 
+                  widgetVar="EtablissementDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  style="width: 1000px"
+                  header="#{langue['Titre.Dlg.Detail']}: Etablissement" closeOnEscape="true">
+
+            <h:form id="EtablissementDetailForm">
+
+                <p:tabView orientation="left">
+                    <p:tab title="#{langue.informations_generales}">
+                        <h:panelGrid columns="2" cellpadding="10" columnClasses="column"  >
+                            <h:outputText value="#{langue.nom_ecole}" />
+                            <h:outputText value="#{etablissementCtrl.etablissement.nom}" />
+                            <h:outputText value="#{langue.date_creation}" /> 
+                            <h:outputText value="#{etablissementCtrl.etablissement.datecreation}" />
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="#{langue.adresse}">
+                        <h:panelGrid columns="2" cellpadding="10" columnClasses="column"  >
+                            <h:outputText value="#{langue.contact}" />
+                            <h:outputText value="#{etablissementCtrl.etablissement.adresse.contact}" />
+
+                            <h:outputText value="#{langue.boite_postale}" />
+                            <h:outputText value="#{etablissementCtrl.etablissement.adresse.bp}" />
+
+                            <h:outputText value="#{langue.email}" />
+                            <h:outputText value="#{etablissementCtrl.etablissement.adresse.email}" />
+
+                            <h:outputText value="#{langue.site_web}" />
+                            <h:outputText value="#{etablissementCtrl.etablissement.adresse.siteweb}" />
+
+                        </h:panelGrid>
+                    </p:tab>
+
+                    <p:tab title="#{langue.branches}">
+
+                        <p:dataTable id="datalist"
+                                     value="#{etablissementCtrl.etablissement.enseignementList}"
+                                     var="branche"
+                                     paginator="true"
+                                     rows="10"
+                                     style="text-align: center;"
+                                     rowsPerPageTemplate="10,20,30,40,50"
+                                     >
+
+                            <p:column width="8%">
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.identifiant}"/>
+                                </f:facet>
+                                <h:outputText value="#{branche.idbranche}"/>
+                            </p:column>
+
+                            <p:column >
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue['Conv.Nom']}"/>
+                                </f:facet>
+                                <h:outputText value="#{branche.nom}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.etat}"/>
+                                </f:facet>
+                                <p:selectBooleanButton id="etat" value="#{branche.etat}" disabled="true" onLabel="Active" offLabel="Inactive" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:90px">
+
+                                </p:selectBooleanButton>
+                            </p:column>
+                        </p:dataTable>
+
+                    </p:tab>
+
+                    <p:tab title="#{langue.categorie}">
+
+                        <p:dataTable id="categorie"
+                                     value="#{etablissementCtrl.categories}"
+                                     var="categorie"
+                                     paginator="true"
+                                     rows="10"
+                                     style="text-align: center;"
+                                     rowsPerPageTemplate="10,20,30,40,50"
+                                     >
+
+                            <p:column  width="10%">
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.identifiant}"/>
+                                </f:facet>
+                                <h:outputText value="#{categorie.idcategorie}"/>
+                            </p:column>
+
+
+                            <p:column width="10%">
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.nom}"/>
+                                </f:facet>
+                                <h:outputText value="#{categorie.nom}"/>
+                            </p:column>
+
+                            <p:column  width="10%">
+                                <f:facet name="header">
+                                    <h:outputText value="#{categorie.etat}"/>
+                                </f:facet>     
+                                <h:selectBooleanCheckbox id="etat" value="#{categorie.etat}" disabled="true"/>
+
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </p:tab>
+
+                    <p:tab title="#{langue.batiments}">
+
+                        <p:dataTable id="batiment"
+                                     value="#{etablissementCtrl.batiments}"
+                                     var="batiment"
+                                     paginator="true"
+                                     rows="10"
+                                     style="text-align: center;"
+                                     rowsPerPageTemplate="10,20,30,40,50"                                         
+                                     >
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nom"/>
+                                </f:facet>
+                                <h:outputText value="#{batiment.nom}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.code}"/>
+                                </f:facet>
+                                <h:outputText value="#{batiment.code}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </p:tab>
+
+
+                    <p:tab title="#{langue.classes}">
+
+                        <p:dataTable id="classe"
+                                     value="#{etablissementCtrl.classes}"
+                                     var="classe"
+                                     paginator="true"
+                                     rows="10"
+                                     style="text-align: center;"
+                                     rowsPerPageTemplate="10,20,30,40,50"                                         
+                                     >
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nom"/>
+                                </f:facet>
+                                <h:outputText value="#{classe.nom}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.cycle}"/>
+                                </f:facet>
+                                <h:outputText value="#{classe.idcycle.nom}"/>
+                            </p:column>
+
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.branche}"/>
+                                </f:facet>
+                                <h:outputText value="#{classe.idbranche.nom}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </p:tab>
+
+                    <p:tab title="#{langue.personnel}">
+
+                        <p:dataTable id="personnel"
+                                     value="#{etablissementCtrl.etablissementPersonnels}"
+                                     var="personnel"
+                                     paginator="true"
+                                     rows="10"
+                                     style="text-align: center;"
+                                     rowsPerPageTemplate="10,20,30,40,50"
+                                     >
+
+                            <p:column  width="8%">
+                                <f:facet name="header">
+                                    <h:outputText value="Matricule"/>
+                                </f:facet>
+                                <h:outputText value="#{personnel.personnel.matriculepersonnel}"/>
+                            </p:column>
+
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.nom}"/>
+                                </f:facet>
+                                <h:outputText value="#{personnel.personnel.nom}"/>
+                            </p:column>
+
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Prénom"/>
+                                </f:facet>
+                                <h:outputText value="#{personnel.personnel.prenom}"/>
+                            </p:column>
+
+                            <p:column >
+                                <f:facet name="header">
+                                    <h:outputText value="Adresse"/>
+                                </f:facet>
+                                <h:outputText value="#{personnel.personnel.adresse}"/>
+                            </p:column>
+
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.contact}"/>
+                                </f:facet>
+                                <h:outputText value="#{personnel.personnel.telephone}"/>
+                            </p:column>
+
+                            <p:column >
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.email}"/>
+                                </f:facet>
+                                <h:outputText value="#{personnel.personnel.email}"/>
+                            </p:column>
+
+                            <p:column >
+                                <f:facet name="header">
+                                    <h:outputText value="Date de recrutement"/>
+                                </f:facet>
+                                <h:outputText value="#{personnel.personnel.daterecrutement}"/>
+                            </p:column>
+
+
+                            <p:column  width="10%">
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue['Conv.Actif']}"/>
+                                </f:facet>
+                                <h:selectBooleanCheckbox id="etat" value="#{personnel.personnel.etatpersonnel}"  disabled="true"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </p:tab>
+
+                </p:tabView>
+
+                <h:panelGroup id="display">
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('EtablissementDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

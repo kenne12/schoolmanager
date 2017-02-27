@@ -1,0 +1,23 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/ComptabiliteTemplate/principalTemplate.xhtml">
+
+    <ui:define name="contenu">
+
+        <ui:include src="frais-exigible/Action.xhtml"/>
+        <ui:include src="frais-exigible/Lister.xhtml"/>
+        <ui:include src="frais-exigible/Detail.xhtml"/>
+        <ui:include src="frais-exigible/Modifier.xhtml"/>
+        <ui:include src="frais-exigible/Creer.xhtml"/>
+        <ui:include src="frais-exigible/Imprimer.xhtml"/>
+    </ui:define>
+    
+    <ui:define name="scriptCollapse">
+        <script>
+            var el = document.getElementById("entree-caisse");
+            el.setAttribute("class", "sub-menu active");
+        </script>
+    </ui:define>
+
+</ui:composition>

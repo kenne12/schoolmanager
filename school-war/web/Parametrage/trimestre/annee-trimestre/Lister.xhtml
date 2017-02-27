@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="AffecterTrimestreListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} #{langue.trimestreAnnee} en cours">
+            <p:contextMenu id="AffecterTrimestreDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{affecterTrimCtrl.trimestreAnnees}"
+                         var="item"
+                         rowKey="#{item.idtrimestrean}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{affecterTrimCtrl.selectedTrimesteAnnee}">
+
+                <p:ajax event="rowSelect"   update=":AffecterTrimestreListerForm:AffecterTrimestreDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":AffecterTrimestreListerForm:AffecterTrimestreDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('AffecterTrimestreListerForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.idtrimestrean}" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.identifiant}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idtrimestrean}"/>
+                </p:column>
+                
+                <p:column width="15%" filterBy="#{item.idannee.code} #{item.idannee.codefin}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.anneeScolaire}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idannee.code} / #{item.idannee.codefin}"/>
+                </p:column>
+
+                <p:column width="20%" sortBy="#{item.idtrimestre.nom}" filterBy="#{item.idtrimestre.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.nom}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idtrimestre.nom}"/>
+                </p:column>
+
+                <p:column style="width: 15%" sortBy="#{item.etat}" filterBy="#{item.etat}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.active}"/>
+                    </f:facet>
+                    <p:selectBooleanCheckbox value="#{item.etat}" disabled="true" onchange="#{affecterTrimCtrl.edit(item)}"/>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <!-- BEGIN SIDEBAR -->
+    <div class="sidebar-scroll">
+        <div id="sidebar" class="nav-collapse collapse">
+
+            <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+            <div class="navbar-inverse">
+                <form class="navbar-search visible-phone">
+                    <input type="text" class="search-query" placeholder="Search" />
+                </form>
+            </div>
+            <!-- END RESPONSIVE QUICK SEARCH FORM -->
+            <!-- BEGIN SIDEBAR MENU -->
+            <ul class="sidebar-menu">
+
+                <!--Accueil-->
+                <li class="sub-menu" id="menuIndex">
+                    <a class="" href="#{request.contextPath}/index.html">
+                        <span>#{langue.accueil}</span>
+                    </a>
+                </li>
+
+                <!--Logements-->
+                <li class="sub-menu" id="menuLogements">
+                    <a href="javascript:;" class="">
+                        <i class="icon-building"></i>
+                        <span>Gérer les ouvrages</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Bibliotheque/gererEditeur.html">Gérer les editeurs</a></li>
+                        <li><a class="" href="#{request.contextPath}/Bibliotheque/gererAuteur.html">Gérer les auteurs</a></li>
+                        <li><a class="" href="#{request.contextPath}/Bibliotheque/gererLivre.html">Gérer les livres</a></li>
+                        <li><a class="" href="#{request.contextPath}/Bibliotheque/gererPublication.html">Gérer les publications</a></li>                    
+                    </ul>
+                </li>
+
+                <!--loyers-->
+                <li class="sub-menu" id="menuLoyers">
+                    <a href="javascript:;" class="">
+                        <i class="icon-bell-alt"></i>
+                        <span>Gérer les emprunts</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Bibliotheque/gererEmprunt.html">Gérer emprunts</a></li>
+                        <li><a class="" href="#{request.contextPath}/Bibliotheque/gererRemise.html">Gérer rémises</a></li>
+                        <li><a class="" href="#{request.contextPath}/Bibliotheque/etatEmprunt.html">Rapport emprunts</a></li>                        
+                    </ul>
+                </li>
+            </ul>
+            <!-- END SIDEBAR MENU -->
+        </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+</ui:composition>

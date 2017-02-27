@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <!-- BEGIN SIDEBAR -->
+    <div class="sidebar-scroll">
+        <div id="sidebar" class="nav-collapse collapse">
+
+            <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+            <div class="navbar-inverse">
+                <form class="navbar-search visible-phone">
+                    <input type="text" class="search-query" placeholder="Search" />
+                </form>
+            </div>
+            <!-- END RESPONSIVE QUICK SEARCH FORM -->
+            <!-- BEGIN SIDEBAR MENU -->
+            <ul class="sidebar-menu">
+
+                <li class="sub-menu" id="menuIndex">
+                    <a class="" href="#{request.contextPath}/index.html">
+                        <span>#{langue.accueil}</span>
+                    </a>
+                </li>
+                
+                
+                <li class="sub-menu" id="Utilisateur">
+                    <a href="javascript:;" class="">                        
+                        <i class="icon-user"></i>
+                        <span>Utilisateur</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Privilege/compteutilisateur/compteutilisateur.html">Compte utilisateur</a></li>
+                    </ul>
+                </li>
+
+                <!--module-->
+                <li class="sub-menu" id="module1">
+                    <a href="javascript:;" class="">
+                        <i class="icon-folder-open"></i>
+                        <span>Gérer les modules</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Privilege/modules/module.html">Gérer les modules</a></li>
+                        <li><a class="" href="#{request.contextPath}/Privilege/modules/affecterModule.html">Gérer les accès</a></li>
+                    </ul>
+                </li>
+
+                <!--menu-->
+                <li class="sub-menu" id="menu">
+                    <a href="javascript:;" class="">
+                        <i class="icon-list-ul"></i>
+                        <span>Gérer les ménus</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Privilege/menu.html">Ménus</a></li>                        
+                        <li><a class="" href="#{request.contextPath}/Privilege/droit-acces.html">Droits d'accès</a></li>
+                    </ul>
+                </li>
+
+                <li class="sub-menu" id="traceur">
+                    <a href="javascript:;" class="">
+                        <i class="icon-eye-open"></i>
+                        <span>Le Mouchard</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Privilege/mouchard/mouchard.html">Actions Utilisateur</a></li>
+                    </ul>
+                </li>
+
+
+            </ul>
+            <!-- END SIDEBAR MENU -->
+        </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+</ui:composition>

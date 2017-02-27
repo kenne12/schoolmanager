@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="AccesCreerDlg" 
+                  widgetVar="AccesCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: d'autorisation d'accès" 
+                  closeOnEscape="true">
+
+            <h:form id="AccesCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+
+                        <p:outputLabel value="#{langue.personnel}" for="compte" />
+                        <p:selectOneMenu value="#{privilegesCtrl.compteUtilisateur.idcompte}" id="compte">
+                            <f:selectItem itemLabel="Selectionner le personnel" itemValue=""/>
+                            <f:selectItems value="#{privilegesCtrl.compteUtiliasteurs}" var="item" itemLabel="#{item.login} [#{item.personnel.nom}]" itemValue="#{item.idcompte}"/> 
+                            <p:ajax update="menu,:AccesListerForm:growl" listener="#{privilegesCtrl.updateMenu()}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Action" for="menu" />
+                        <p:selectManyCheckbox id="menu"  value="#{privilegesCtrl.selectedMenus}" layout="grid" columns="3" converter="menuConverter" required="true">
+                            <f:selectItems value="#{privilegesCtrl.menus}" var="menu" itemLabel="#{menu.nom}" itemValue="#{menu}" />
+                        </p:selectManyCheckbox>
+
+
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{privilegesCtrl.enregistrerPrivilege()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:AccesListerForm:datalist,:AccesListerForm:growl" 
+                                     oncomplete="PF('AccesCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('AccesCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

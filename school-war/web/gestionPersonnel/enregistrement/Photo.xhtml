@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+    <ui:composition>
+
+        <p:dialog appendTo="@(body)"
+                  closeOnEscape="true"
+                  header="Galérie Photo"
+                  widgetVar="galerieDlg">                  
+            <h:form id="galerieForm">
+                <h:panelGroup> 
+                    <p:galleria value="#{personnelCtrl.galeries}" var="image" panelWidth="500" panelHeight="280" showCaption="true">
+                        <img src="#{request.contextPath}/photos/photo_personnels/#{image.chemin}" title="#{image.personnel.nom}" alt="#{image.chemin}" />
+                    </p:galleria> 
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog appendTo="@(body)"
+                  closeOnEscape="true"
+                  widgetVar="imgViewDlg">                  
+            <h:form id="viewForm">
+                <p:panel id="apercu" rendered="#{personnelCtrl.photoSelected}">
+                    <img id="apercuImg" style="visibility: #{!personnelCtrl.photoSelected ? 'visible':'hidden'};width: 400px;height: 400px" src="#{request.contextPath}/photos/photo_personnels/#{personnelCtrl.selectedPhoto.chemin}" title="#{personnelCtrl.selectedPhoto.personnel.nom}" alt="#{personnelCtrl.selectedPhoto.chemin}" />
+                </p:panel>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="PersonnelPhotosDlg" 
+                  widgetVar="PersonnelPhotosDialog" 
+                  modal="true" resizable="false"
+                  appendTo="@(body)"
+                  height="550"
+                  header="Formulaire d'ajout des Photos" 
+                  closeOnEscape="true">
+
+            <h:form id="PersonnelPhotosForm" enctype="multipart/form-data">
+
+                <p:panelGrid columns="2">
+                    <p:outputLabel for="upload" value="SELECTIONNER UNE PHOTO"/> 
+                    
+                    <rich:fileUpload    fileUploadListener="#{personnelCtrl.uplaodImages(fileUploadEvent)}" id="upload" acceptedTypes=".jpg, .gif, .png, .bmp"
+                                     ontyperejected="alert('Only JPG, GIF, PNG and BMP files are accepted');" maxFilesQuantity="5">
+                        <a4j:ajax event="uploadcomplete" execute="@none" render=":PersonnelListerForm:growl" />
+                    </rich:fileUpload>
+                </p:panelGrid>
+
+                <br/>
+
+                <h:panelGroup style="text-align: center;">
+                    <p:dataTable id="datalist"
+                                 value="#{personnelCtrl.images}"
+                                 var="item"
+                                 rowKey="#{item.idphoto}"
+                                 paginator="false"
+                                 style="text-align: center; width: 600px;" 
+                                 selectionMode="single" 
+                                 selection="#{personnelCtrl.selectedPhoto}">
+
+                        <p:ajax event="rowSelect"   update=":viewForm, :PersonnelPhotosForm:voir, :PersonnelPhotosForm:supprimer"/>
+                        <p:ajax event="rowUnselect" update=":viewForm, :PersonnelPhotosForm:voir, :PersonnelPhotosForm:supprimer"/>
+
+                        <p:column width="15%">
+                            <f:facet name="header">
+                                <h:outputText value="Numero"/>
+                            </f:facet>
+                            <h:outputText value="#{personnelCtrl.images.indexOf(item)+1}"/>
+                        </p:column>
+
+                        <p:column width="50%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.personnel}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.personnel.nom} #{item.personnel.prenom}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{item.chemin}">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue['Conv.Nom']}"/> 
+                            </f:facet>
+                            <h:outputText value="#{item.chemin}"/>
+                        </p:column>
+
+                    </p:dataTable>
+                    <br/>
+
+                    <p:commandButton id="supprimer"
+                                     value="#{langue['Conv.Supprimer']}"
+                                     disabled="#{personnelCtrl.photoSelected}"
+                                     actionListener="#{personnelCtrl.handleDellImages()}"
+                                     update=":PersonnelPhotosForm">
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
+                                   message="#{langue['Message.Confirm.Supprimer']}?" 
+                                   icon="ui-icon-alert"/> 
+                    </p:commandButton>                             
+                    <p:commandButton id="voir"  update=":viewForm" disabled="#{personnelCtrl.photoSelected}" onclick="PF('imgViewDlg').show()" value="Visualiser"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog> 
+
+    </ui:composition>
+
+</html>

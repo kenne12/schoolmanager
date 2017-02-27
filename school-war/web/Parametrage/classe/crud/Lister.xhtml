@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="ClasseListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} #{langue.classe}">
+            <p:contextMenu id="ClasseDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{classeCtrl.classes}"
+                         var="item"
+                         rowKey="#{item.idclasse}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{classeCtrl.selectedClasse}">
+
+                <p:ajax event="rowSelect"   update=":ClasseListerForm:ClasseDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":ClasseListerForm:ClasseDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('ClasseListerForm:viewButton').click();"/>
+
+                
+                <p:column sortBy="#{item.nom}" filterBy="#{item.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.nom}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.nom}"/>
+                </p:column>
+                
+                
+                <p:column sortBy="#{item.idcycle.nom}" filterBy="#{item.idcycle.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.cycle}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idcycle.nom}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.idbranche.nom}" filterBy="#{item.idbranche.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.branche}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idbranche.nom}"/>
+                </p:column>
+                
+                <p:column style="width: 10%" filterBy="#{item.niveau}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.niveau}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.niveau}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

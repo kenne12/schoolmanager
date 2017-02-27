@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <!-- BEGIN SIDEBAR -->
+    <div class="sidebar-scroll">
+        <div id="sidebar" class="nav-collapse collapse">
+
+            <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+            <div class="navbar-inverse">
+                <form class="navbar-search visible-phone">
+                    <input type="text" class="search-query" placeholder="Search" />
+                </form>
+            </div>
+            <!-- END RESPONSIVE QUICK SEARCH FORM -->
+            <!-- BEGIN SIDEBAR MENU -->
+            <ul class="sidebar-menu">
+
+                <!--Accueil-->
+                <li class="sub-menu" id="menuIndex">
+                    <a class="" href="#{request.contextPath}/index.html">
+                        <span>#{langue.accueil}</span>
+                    </a>
+                </li>
+
+                <!--Logements-->
+                <li class="sub-menu" id="menuLogements">
+                    <a href="javascript:;" class="">
+                        <i class="icon-building"></i>
+                        <span>Catégorie Personnel</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionPersonnel/categorie.html">Enregistrer</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionPersonnel/affecterCategorie.html">Affecter catégories</a></li>
+                    </ul>
+                </li>
+
+                <!--loyers-->
+                <li class="sub-menu" id="menuLoyers">
+                    <a href="javascript:;" class="">
+                        <i class="icon-bell-alt"></i>
+                        <span>Gérer les fonctions</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionPersonnel/fonctions.html">Gerer les fonctions</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionPersonnel/affecterCategorie.html">Gerer affectation</a></li>
+                    </ul>
+                </li>
+
+
+                <!--Habitants-->
+                <li class="sub-menu" id="menuHabitants">
+                    <a href="javascript:;" class="">
+                        <i class="icon-user"></i>
+                        <span>Gérer le personnel</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionPersonnel/enregistrement.html">Enregistrement</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionPersonnel/affecterMatiere.html">Affecter matières</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionPersonnel/affecterClasse.html">Affecter classes</a></li>
+                    </ul>
+                </li>
+
+                <!--payement personnel-->
+                <li class="sub-menu" id="payerPersonnel">
+                    <a href="javascript:;" class="">
+                        <i class="icon-user"></i>
+                        <span>Gérer le payement</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionPersonnel/gererPaye.html">Gerer la paye</a></li>                       
+                    </ul>
+                </li>
+
+            </ul>
+            <!-- END SIDEBAR MENU -->
+        </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+</ui:composition>

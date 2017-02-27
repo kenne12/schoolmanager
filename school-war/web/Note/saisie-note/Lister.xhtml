@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="EvaluationListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} des notes évaluées par M /Mme : #{loginBean.personnel.nom}">
+            <p:contextMenu id="EvaluationDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{evaluationCtrl.evaluations}"
+                         var="item"
+                         stickyHeader="true"
+                         rowKey="#{item.ideval}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{evaluationCtrl.selectedEvaluation}">
+
+                <p:ajax event="rowSelect"   update=":EvaluationListerForm:EvaluationDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":EvaluationListerForm:EvaluationDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('EvaluationListerForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.eleve.nom}" filterBy="#{item.eleve.prenom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.eleve}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.eleve.nom} #{item.eleve.prenom}"/>
+                </p:column>
+
+                <p:column  filterBy="#{item.planningEvaluation.elementEvaluation.elementevaluation.matiere.libelle}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.matiere}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.planningEvaluation.elementEvaluation.elementevaluation.matiere.libelle}"/>
+                </p:column>
+
+
+                <p:column  filterBy="#{item.planningEvaluation.elementEvaluation.elementevaluation.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="Unité d'évalaution"/>
+                    </f:facet>
+                    <h:outputText value="#{item.planningEvaluation.elementEvaluation.elementevaluation.nom}"/>
+                </p:column>
+
+                <p:column  filterBy="#{item.planningEvaluation.sequence.idsequence.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.sequence}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.planningEvaluation.sequence.idsequence.nom}"/>
+                </p:column>
+
+
+
+                <p:column sortBy="#{item.note}" filterBy="#{item.note}">
+                    <f:facet name="header">
+                        <h:outputText value="Note"/>
+                    </f:facet>
+                    <h:outputText value="#{item.note}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.observation}" filterBy="#{item.observation}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.appreciation}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.observation}"/>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+
+    </h:form>
+
+</ui:composition>

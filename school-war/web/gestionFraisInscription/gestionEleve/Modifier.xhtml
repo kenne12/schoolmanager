@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="EleveModifierDlg" 
+                  widgetVar="EleveModifierDialog" modal="true" 
+                  resizable="false"
+                  appendTo="@(body)" header="#{langue['Titre.Dlg.Modification']}: d'un élève" 
+                  closeOnEscape="true">
+
+            <h:form id="EleveModifierForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="4" columnClasses="column" >
+
+                        <p:outputLabel value="#{langue['Conv.Nom']}" for="nom" />
+                        <h:panelGroup>
+                            <p:inputText id="nom" value="#{eleveCtrl.selectedEleve.nom}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue['Conv.Nom']}" for="prenom" />
+                        <h:panelGroup>
+                            <p:inputText id="prenom" value="#{eleveCtrl.selectedEleve.prenom}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Date de naissance" for="date" />
+                        <h:panelGroup>
+                            <p:calendar id="date" value="#{eleveCtrl.selectedEleve.datenaissance}" required="true" requiredMessage="la date est requise">           
+                            </p:calendar>
+                        </h:panelGroup>
+
+
+                        <p:outputLabel value="Lieu de naissance" for="lieuNaiss" />
+                        <h:panelGroup>
+                            <p:inputText id="lieuNaiss" value="#{eleveCtrl.selectedEleve.lieunaissance}" required="true" requiredMessage="le lieu de naissance est requis" />                                          
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue['Conv.Sexe']}" for="sexe" />
+                        <h:panelGroup>
+                            <p:selectOneMenu value="#{eleveCtrl.selectedEleve.sexe}" id="sexe">
+                                <f:selectItem itemLabel="selectionner le sexe" itemValue=""/>
+                                <f:selectItem itemLabel="Masculin" itemValue="M"/>
+                                <f:selectItem itemLabel="Féminin" itemValue="F"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Date d'admission" for="date1" />
+                        <h:panelGroup>
+                            <p:calendar id="date1" value="#{eleveCtrl.selectedEleve.anneeadmission}" required="true" requiredMessage="la date d'admission est requise">           
+                            </p:calendar>
+                        </h:panelGroup>
+
+
+                        <p:outputLabel value="Etat" for="etat" />
+                        <h:panelGroup>
+                            <p:selectBooleanButton id="etat" value="#{eleveCtrl.selectedEleve.etateleve}" onLabel="Active" offLabel="Inactive" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:90px">
+                            </p:selectBooleanButton>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Photo" for="photo" />
+                        <h:panelGroup>
+                            <p:fileUpload id="photo" value="#{eleveCtrl.file}" mode="simple" disabled="photo"
+                                          allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|PNG|GIF|JPG|JPEG)$/" auto="true"/>
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{eleveCtrl.modifier()}" value="#{langue['Conv.Modifier']}"
+                                     update=":EleveModifierForm,:EleveListerForm:datalist,:EleveListerForm:growl, :actionsForm"
+                                     oncomplete="PF('EleveModifierDialog').hide()">
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}" message="#{langue['Message.Confirm.Modifier']}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{langue['Conv.Annuler']}" onclick="PF('EleveModifierDlg').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="actionsForm">
+        <p:fieldset legend="#{langue['Conv.Actions']}" toggleable="true" toggleSpeed="300">
+            <div class="footer-section">
+                <p:commandButton id="creer" 
+                                 icon="ui-icon-plus"   
+                                 value="#{langue['Conv.Creer']}" 
+                                 update=":EmpruntCreerForm, :EmpruntListerForm:growl,:EmpruntCreerForm:livre" 
+                                 oncomplete="PF('EmpruntCreerDialog').show()"/>
+                <p:commandButton id="detail"   
+                                 icon="ui-icon-search" 
+                                 value="#{langue['Conv.Detail']}" 
+                                 update=":EmpruntDetailForm" 
+                                 oncomplete="PF('EmpruntDetailDialog').show()" 
+                                 disabled="#{empruntCtrl.detail}"/>
+                <p:commandButton id="modifier"   
+                                 icon="ui-icon-pencil" 
+                                 value="#{langue['Conv.Modifier']}" 
+                                 update=":EmpruntModifierForm" 
+                                 oncomplete="PF('EmpruntModifierDialog').show()" 
+                                 disabled="#{empruntCtrl.modifier}"/>
+
+                <p:commandButton id="supprimer" 
+                                 icon="ui-icon-trash"  
+                                 value="#{langue['Conv.Supprimer']}" 
+                                 update=":EmpruntListerForm:growl,:EmpruntListerForm:datalist, :actionsForm"
+                                 disabled="#{empruntCtrl.supprimer}"
+                                 actionListener="#{logementCtrl.supprimer()}">
+                    <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
+                               message="#{langue['Message.Confirm.Supprimer']} ?"
+                               icon="ui-icon-alert"/>
+                </p:commandButton>
+
+                <p:commandButton id="imprimer" icon="ui-icon-print"  
+                                 value="#{langue['Conv.Imprimer']}" actionListener="#{empruntCtrl.imprimerEmpruntPdf()}"
+                                 update="actionsForm,:EmpruntImprimerForm" disabled="#{empruntCtrl.imprimer}" />
+
+
+                <p:commandButton id="imprime" icon="ui-icon-print"  
+                                 value="#{langue.visualiser}" actionListener="#{empruntCtrl.nothing()}"
+                                 update=":EmpruntImprimerForm" disabled="#{empruntCtrl.visualise}" 
+                                 oncomplete="PF('EmpruntImprimerDialog').show()"/>
+
+
+            </div>
+        </p:fieldset>
+    </h:form>
+</ui:composition>

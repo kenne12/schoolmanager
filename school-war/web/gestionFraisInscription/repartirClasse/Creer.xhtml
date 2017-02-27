@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="ClasseCreerDlg" 
+                  widgetVar="ClasseCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue.classe}" 
+                  closeOnEscape="true">
+
+            <h:form id="ClasseCreerForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue.anneeScolaire}" for="annee"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu id="annee" value="#{eleveClasseCtrl.annee.idannee}">
+                                <f:selectItem itemLabel="#{langue.selectLe} #{langue.anneeScolaire}" itemValue=""/>  
+                                <f:selectItems value="#{anneeCtrl.anneeCourantes}" var="item" itemLabel="#{item.code}-#{item.code+1}" itemValue="#{item.idannee}"/>
+                                <p:ajax update="eleve" listener="#{eleveClasseCtrl.handleEleveChange()}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.classe}" for="classe"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu id="classe" value="#{eleveClasseCtrl.classe}" converter="classeConverter">
+                                <f:selectItems value="#{classeCtrl.classeActives}" var="item" itemLabel="#{item.nom}" itemValue="#{item}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup> 
+
+                        <p:outputLabel value="#{langue.eleve}"/>                                                
+                        <p:pickList id="eleve" value="#{eleveClasseCtrl.dualeleves}" var="eleve" effect="bounce"
+                                    itemValue="#{eleve}" itemLabel="#{eleve.nom} #{eleve.prenom}" showSourceControls="true" showTargetControls="true" showCheckbox="false"
+                                    showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="eleveConverter">
+
+                            <f:facet name="sourceCaption">élèves disponibles</f:facet>
+                            <f:facet name="targetCaption">élèves selectionnés</f:facet>                            
+                        </p:pickList> 
+
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{eleveClasseCtrl.repartirClasse()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:ClasseListerForm:datalist,:ClasseListerForm:growl, ClasseCreerForm" 
+                                     oncomplete="PF('ClasseCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('ClasseCreerDialog').hide()"/>
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

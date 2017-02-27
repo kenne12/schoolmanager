@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="EmpruntCreerDlg" 
+                  widgetVar="EmpruntCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: Emprunt" 
+                  closeOnEscape="true">
+
+            <h:form id="EmpruntCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue.eleve}" for="eleve" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="eleve" value="#{empruntCtrl.eleve.ideleve}" >
+                                <f:selectItem itemLabel="#{langue.selectL} #{langue.eleve}" itemValue="" />
+                                <f:selectItems value="#{empruntCtrl.eleves}" var="item" 
+                                               itemLabel="#{item.nom} #{item.prenom}" 
+                                               itemValue="#{item.ideleve}"/>
+                                <p:ajax update="livre,EmpruntCreerForm" listener="#{empruntCtrl.handleEleveChange()}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.livre}" for="livre"/> 
+                        <p:pickList id="livre" value="#{empruntCtrl.dualLivre}" var="item" effect="bounce"
+                                    itemValue="#{item}" itemLabel="#{item.titre}" showSourceControls="true" showTargetControls="true" showCheckbox="false"
+                                    showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="livreConverter">
+
+                            <f:facet name="sourceCaption">#{langue.livreDisponible}</f:facet>
+                            <f:facet name="targetCaption">#{langue.livreSelectionne}</f:facet>                            
+                        </p:pickList>
+
+                    </p:panelGrid><br/>
+                    <p:commandButton actionListener="#{empruntCtrl.enregistrerEmprunt()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:EmpruntListerForm:datalist,:EmpruntListerForm:growl, EmpruntCreerForm" 
+                                     oncomplete="PF('EmpruntCreerDialog').hide()" disabled="#{empruntCtrl.canemprunt}"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('EmpruntCreerDialog').hide()"/>
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

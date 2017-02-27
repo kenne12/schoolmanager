@@ -1,0 +1,15 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/gestionEtatTemplate/listeTemplate.xhtml">
+
+    <ui:define name="contenu">        
+        <ui:include src="listeClasse/Action.xhtml"/>      
+        <ui:include src="listeClasse/Lister.xhtml"/>
+        <ui:include src="listeClasse/Detail.xhtml"/>
+        <ui:include src="listeClasse/Modifier.xhtml"/>
+        <ui:include src="listeClasse/Creer.xhtml"/>
+        <ui:include src="listeClasse/Imprimer.xhtml"/>              
+    </ui:define>
+
+</ui:composition>

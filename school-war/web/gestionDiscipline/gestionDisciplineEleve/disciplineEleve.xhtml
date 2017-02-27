@@ -1,0 +1,14 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/gestionDisciplineTemplate/principalTemplate.xhtml">
+
+    <ui:define name="contenu">        
+        <ui:include src="disciplineEleve/Action.xhtml"/>       
+        <ui:include src="disciplineEleve/Lister.xhtml"/>
+        <ui:include src="disciplineEleve/Detail.xhtml"/>
+        <ui:include src="disciplineEleve/Modifier.xhtml"/>
+        <ui:include src="disciplineEleve/Creer.xhtml"/>
+        <ui:include src="disciplineEleve/Imprimer.xhtml"/> 
+    </ui:define>    
+</ui:composition>

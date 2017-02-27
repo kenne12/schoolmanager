@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="AffecterSequenceModifierDlg" 
+                  widgetVar="AffecterSequenceModifierDialog" modal="true" 
+                  resizable="false"
+                  appendTo="@(body)" header="#{langue['Titre.Dlg.Modification']}: #{langue.sequence}" 
+                  closeOnEscape="true">
+
+            <h:form id="AffecterSequenceModifierForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" >
+
+                        <p:outputLabel value="#{langue.trimestre}" for="trimestre" />
+                        <p:selectOneMenu id="trimestre" value="#{affecterSeqCtrl.selectedSequenceAnnee.trimestre}" disabled="true" converter="trimestreAnneeConverter">
+                            <f:selectItems value="#{affecterSeqCtrl.trimesteannees}" var="item" itemLabel="#{item.idtrimestre.nom}" itemValue="#{item}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{langue.sequence}" for="sequence"/>
+                        <p:selectOneMenu id="sequence" value="#{affecterSeqCtrl.selectedSequenceAnnee.idsequence}" disabled="true" converter="sequenceConverter">
+                            <f:selectItems value="#{affecterSeqCtrl.sequenceSource}" var="item" itemLabel="#{item.nom}" itemValue="#{item}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{langue.active}"/>   
+                        <h:selectBooleanCheckbox id="etat" value="#{affecterSeqCtrl.selectedSequenceAnnee.etat}" disabled="false"/>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{classeCtrl.modifier()}" value="#{langue['Conv.Modifier']}"
+                                     update=":AffecterSequenceModifierForm,:AffecterSequenceListerForm:datalist,:AffecterSequenceListerForm:growl, :actionsForm"
+                                     oncomplete="PF('AffecterSequenceModifierDialog').hide()">
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}" message="#{langue['Message.Confirm.Modifier']}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{langue['Conv.Annuler']}" onclick="PF('AffecterSequenceModifierDlg').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

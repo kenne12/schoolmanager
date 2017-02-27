@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+
+
+        <h:form id="UploadPhotoForm">
+
+            <h:panelGroup id="display" >
+                <p:outputLabel value="#{langue['Conv.Photo']}"  />
+
+                <p:galleria id="imgs" 
+                            value="#{batimentCtrl.images}" 
+                            var="image" 
+                            effectSpeed="1000"
+                            panelWidth="800" 
+                            panelHeight="600"
+                            showCaption="true">
+                    <p:graphicImage width="800"
+                                    height="600"
+                                    value="/#{image.nom}" 
+                                    alt="Image Description for #{image.nom}" 
+                                    title="#{image.nom}"/>
+                </p:galleria>
+            </h:panelGroup>
+
+
+
+        </h:form>
+
+
+    </ui:composition>
+
+</html>

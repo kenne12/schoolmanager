@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="RemiseListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} emprunts">
+            <p:contextMenu id="RemiseDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{retourCtrl.emprunts}"
+                         var="item"
+                         rowKey="#{item.id}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{retourCtrl.selectedRetour}">
+
+                <p:ajax event="rowSelect"   update=":RemiseListerForm:RemiseDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":RemiseListerForm:RemiseDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('RemiseListerForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.idannee.idannee}" filterBy="#{item.idannee.code}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.anneeScolaire}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idannee.code}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.eleve.ideleve}" filterBy="#{item.eleve.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.nom}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.eleve.nom}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.eleve.ideleve}" filterBy="#{item.eleve.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.prenom}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.eleve.prenom}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.livre.codeisbn}" filterBy="#{item.livre.titre}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.livre}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.livre.titre}"/>
+                </p:column>
+
+                <p:column  filterBy="#{item.dateemprunt}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.date}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.dateemprunt}"/>
+                </p:column>
+
+            </p:dataTable>
+
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

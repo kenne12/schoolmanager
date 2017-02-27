@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="TypecompteListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} : Classe de compte">
+            <p:contextMenu id="TypecompteDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>                
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{typecompteCtrl.typecomptes}"
+                         var="item"
+                         rowKey="#{item.idtypecompte}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{typecompteCtrl.typecompte}">
+
+                <p:ajax event="rowSelect"   update=":TypecompteListerForm:TypecompteDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":TypecompteListerForm:TypecompteDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('TypecompteListerForm:viewButton').click();"/>
+
+
+                <p:column style="width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="Numero"/>
+                    </f:facet>
+                    <h:outputText value="#{item.classe}"/>
+                </p:column>
+
+
+                <p:column style="width: 40%;text-align: left">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.libelle}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.libelle}"/>
+                </p:column>
+
+                <p:column style="width:10%">
+                    <f:facet name="header">
+                        <h:outputText value="Débit"/>
+                    </f:facet>
+                    <h:outputText value="#{item.debit}">
+                        <f:convertNumber/>   
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width:10%">
+                    <f:facet name="header">
+                        <h:outputText value="Crédit"/>
+                    </f:facet>
+                    <h:outputText value="#{item.credit}">
+                        <f:convertNumber/>   
+                    </h:outputText>
+                </p:column>
+
+
+                <p:column style="width:10%">
+                    <f:facet name="header">
+                        <h:outputText value="Solde"/>
+                    </f:facet>
+                    <h:outputText value="#{item.credit - item.debit}">
+                        <f:convertNumber/>   
+                    </h:outputText>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

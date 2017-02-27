@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="PlanningEvaluationListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="Programme des evaluations">
+            <p:contextMenu id="PlanningEvaluationDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{planningEvaluationCtrl.planningEvaluations}"
+                         var="item"
+                         rowKey="#{item.idplanning}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{planningEvaluationCtrl.planningEvaluation}">
+
+                <p:ajax event="rowSelect" listener="#{planningEvaluationCtrl.activeButton()}"    update=":PlanningEvaluationListerForm:PlanningEvaluationDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" listener="#{planningEvaluationCtrl.deactiveButton()}" update=":PlanningEvaluationListerForm:PlanningEvaluationDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect"  onsuccess="document.getElementById('PlanningEvaluationListerForm:viewButton').click();"/>
+
+
+
+
+                <p:column filterBy="#{item.elementEvaluation.classe.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.classe}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.elementEvaluation.classe.nom}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.sequence.idsequence.nom}" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.sequence}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.sequence.idsequence.nom}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.elementEvaluation.elementevaluation.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="Unité d'évaluation"/>
+                    </f:facet>
+                    <h:outputText value="#{item.elementEvaluation.elementevaluation.nom}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.dateEvaluation}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.date}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.dateEvaluation}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.heureDebut}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.heure_debut}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.heureDebut}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.heureFin}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.heure_fin}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.heureFin}"/>
+                </p:column>
+
+            </p:dataTable>
+
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

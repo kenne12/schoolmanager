@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="TypeMatierelCreerDlg" 
+                  widgetVar="TypeMatiereCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: matières" 
+                  closeOnEscape="true">
+
+            <h:form id="TypeMatiereCreerForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses ="column">
+
+                        <p:outputLabel value="Type Matiere" for="type"/>
+                        <p:selectOneMenu id="type" value="#{matiereCtrl.natureMatiere.idnaturematiere}" required="true" requiredMessage="Type Matiere : obligatoire">
+                            <f:selectItem itemLabel="#{langue.choisir}"/>
+                            <f:selectItems value="#{matiereCtrl.listNatureMatiere}" var="item" itemLabel="#{item.libelle}" itemValue="#{item.idnaturematiere}" />
+                        </p:selectOneMenu>
+
+
+                        <p:outputLabel value="#{langue.nom}" for="nom" />
+                        <p:inputText id="nom" value="#{matiereCtrl.matiere.libelle}" required="true" 
+                                     requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{matiereCtrl.save()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:TypeMatiereListerForm:datalist,:TypeMatiereListerForm:growl, TypeMatiereCreerForm" 
+                                     oncomplete="PF('TypeMatiereCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('TypeMatiereCreerDialog').hide()"/>
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

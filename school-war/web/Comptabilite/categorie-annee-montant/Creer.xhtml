@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="CategorieAnPrixCreerDlg" 
+                  widgetVar="CategorieAnPrixCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="Formulaire de parametrage des la pension par catégorie" 
+                  closeOnEscape="true">
+
+            <h:panelGroup >
+                <p:panelGrid  columns="2">
+
+                    <h:form id="CategorieAnPrixCreerForm">
+                        
+                        <p:growl id="growl" showDetail="true" sticky="true" /> 
+
+                        <h:panelGroup id="display" >
+                            <p:panelGrid columns="2" columnClasses="column">
+
+
+                                <p:outputLabel for="categorie" value="#{langue.categorie}"/> 
+                                <p:pickList id="categorie" value="#{categorieAnneePrixCtrl.dualElements}" var="item" effect="bounce" required="true"
+                                            itemValue="#{item}" itemLabel="#{item.nom}" showSourceControls="true" showTargetControls="true" showCheckbox="false"
+                                            showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="categorieConverter">
+
+                                    <f:facet name="sourceCaption">#{langue.categorie} disponibles</f:facet>
+                                    <f:facet name="targetCaption">#{langue.categorie} selectionnés</f:facet>                            
+                                </p:pickList>
+
+                            </p:panelGrid>
+                            <br/>
+                            <p:commandButton actionListener="#{categorieAnneePrixCtrl.transfertData()}" value="TRANSFERER DANS LE TABLEAU" 
+                                             update="display,:CategorieAnPrixListerForm:growl, CategorieAnPrixCreerForm,:ValidateForm"/>
+
+                        </h:panelGroup>
+
+                    </h:form>
+
+                    <h:form id="ValidateForm" style="width: 500px">
+                        <p:dataTable id="datalist1"
+                                     value="#{categorieAnneePrixCtrl.categorieAnneePricesTest}"
+                                     var="item"
+                                     paginator="true"
+                                     editable="true"
+                                     editMode="cell"
+                                     rows="10"
+                                     style="text-align: center;"
+                                     rowsPerPageTemplate="10,20,30,40,50">
+                            <p:ajax event="cellEdit" update="datalist1" />
+
+                            <p:column filterBy="#{item.idcategorie.nom}">
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.categorie}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idcategorie.nom}"/>
+                            </p:column>
+
+                            <p:column headerText="#{langue.prix}">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.prix}" /></f:facet>
+                                    <f:facet name="input"><p:inputText required="true" value="#{item.prix}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Nombre de tranche">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.nombretranche}" /></f:facet>
+                                    <f:facet name="input"><p:inputText required="true" value="#{item.nombretranche}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                        </p:dataTable>
+                        <br/>
+
+                        <p:commandButton update=":CategorieAnPrixListerForm,:CategorieAnPrixListerForm:growl" actionListener="#{categorieAnneePrixCtrl.save()}" value="#{langue['Conv.Enregistrer']}"                                           
+                                         oncomplete="PF('CategorieAnPrixCreerDialog').hide()"/>
+
+                        <p:commandButton value="#{langue.fermer}" onclick="PF('CategorieAnPrixCreerDialog').hide()"/>
+
+                    </h:form>
+
+
+                </p:panelGrid>
+            </h:panelGroup> 
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

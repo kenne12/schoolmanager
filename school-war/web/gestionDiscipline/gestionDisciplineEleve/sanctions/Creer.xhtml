@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="SanctionCreerDlg" 
+                  widgetVar="SanctionCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: de sanctions" 
+                  closeOnEscape="true">
+
+            <h:form id="SanctionCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue['Conv.Nom']}" for="nom" />
+                        <h:panelGroup>
+                            <p:inputText id="nom" value="#{sanctionCtrl.sanction.libelle}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{sanctionCtrl.enregistrerSanction()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:SanctionListerForm:datalist,:SanctionListerForm:growl, SanctionCreerForm" 
+                                     oncomplete="PF('SanctionCreerDialog').hide()"/>
+                    <p:commandButton value="Annuler" onclick="PF('SanctionCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

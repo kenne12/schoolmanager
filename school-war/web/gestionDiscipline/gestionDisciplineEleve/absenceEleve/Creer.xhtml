@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="AbsenceCreerDlg" 
+                  widgetVar="AbsenceCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: de absences" 
+                  closeOnEscape="true">
+
+            <h:form id="AbsenceCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="Année Scolaire" for="annee" />
+                        <h:panelGroup>
+                            <p:selectOneMenu value="#{absenceCtrl.annee.idannee}" id="annee" required="true">
+                                <f:selectItems value="#{anneeCtrl.anneeCourantes}" var="item" itemLabel="#{item.code}" itemValue="#{item.idannee}"/>
+                            </p:selectOneMenu> 
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Eleve" for="eleve" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="eleve" value="#{absenceCtrl.eleve.ideleve}"  required="true">
+                                <f:selectItem itemLabel="Selectionner un eleve" itemValue=""/> 
+                                <f:selectItems value="#{absenceCtrl.eleves}" var="item" itemLabel="#{item.nom} #{item.prenom}" itemValue="#{item.ideleve}"/>
+                            </p:selectOneMenu> 
+                        </h:panelGroup>
+
+
+                        <p:outputLabel value="Sequence" for="sequence" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="sequence" value="#{absenceCtrl.sequenceAnnee.idsequencean}"  required="true">
+                                <f:selectItem itemLabel="Selectionner une sequence" itemValue=""/> 
+                                <f:selectItems value="#{absenceCtrl.sequenceAnnees}" var="item" itemLabel="#{item.idsequence.nom} #{item.idannee.code}" itemValue="#{item.idsequencean}"/>
+                            </p:selectOneMenu> 
+                        </h:panelGroup>
+
+                        <p:outputLabel  value="Date : " for="date"/>
+                        <h:panelGroup>                         
+                            <p:calendar id="date" value="#{absenceCtrl.absence.datejour}" required="true" requiredMessage="la date est obligatoire" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Nombre d'heure(s)" for="nombre" />
+                        <h:panelGroup>
+                            <p:inputText id="nombre" value="#{absenceCtrl.absence.nombreheure}" required="true" 
+                                         requiredMessage="Nombre d'heures: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{absenceCtrl.enregistrerAbsence}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:AbsenceListerForm:datalist,:AbsenceListerForm:growl, AbsenceCreerForm" 
+                                     oncomplete="PF('AbsenceCreerDialog').hide()"/>
+                    <p:commandButton value="Annuler" onclick="PF('AbsenceCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

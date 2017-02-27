@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="actionsForm">
+        <p:fieldset legend="#{langue['Conv.Actions']}" toggleable="true" toggleSpeed="300">
+            <div class="footer-section">
+
+                <p:commandButton id="creer"  icon="ui-icon-plus"   
+                                 value="#{langue['Conv.Creer']}" 
+                                 update=":AffectationCreerForm, :AffectationListerForm:growl" 
+                                 oncomplete="PF('AffectationCreerDialog').show()"
+                                 />
+                <p:commandButton id="detail"   
+                                 icon="ui-icon-search" 
+                                 value="#{langue['Conv.Detail']}" 
+                                 update=":AffectationDetailForm" 
+                                 oncomplete="PF('AffectationDetailDialog').show()" 
+                                 disabled="#{affecterClasseCtrl.detail}"/>
+
+                <p:commandButton id="modifier"   
+                                 icon="ui-icon-pencil" 
+                                 value="#{langue['Conv.Modifier']}" 
+                                 update=":AffectationModifierForm" 
+                                 oncomplete="PF('AffectationModifierDialog').show()" 
+                                 disabled="#{affecterClasseCtrl.modifier}"/>
+
+                <p:commandButton id="supprimer" 
+                                 icon="ui-icon-trash"  
+                                 value="#{langue['Conv.Supprimer']}" 
+                                 update=":AffectationListerForm:growl,:AffectationListerForm:datalist, :actionsForm"
+                                 disabled="#{affecterClasseCtrl.supprimer}"
+                                 actionListener="#{affecterClasseCtrl.supprimer()}">
+                    <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
+                               message="#{langue['Message.Confirm.Supprimer']}?"
+                               icon="ui-icon-alert"/>
+                </p:commandButton>
+
+
+
+
+
+                <p:commandButton id="imprimer" icon="ui-icon-print"  
+                                 value="#{langue['Conv.Imprimer']}" actionListener="#{affecterClasseCtrl.imprimerAffectationHtml()}"
+                                 update=":AffectationListerForm:growl,:AffectationImprimerForm" disabled="#{salleCtrl.imprimer}" 
+                                 oncomplete="PF('AffectationImprimerDialog').show()"/>              
+
+            </div>
+        </p:fieldset>
+    </h:form>
+</ui:composition>

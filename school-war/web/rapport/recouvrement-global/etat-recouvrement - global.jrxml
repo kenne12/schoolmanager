@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="etat-recouvrement-global" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8b33cd51-a4c1-4c61-84c8-8f73f0f0c25b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idannee" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     e."ideleve",
+     UPPER(e."nom") AS nom_eleve,
+     e."prenom" AS prenom_eleve,
+     e."matricule" AS matricule,
+     ecole."nom" AS etablissement_nom,
+     ecole."devise" AS etablissement_devise,
+     ecole."logo" AS etablissement_logo,
+     ad."bp",
+     ad."siteweb"  AS adresse_siteweb,
+     ad."contact"  AS adresse_contact,
+     ad."adresse",
+     ad."email",
+     c."nom" AS classe_nom,
+     a."code" AS annee_code,
+     a."codefin" AS annee_codefin,
+     a."idannee",
+     pc."annee",
+     c.niveau,
+COALESCE(MAX(cap.prix),0) - COALESCE(SUM(pc.montant_cumule),0) AS reste,
+COALESCE (SUM(pc.montant_cumule),0) AS somme,
+SUM(cap.prix)
+
+FROM
+		etablissement ecole INNER JOIN "classe" c ON ecole.id = c.etablissement
+		INNER JOIN "classecategorie" cc ON c.idclasse = cc.idclasse
+		INNER JOIN catanneeprix cap ON cap.idcategorie = cc.idcategorie
+		INNER JOIN "annee" a ON cap.idannee = a.idannee
+		INNER JOIN "eleveanneeclasse" eac ON c.idclasse = eac.idclasse
+		AND eac.idannee = a.idannee
+		INNER JOIN "eleve" e ON e.ideleve = eac.eleve
+LEFT OUTER JOIN pension_cumulee pc ON e.ideleve = pc.eleve
+AND pc.annee = a.idannee
+INNER JOIN "adresse" ad ON ecole.adresse = ad.id
+
+WHERE
+    a.idannee =$P{idannee}  AND
+	a.etablissement = ecole.id
+GROUP BY
+     e.ideleve,
+     e.nom,
+     e.prenom,
+     e.matricule,
+     ecole.nom,
+     ecole.devise,
+     ecole.logo,
+     ad.bp,
+     ad.siteweb,
+     ad.contact,
+     ad.adresse,
+     ad.email,
+     c.nom,
+     a.code,
+     a.codefin,
+     a.idannee,
+     pc.annee,
+     c.niveau
+ORDER BY
+     c.niveau,
+     c.nom,
+     e.nom ASC,
+     e.prenom ASC,
+     e.matricule;]]>
+	</queryString>
+	<field name="ideleve" class="java.lang.Integer"/>
+	<field name="nom_eleve" class="java.lang.String"/>
+	<field name="prenom_eleve" class="java.lang.String"/>
+	<field name="matricule" class="java.lang.String"/>
+	<field name="etablissement_nom" class="java.lang.String"/>
+	<field name="etablissement_devise" class="java.lang.String"/>
+	<field name="etablissement_logo" class="java.lang.String"/>
+	<field name="bp" class="java.lang.String"/>
+	<field name="adresse_siteweb" class="java.lang.String"/>
+	<field name="adresse_contact" class="java.lang.String"/>
+	<field name="adresse" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="classe_nom" class="java.lang.String"/>
+	<field name="annee_code" class="java.lang.Integer"/>
+	<field name="annee_codefin" class="java.lang.Integer"/>
+	<field name="idannee" class="java.lang.Integer"/>
+	<field name="annee" class="java.lang.Integer"/>
+	<field name="niveau" class="java.lang.Integer"/>
+	<field name="reste" class="java.lang.Long"/>
+	<field name="somme" class="java.lang.Long"/>
+	<field name="sum" class="java.lang.Long"/>
+	<variable name="somme_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{somme}]]></variableExpression>
+	</variable>
+	<variable name="reste_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{reste}]]></variableExpression>
+	</variable>
+	<variable name="somme_2" class="java.lang.Long" resetType="Group" resetGroup="classe-group" calculation="Sum">
+		<variableExpression><![CDATA[$F{somme}]]></variableExpression>
+	</variable>
+	<variable name="reste_2" class="java.lang.Long" resetType="Group" resetGroup="classe-group" calculation="Sum">
+		<variableExpression><![CDATA[$F{reste}]]></variableExpression>
+	</variable>
+	<variable name="somme_3" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{somme}]]></variableExpression>
+	</variable>
+	<variable name="reste_3" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{reste}]]></variableExpression>
+	</variable>
+	<group name="classe-group">
+		<groupExpression><![CDATA[$F{classe_nom}]]></groupExpression>
+		<groupHeader>
+			<band height="24">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="555" height="24" backcolor="#CCCCCC" uuid="7ed27a9f-ea07-4719-85a1-913d63ace89b"/>
+					<box leftPadding="3" rightPadding="0">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Etat des recouvrements de la  " +$F{classe_nom}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="26">
+				<textField pattern="#,##0">
+					<reportElement mode="Opaque" x="375" y="0" width="91" height="21" backcolor="#CCCCCC" uuid="f899911f-0f85-448c-8179-2024088c390a"/>
+					<box rightPadding="3">
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{somme_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement mode="Opaque" x="466" y="0" width="89" height="21" backcolor="#CCCCCC" uuid="e7c5600b-452e-4f22-acbb-21d7e6dc78ae"/>
+					<box rightPadding="3">
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{reste_2}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="375" height="21" backcolor="#CCCCCC" uuid="401767ed-5b01-44c3-8e66-c05cc7187c2b"/>
+					<box leftPadding="3">
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total des recouvrements de la : " + $F{classe_nom}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="123" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="527" y="3" width="30" height="20" backcolor="#CCFFFF" uuid="a5a2b41c-8ed1-40a5-9439-f15f4c2e1624"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="103" width="136" height="13" uuid="40b55ca4-7950-4752-96a7-cb7d29d4b825"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Paix - Travail - Patrie"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="24" width="137" height="13" uuid="1b5f4fbe-2346-41d7-a347-70591de2c8d0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["REPUBLIQUE DU CAMEROUN"]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="450" y="39" width="63" height="60" uuid="d7c9005c-201f-485c-959c-979e9966eacb"/>
+				<imageExpression><![CDATA["E:\\big-malkus\\photos\\36239_147584225295486_7401651_n.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="31" y="3" width="496" height="20" backcolor="#CCCCFF" uuid="456f25ba-bf69-4336-aa3b-bf4aadcc7b49"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MINISTERE DES ENSEIGNEMENTS SECONDAIRES"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="92" width="275" height="24" uuid="d511459f-7d33-4c72-a441-c1912b0ef123"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{annee_code}+" / " +$F{annee_codefin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="32" width="275" height="20" uuid="3ff45304-8351-427a-9929-3c9d94e347c5"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{etablissement_nom}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="41" y="39" width="63" height="60" uuid="b8f1f88a-95ef-4e9e-bf5d-bcca0a6d1c9c"/>
+				<imageExpression><![CDATA["E:\\big-malkus\\photos\\36239_147584225295486_7401651_n.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="3" width="30" height="20" backcolor="#CCFFFF" uuid="98e100dd-8dc5-4a60-b964-9fa1c8b69682"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="413" y="102" width="142" height="14" uuid="bfaa4242-6002-4e3b-b22b-b30533d83d94"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Peace - Work - Fatherland"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="72" width="275" height="20" uuid="05a02acc-a976-410a-8764-552a7782b2a0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" Site web : "+$F{adresse_siteweb}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="52" width="275" height="20" uuid="51e739f5-b82c-42b9-a510-6efe0d4f0165"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Tél ; "+$F{adresse_contact}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="413" y="24" width="143" height="13" uuid="6573d525-2214-41d9-839a-f00f6a54f58f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["REPUBLIC OF  CAMEROON"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="45" splitType="Stretch">
+			<textField>
+				<reportElement mode="Transparent" x="31" y="6" width="493" height="39" backcolor="#999999" uuid="800459cf-d437-47f7-a90f-9dba4c2611f3"/>
+				<box>
+					<pen lineColor="#999999"/>
+					<topPen lineWidth="0.25" lineColor="#33FFCC"/>
+					<leftPen lineWidth="0.5" lineColor="#33FFCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#33FFCC"/>
+					<rightPen lineWidth="0.5" lineColor="#33FFCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ETAT DE RECOUVREMENT DES FRAIS EXIGIBLES DE L'ETABLISSEMENT"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="6" width="555" height="1" uuid="aa54b7a2-ebb5-4031-813c-110f8cdb093f"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#33FFCC"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="466" y="10" width="89" height="21" backcolor="#CCFFFF" uuid="5652389d-36e3-4855-a29a-d4336347dec6"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Reste à Payer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="375" y="10" width="91" height="21" backcolor="#CCFFFF" uuid="cd1d8965-3c8e-4c1d-b827-fae25329e589"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Montant Payé]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="78" y="10" width="157" height="21" backcolor="#CCFFFF" uuid="f5d35aba-1797-46b0-88db-281cd392427e"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Nom]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="235" y="10" width="140" height="21" backcolor="#CCFFFF" uuid="c1b7c60e-71f0-4f54-bcdf-c395fb54b437"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Prénom]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="10" width="78" height="21" backcolor="#CCFFFF" uuid="fc84fa63-0a7c-4371-b44d-4d2eeeebcf2f"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Matricule]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="78" height="30" uuid="602b6bc5-44c4-48ea-92b4-d2d027677584"/>
+				<box leftPadding="3" rightPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{matricule}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="78" y="0" width="157" height="30" uuid="910572a1-de74-4cfb-817d-66b23394aa4f"/>
+				<box leftPadding="3" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_eleve}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="235" y="0" width="140" height="30" uuid="be24db03-cb50-4ad6-a3f5-cc6a70da3356"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prenom_eleve}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="375" y="0" width="91" height="30" uuid="ba895ff4-97aa-440a-bc4d-8c8f92a71060"/>
+				<box rightPadding="3">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{somme}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement mode="Opaque" x="466" y="0" width="89" height="30" backcolor="#CCCCCC" uuid="528a6908-63e1-4740-8bec-4953dafed9cc"/>
+				<box rightPadding="3">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reste}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="0" width="376" height="21" backcolor="#CCFFFF" uuid="d06c415d-7585-4830-9dde-801f0088d3d0"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total des recouvrements " ]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement mode="Opaque" x="376" y="0" width="90" height="21" backcolor="#CCFFFF" uuid="aeadd913-ebd5-4895-af6f-2d556e8dacf8"/>
+				<box rightPadding="3">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{somme_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement mode="Opaque" x="466" y="0" width="89" height="21" backcolor="#CCFFFF" uuid="5e20fd0c-fbf1-4f3c-b69d-1a6012c15f97"/>
+				<box rightPadding="3">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{reste_3}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

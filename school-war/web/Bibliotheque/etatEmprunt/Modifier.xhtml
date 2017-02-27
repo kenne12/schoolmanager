@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="LogementModifierDlg" 
+                  widgetVar="LogementModifierDialog" modal="true" 
+                  resizable="false"
+                  appendTo="@(body)" header="#{langue['Titre.Dlg.Modification']}: #{langue['Conv.Logement']}" 
+                  closeOnEscape="true">
+
+            <h:form id="LogementModifierForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+                        <p:outputLabel value="#{langue['Conv.TypeLogement']}" for="typeLogement" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="typeLogement" value="#{logementCtrl.type.id}"
+                                             required="true"
+                                             requiredMessage="#{langue['Conv.TypeLogement']}: #{langue['Conv.ValeurRequise']}">
+                                <f:selectItem itemLabel="Selectionner un type de logement" itemValue="#{logementCtrl.type.id}" />
+                                <f:selectItems value="#{logementCtrl.typesLogements}" 
+                                               var="typelogement" 
+                                               itemLabel="#{typelogement.code}" itemValue="#{typelogement.id}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue['Conv.Batiment']}" for="batiment" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="batiment" value="#{logementCtrl.batiment.id}"
+                                             required="true"
+                                             requiredMessage="#{langue['Conv.Batiment']}: #{langue['Conv.ValeurRequise']}">
+                                <f:selectItem itemLabel="Selectionner le batiment" 
+                                              itemValue="#{logementCtrl.batiment.id}" />
+                                <f:selectItems value="#{logementCtrl.batiments}" 
+                                               var="batiment" 
+                                               itemLabel="#{batiment.code}" itemValue="#{batiment.id}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue['Conv.Reference']}" for="reference" />
+                        <h:panelGroup>
+                            <p:inputText id="reference" value="#{logementCtrl.selectedLogement.reference}" required="true" 
+                                         requiredMessage="#{langue['Conv.Reference']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue['Conv.Description']}" for="description" />
+                        <h:panelGroup>
+                            <p:inputText id="description" value="#{logementCtrl.selectedLogement.description}" required="true" 
+                                         requiredMessage="#{langue['Conv.Description']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+                    </p:panelGrid><br/>   
+                    <p:commandButton actionListener="#{logementCtrl.modifier()}" value="#{langue['Conv.Modifier']}"
+                                     update=":LogementModifierForm,:LogementListerForm:datalist,:LogementListerForm:growl, :actionsForm"
+                                     oncomplete="PF('LogementModifierDialog').hide()">
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}" message="#{langue['Message.Confirm.Modifier']}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{langue['Conv.Annuler']}" onclick="PF('LogementModifierDlg').hide()"/>
+
+                </h:panelGroup>
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

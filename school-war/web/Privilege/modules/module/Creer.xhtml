@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ModuleCreerDlg" 
+                  widgetVar="ModuleCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: de modules" 
+                  closeOnEscape="true">
+
+            <h:form id="ModuleCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+
+
+                        <p:outputLabel value="#{langue['Conv.Nom']}" for="nom" />
+                        <h:panelGroup>
+                            <p:inputText id="nom" value="#{moduleCtrl.module.nom}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Etat" for="etat" />
+                        <p:selectBooleanCheckbox id="etat" value="#{moduleCtrl.module.etat}"/>
+
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{moduleCtrl.enregistrerModule}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:ModuleListerForm:datalist,:ModuleListerForm:growl, ModuleCreerForm" 
+                                     oncomplete="PF('ModuleCreerDialog').hide()"/>
+                    <p:commandButton value="Annuler" onclick="PF('ModuleCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

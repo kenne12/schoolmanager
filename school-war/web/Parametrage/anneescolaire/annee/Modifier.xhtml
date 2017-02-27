@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="AnneeModifierDlg" 
+                  widgetVar="AnneeModifierDialog" modal="true" 
+                  resizable="false"
+                  appendTo="@(body)" header="#{langue['Titre.Dlg.Modification']}: #{langue.anneeScolaire}" 
+                  closeOnEscape="true">
+
+            <h:form id="AnneeModifierForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" >
+
+
+                        <p:outputLabel value="#{langue['Conv.Code']}" for="code" />
+                        <h:panelGroup>
+                            <p:inputText id="code" value="#{anneeCtrl.selectedAnnee.code}"
+                                         required="true" 
+                                         requiredMessage="#{langue.Anneedebut} : #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+                        
+                        <p:outputLabel value="#{langue['Conv.Code']}" for="codefin" />
+                        <h:panelGroup>
+                            <p:inputText id="codefin" value="#{anneeCtrl.selectedAnnee.codefin}"
+                                         required="true" 
+                                         requiredMessage="#{langue.Anneefin} : #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.theme}" for="theme" />
+                        <h:panelGroup>
+                            <p:inputText id="theme" value="#{anneeCtrl.selectedAnnee.theme}" />                                         
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.active}" for="etat" />
+                        <h:panelGroup>
+                            <p:selectBooleanCheckbox id="etat" value="#{anneeCtrl.selectedAnnee.etatannee}"/>
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{anneeCtrl.modifier()}" value="#{langue['Conv.Modifier']}"
+                                     update=":AnneeModifierForm,:AnneeListerForm:datalist,:AnneeListerForm:growl, :actionsForm"
+                                     oncomplete="PF('AnneeModifierDialog').hide()">
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}" message="#{langue['Message.Confirm.Modifier']}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{langue['Conv.Annuler']}" onclick="PF('AnneeModifierDlg').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

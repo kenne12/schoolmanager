@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <!-- BEGIN SIDEBAR -->
+    <div class="sidebar-scroll">
+        <div id="sidebar" class="nav-collapse collapse">
+
+            <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+            <div class="navbar-inverse">
+                <form class="navbar-search visible-phone">
+                    <input type="text" class="search-query" placeholder="Search" />
+                </form>
+            </div>
+            <!-- END RESPONSIVE QUICK SEARCH FORM -->
+            <!-- BEGIN SIDEBAR MENU -->
+            <ul class="sidebar-menu">
+
+                <!--Accueil-->
+                <li class="sub-menu" id="menuIndex">
+                    <a class="" href="#{request.contextPath}/index.html">
+                        <span>#{langue.accueil}</span>
+                    </a>
+                </li>
+
+                <!--Matieres-->
+                <li class="sub-menu" id="menuMatiere">
+                    <a href="javascript:;" class="">
+                        <i class="icon-book"></i>
+                        <span>Gérer les Matières</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Note/matiere/nature.html">Nature Matiere</a></li>
+                        <li><a class="" href="#{request.contextPath}/Note/matiere/matiere.html">Matière</a></li>
+                        <li><a class="" href="#{request.contextPath}/Note/matiere/elementevaluation.html">Unité Evaluation</a></li>
+                        <li><a class="" href="#{request.contextPath}/Note/matiere/elementevaluationparclasse.html">Unité Evaluation / Classe</a></li>
+                    </ul>
+                </li>
+
+                <li class="sub-menu" id="menuNotes">
+                    <a href="javascript:;" class="">
+                        <i class="icon-building"></i>
+                        <span>Gestion des notes</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Note/observation-note.html">Observation note</a></li>
+                        <li><a class="" href="#{request.contextPath}/Note/planning.html">Planning Evaluation</a></li>
+                        <li><a class="" href="#{request.contextPath}/Note/saisie-note.html">Saisir les notes(Enseignant)</a></li>
+                        <li><a class="" href="#{request.contextPath}/Note/saisie-note1.html">Saisir les notes</a></li>
+                    </ul>
+                </li>
+
+                <li class="sub-menu" id="proces_verbal_note">
+                    <a href="javascript:;" class="">
+                        <i class="icon-building"></i>
+                        <span>Procès verbal note</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Note/proces_note_seq.html">Séquentiel</a></li>
+                        <li><a class="" href="#{request.contextPath}/Note/proces_note_trim.html">Trimestriel</a></li>
+                        <li><a class="" href="#{request.contextPath}/Note/proces_note_annuel.html">Annuel</a></li>
+                    </ul>
+                </li>
+
+                <li class="sub-menu" id="bulletin">
+                    <a href="javascript:;" class="">
+                        <i class="icon-building"></i>
+                        <span>Imprimer les bulletins</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/Note/bulletin/sequentiel.html">Séquentiel</a></li>
+                        <li><a class="" href="#{request.contextPath}/Note/bulletin/trimestriel.html">Trimestriel</a></li>
+                        <li><a class="" href="#{request.contextPath}/Note/bulletin/annuel.html">Annuel</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+            <!-- END SIDEBAR MENU -->
+        </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+</ui:composition>

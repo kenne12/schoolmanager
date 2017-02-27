@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:composition>
+
+        <p:dialog id="PlanningEvaluationCreerDlg" 
+                  widgetVar="PlanningEvaluationCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)"
+                  footer="Cliquer sur la cellule du coefficient pour modifier celui par défaut"
+                  header="Formulaire de planning des evaluations" 
+                  closeOnEscape="true">
+
+            <h:panelGroup >
+                <p:panelGrid  columns="2">
+
+                    <h:form id="PlanningEvaluationCreerForm">
+                        <p:panelGrid  columns="2" columnClasses="column">
+
+
+                            <p:outputLabel value="#{langue.classe}" for="classe"/>
+                            <p:selectOneMenu id="classe" value="#{planningEvaluationCtrl.classe}" converter="classeConverter">
+                                <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
+                                <f:selectItems value="#{planningEvaluationCtrl.classes}" var="item" itemLabel="#{item.nom}" itemValue="#{item}"/>
+                                <p:ajax update="unite" listener="#{planningEvaluationCtrl.updateUnite()}"/>
+                            </p:selectOneMenu>                        
+
+
+                            <p:outputLabel for="sequence" value="#{langue.sequence}" />
+
+                            <p:selectOneMenu  id="sequence" value="#{planningEvaluationCtrl.sequenceannee}" converter="sequenceConverter">
+                                <f:selectItem itemLabel="#{langue.choisir}"/>
+                                <f:selectItems value="#{planningEvaluationCtrl.sequenceannees}" var="seq" itemLabel="#{seq.idsequence.nom}" itemValue="#{seq}"/>
+                                <p:ajax update="unite" listener="#{planningEvaluationCtrl.updateUnite()}"/>
+                            </p:selectOneMenu>                        
+
+
+                            <p:outputLabel for="unite" value="Unite d'evaluation"/> 
+                            <p:pickList id="unite" value="#{planningEvaluationCtrl.dualListModel}" var="item" effect="bounce" required="true"
+                                        itemValue="#{item}" itemLabel="#{item.elementevaluation.nom}" showCheckbox="false"
+                                        showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="classeElementConverter">
+
+                                <f:facet name="sourceCaption">disponibles</f:facet>
+                                <f:facet name="targetCaption">selectionnés</f:facet>                            
+                            </p:pickList>
+
+
+                        </p:panelGrid>
+                        <br/>
+                        <p:commandButton icon="ui-icon-right"  actionListener="#{planningEvaluationCtrl.transfertEtape()}" value="TRANSFERER DANS LE TABLEAU" 
+                                         update=":ValidateForm,:PlanningEvaluationListerForm:growl, PlanningEvaluationCreerForm"/> 
+
+                    </h:form>
+
+                    <h:form id="ValidateForm" style="width: 550px">
+                        <p:growl id="vgrowl"/>
+                        <p:dataTable id="datalist1"
+                                     value="#{planningEvaluationCtrl.planningEvaluations1}"
+                                     var="item"
+                                     paginator="true"
+                                     editable="true"
+                                     rows="10"
+                                     style="text-align: center;"
+                                     rowsPerPageTemplate="10,20,30,40,50">
+
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Classe"/>
+                                </f:facet>
+                                <h:outputText value="#{item.elementEvaluation.classe.nom}"/>
+                            </p:column>
+
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Unité"/>
+                                </f:facet>
+                                <h:outputText value="#{item.elementEvaluation.elementevaluation.nom}"/>
+                            </p:column>
+
+
+
+                            <p:column headerText="#{langue.date}">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <p:outputLabel  value="#{item.dateEvaluation}" >
+                                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                                        </p:outputLabel>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:calendar  value="#{item.dateEvaluation}" navigator="true"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+
+                            <p:column headerText="#{langue.heure_debut}">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <p:outputLabel  value="#{item.heureDebut}" >
+                                            
+                                        </p:outputLabel>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <input type="datetime" class="form-control" jsf:value="#{item.heureDebut}"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column style="width:32px">
+                                <p:rowEditor />
+                            </p:column>
+
+
+                        </p:dataTable>
+                        <br/>
+
+                        <p:commandButton icon="ui-icon-check" actionListener="#{planningEvaluationCtrl.save()}" value="#{langue['Conv.Enregistrer']}" 
+                                         update=":PlanningEvaluationListerForm:datalist,:PlanningEvaluationListerForm:growl, :PlanningEvaluationCreerForm,vgrowl" 
+                                         oncomplete="PF('PlanningEvaluationCreerDialog').hide()"/>
+                        <p:commandButton icon="ui-icon-cancel" value="#{langue.fermer}" onclick="PF('PlanningEvaluationCreerDialog').hide()"/>
+
+                    </h:form>
+
+
+                </p:panelGrid>
+            </h:panelGroup>
+
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

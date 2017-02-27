@@ -1,0 +1,23 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/gestionFraisInscriptionTemplate/principalTemplate.xhtml">
+
+    <ui:define name="contenu">
+
+        <ui:include src="gererInscription/Action.xhtml"/>
+        <ui:include src="gererInscription/Lister.xhtml"/>
+        <ui:include src="gererInscription/Detail.xhtml"/>
+        <ui:include src="gererInscription/Modifier.xhtml"/>
+        <ui:include src="gererInscription/Creer.xhtml"/>
+        <ui:include src="gererInscription/Imprimer.xhtml"/>
+    </ui:define>
+    
+    <ui:define name="scriptCollapse">
+        <script>
+            var el = document.getElementById("menuFrais");
+            el.setAttribute("class", "sub-menu active");
+        </script>
+    </ui:define>
+
+</ui:composition>

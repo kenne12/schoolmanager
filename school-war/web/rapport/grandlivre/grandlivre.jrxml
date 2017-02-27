@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="grandlivre" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2c805346-489b-47ab-b0d0-416e3675b677">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     annee."idannee" AS annee_idannee,
+     annee."code" AS annee_code,
+     annee."codefin" AS annee_codefin,
+     etablissement."nom" AS etablissement_nom,
+     etablissement."logo" AS etablissement_logo,
+     type_etablissement."nom" AS type_etablissement_nom,
+     adresse."bp" AS adresse_bp,
+     adresse."contact" AS adresse_contact,
+     adresse."email" AS adresse_email,
+     adresse."adresse" AS adresse_adresse,
+     operation."debit" AS operation_debit,
+     operation."libelle" AS operation_libelle,
+     operation."credit" AS operation_credit,
+     compte."libelle" AS compte_libelle,
+     compte."idcompte" AS compte_idcompte,
+     compte."classe" AS compte_classe,
+     typecompte."libelle" AS typecompte_libelle,
+     typecompte."classe" AS typecompte_classe,
+     adresse."siteweb" AS adresse_siteweb
+FROM
+     "public"."etablissement" etablissement INNER JOIN "public"."annee" annee ON etablissement."id" = annee."etablissement"
+     INNER JOIN "public"."type_etablissement" type_etablissement ON etablissement."type" = type_etablissement."id"
+     INNER JOIN "public"."adresse" adresse ON etablissement."adresse" = adresse."id"
+     INNER JOIN "public"."operation" operation ON etablissement."id" = operation."idetablissement"
+     INNER JOIN "public"."compte" compte ON etablissement."id" = compte."idetablissement"
+     INNER JOIN "public"."typecompte" typecompte ON etablissement."id" = typecompte."idetablissement"
+     AND typecompte."idtypecompte" = compte."idtypecompte"
+     AND compte."idcompte" = operation."idcompte"
+     AND annee."idannee" = operation."idannee"
+ORDER BY
+     compte_classe ASC]]>
+	</queryString>
+	<field name="annee_idannee" class="java.lang.Integer"/>
+	<field name="annee_code" class="java.lang.Integer"/>
+	<field name="annee_codefin" class="java.lang.Integer"/>
+	<field name="etablissement_nom" class="java.lang.String"/>
+	<field name="etablissement_logo" class="java.lang.String"/>
+	<field name="type_etablissement_nom" class="java.lang.String"/>
+	<field name="adresse_bp" class="java.lang.String"/>
+	<field name="adresse_contact" class="java.lang.String"/>
+	<field name="adresse_email" class="java.lang.String"/>
+	<field name="adresse_adresse" class="java.lang.String"/>
+	<field name="operation_debit" class="java.lang.Double"/>
+	<field name="operation_libelle" class="java.lang.String"/>
+	<field name="operation_credit" class="java.lang.Double"/>
+	<field name="compte_libelle" class="java.lang.String"/>
+	<field name="compte_idcompte" class="java.lang.Long"/>
+	<field name="compte_classe" class="java.lang.Integer"/>
+	<field name="typecompte_libelle" class="java.lang.String"/>
+	<field name="typecompte_classe" class="java.lang.Integer"/>
+	<field name="adresse_siteweb" class="java.lang.String"/>
+	<sortField name="compte_classe"/>
+	<variable name="operation_debit_1" class="java.lang.Double" resetType="Group" resetGroup="groupecompte" calculation="Sum">
+		<variableExpression><![CDATA[$F{operation_debit}]]></variableExpression>
+	</variable>
+	<variable name="operation_credit_1" class="java.lang.Double" resetType="Group" resetGroup="groupecompte" calculation="Sum">
+		<variableExpression><![CDATA[$F{operation_credit}]]></variableExpression>
+	</variable>
+	<group name="groupecompte">
+		<groupExpression><![CDATA[$F{compte_idcompte}]]></groupExpression>
+		<groupHeader>
+			<band height="23">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="555" height="23" backcolor="#CCCCCC" uuid="c40935e4-38e5-486c-a11f-1f6d528469f0"/>
+					<box leftPadding="3">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Compte  : "+$F{compte_classe}+"        "+$F{compte_libelle}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="31">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="375" height="23" backcolor="#CCCCCC" uuid="b66ed465-5304-43d9-9cfa-51f95dfde0eb"/>
+					<box leftPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total pour le compte  : "+$F{compte_classe}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0;(#,##0)">
+					<reportElement mode="Opaque" x="435" y="0" width="60" height="23" backcolor="#CCCCCC" uuid="1f4018fa-42d5-445a-af62-48b8e1fb858a"/>
+					<box rightPadding="1">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{operation_credit_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0;(#,##0)">
+					<reportElement mode="Opaque" x="375" y="0" width="60" height="23" backcolor="#CCCCCC" uuid="9e7f70dd-c15d-47a7-88bd-f9383036151a"/>
+					<box rightPadding="1">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{operation_debit_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement mode="Opaque" x="495" y="0" width="60" height="23" backcolor="#CCCCCC" uuid="30c1816c-aa76-4ee1-b671-d2facb777203"/>
+					<box rightPadding="1">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{operation_credit_1} - $V{operation_debit_1})]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="123" splitType="Stretch">
+			<image>
+				<reportElement x="449" y="40" width="63" height="60" uuid="0be0b91a-47f5-41ce-a4fd-692bf603e456"/>
+				<imageExpression><![CDATA["E:\\big-malkus\\photos\\36239_147584225295486_7401651_n.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="137" y="73" width="275" height="20" uuid="d34be0dd-aaa0-4fed-8d69-a2d4699962ce"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[" Site web : "+$F{adresse_siteweb}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="137" y="33" width="275" height="20" uuid="89dd8ed4-3c00-41c0-91b2-cb8afe8c4344"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{etablissement_nom}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="40" y="40" width="63" height="60" uuid="c396bd13-4eff-4dbb-b997-9773a712a101"/>
+				<imageExpression><![CDATA["E:\\big-malkus\\photos\\36239_147584225295486_7401651_n.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="30" y="4" width="496" height="20" backcolor="#CCCCFF" uuid="efadec1c-08c2-4d3f-af2b-2b62314ddc92"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MINISTERE DES ENSEIGNEMENTS SECONDAIRES"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="526" y="4" width="30" height="20" backcolor="#CCFFFF" uuid="82061d45-c5e4-4286-b98f-26dcc1ef50bf"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="4" width="30" height="20" backcolor="#CCFFFF" uuid="849f68ad-5e58-4fe5-9f5e-8f31018ea01b"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<line>
+				<reportElement x="138" y="33" width="1" height="87" uuid="530b792d-4997-4615-9b97-3a255c6f1f70"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="412" y="33" width="1" height="87" uuid="5848fc15-f286-4ef7-81c7-7b4706f93353"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="137" y="53" width="275" height="20" uuid="3507009c-ec77-45cc-a072-f90edb627402"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Tél ; "+$F{adresse_contact}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="137" y="97" width="276" height="20" uuid="4df0432b-447a-48db-bc81-71257e20e91b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{annee_code}+" / " +$F{annee_codefin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="408" y="25" width="147" height="13" uuid="dc8d9a51-4e70-40af-85ff-7e099d528be2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["REPUBLIC OF  CAMEROON"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="413" y="103" width="141" height="13" uuid="b4f89002-4d8e-4238-9772-0642d517f6bf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Peace - Work - Fatherland"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="25" width="136" height="13" uuid="3cb31f6c-e555-4326-b273-0193d930b1df"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["REPUBLIQUE DU CAMEROUN"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="107" width="136" height="13" uuid="254f8e27-ed64-4fca-845c-b9b07e117d8a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Paix - Travail - Patrie"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement mode="Transparent" x="30" y="2" width="496" height="21" backcolor="#999999" uuid="84c99d1d-1a86-469f-af45-ad4a3eb7868e"/>
+				<box>
+					<pen lineColor="#999999"/>
+					<topPen lineWidth="0.25" lineColor="#33FFCC"/>
+					<leftPen lineWidth="0.5" lineColor="#33FFCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#33FFCC"/>
+					<rightPen lineWidth="0.5" lineColor="#33FFCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["LE GRAND LIVRE COMPTABLE"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="2" width="555" height="1" uuid="f796c1a7-901a-46e8-a0e9-2db86055984d"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#33FFCC"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="49" splitType="Stretch">
+			<staticText>
+				<reportElement x="157" y="23" width="218" height="21" uuid="affa5780-e41e-4e99-b307-47de66441ce1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Libellé]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="375" y="23" width="60" height="21" uuid="1ba5468c-6e8c-4ff2-9ffe-de3649c7d164"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Débit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="435" y="23" width="60" height="21" uuid="c6b0fff7-38f1-4184-a42b-d2758660ac0c"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Crédit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="23" width="40" height="21" uuid="f41f6fb3-4ac2-4c7e-8ce8-893191f8b356"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Journal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="23" width="117" height="21" uuid="86f79a1e-6e22-41b4-a558-4f7fbb2bb3ae"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Intitulé]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="495" y="23" width="60" height="21" uuid="98982a20-8699-4478-9bf4-23d7fc437518"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Solde]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="32" splitType="Stretch">
+			<textField>
+				<reportElement x="157" y="0" width="218" height="32" uuid="7b9ead72-d63d-47e2-8b0b-1dde2b0080b3"/>
+				<box leftPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{operation_libelle}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)">
+				<reportElement mode="Opaque" x="495" y="0" width="60" height="32" backcolor="#CCCCCC" uuid="84b4d05b-8876-4606-afbe-3e33325a1426"/>
+				<box rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{operation_credit}-$F{operation_debit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="0" width="117" height="32" uuid="2ae13bba-c6df-4929-9614-455124ab46cd"/>
+				<box leftPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{typecompte_libelle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="40" height="32" uuid="7c28510d-41bb-427b-a174-b44d77d6a04a"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{typecompte_classe}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="375" y="0" width="60" height="32" uuid="273cea2a-8c74-4542-aeac-f5324c3b81d3"/>
+				<box rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[(($F{operation_debit}.equals(0d))? " ":$F{operation_debit})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)">
+				<reportElement x="435" y="0" width="60" height="32" uuid="2641f4c9-8de0-4e96-bd51-2b8bd85a2ef1"/>
+				<box rightPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[(($F{operation_credit}.equals(0d))? " " : $F{operation_credit})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="14" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="9" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="12" splitType="Stretch"/>
+	</summary>
+</jasperReport>

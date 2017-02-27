@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="EvaluationImprimerDlg" widgetVar="EvaluationImprimerDialog" modal="true" resizable="true"  width="1000px" height="550px"
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Impression']} #{langue.de} #{langue.bulletinNote}"  closeOnEscape="true">
+
+            <h:form  id="EvaluationImprimerForm">
+
+                <object data="#{request.contextPath}/rapport/bulletins/#{bulletinCtrl.eleveAnneeClasse.eleve.nom}_#{bulletinCtrl.eleveAnneeClasse.eleve.prenom}_#{bulletinCtrl.sequence.idsequence.nom}.pdf" width="100%" height="545px" type="application/pdf" title="bulletin"></object>
+
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+</html>

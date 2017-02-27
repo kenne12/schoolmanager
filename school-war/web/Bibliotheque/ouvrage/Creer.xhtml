@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="LivreCreerDlg" 
+                  widgetVar="LivreCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue.livre}" 
+                  closeOnEscape="true">
+
+            <h:form id="LivreCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue.codeIsbn}" for="isbn" />
+                        <h:panelGroup>
+                            <p:inputText  id="isbn" value="#{livreCtrl.livre.codeisbn}" required="true" 
+                                          requiredMessage="#{langue.codeIsbn} : #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+
+
+                        <p:outputLabel value="#{langue.editeur}" for="editeur" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="editeur" value="#{livreCtrl.editeur.idediteur}" >
+                                <f:selectItem itemLabel="#{langue.selectL} #{langue.editeur}" itemValue="" />
+                                <f:selectItems value="#{livreCtrl.editeurs}" var="item" 
+                                               itemLabel="#{item.nom}" 
+                                               itemValue="#{item.idediteur}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+
+                        <p:outputLabel value="#{langue.titre}" for="titre" />
+                        <h:panelGroup>
+                            <p:inputText id="titre" value="#{livreCtrl.livre.titre}" required="true" 
+                                         requiredMessage="#{langue.titre} : #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue['Conv.Date']}" for="dateNaiss" />
+                        <h:panelGroup>
+                            <p:calendar id="dateNaiss" value="#{livreCtrl.livre.datepublication}" required="true" requiredMessage="la date de publication est requise !">           
+                            </p:calendar>
+                        </h:panelGroup>
+
+
+                    </p:panelGrid><br/>
+                    <p:commandButton actionListener="#{livreCtrl.enregistrerLivre}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:LivreListerForm:datalist,:LivreListerForm:growl, LivreCreerForm" 
+                                     oncomplete="PF('LivreCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('LivreCreerDialog').hide()"/>
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

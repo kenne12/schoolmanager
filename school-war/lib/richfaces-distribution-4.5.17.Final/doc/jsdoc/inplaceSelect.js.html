@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: inplaceSelect.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: inplaceSelect.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>(function ($, rf) {
+
+    rf.ui = rf.ui || {};
+
+    /**
+     * Backing object for rich:inplaceSelect
+     * 
+     * @extends RichFaces.ui.InplaceBase
+     * @memberOf! RichFaces.ui
+     * @constructs RichFaces.ui.InplaceSelect
+     * 
+     * @param id
+     * @param options
+     */
+    rf.ui.InplaceSelect = function(id, options) {
+        var mergedOptions = $.extend({}, defaultOptions, options);
+        $super.constructor.call(this, id, mergedOptions);
+        this.getInput().bind("click", $.proxy(this.__clickHandler, this));
+        mergedOptions['attachTo'] = id;
+        mergedOptions['scrollContainer'] = $(document.getElementById(id + "Items")).parent()[0];
+        mergedOptions['focusKeeperEnabled'] = false;
+        this.popupList = new rf.ui.PopupList(id + "List", this, mergedOptions);
+        this.list = this.popupList.__getList();
+        this.clientSelectItems = mergedOptions.clientSelectItems;
+        this.selValueInput = $(document.getElementById(id + "selValue"));
+        this.initialValue = this.selValueInput.val();
+        this.listHandler = $(document.getElementById(id + "List"));
+        this.listHandler.bind("mousedown", $.proxy(this.__onListMouseDown, this));
+        this.listHandler.bind("mouseup", $.proxy(this.__onListMouseUp, this));
+        this.openOnEdit = mergedOptions.openOnEdit;
+        this.saveOnSelect = mergedOptions.saveOnSelect;
+        this.savedIndex = -1;
+
+        this.inputItem = $(document.getElementById(id + "Input"));
+        this.inputItemWidth = this.inputItem.width();
+        this.inputWidthDefined = options.inputWidth !== undefined;
+    };
+    rf.ui.InplaceInput.extend(rf.ui.InplaceSelect);
+    var $super = rf.ui.InplaceSelect.$super;
+
+    var defaultOptions = {
+        defaultLabel: "",
+        saveOnSelect: true,
+        openOnEdit: true,
+        showControl: false,
+        itemCss: "rf-is-opt",
+        selectItemCss: "rf-is-sel",
+        listCss: "rf-is-lst-cord",
+        noneCss: "rf-is-none",
+        editCss: "rf-is-fld-cntr",
+        changedCss: "rf-is-chng"
+    };
+
+    $.extend(rf.ui.InplaceSelect.prototype, (function () {
+
+        return{
+            name : "inplaceSelect",
+            defaultLabelClass : "rf-is-dflt-lbl",
+
+            getName: function() {
+                return this.name;
+            },
+            getNamespace: function() {
+                return this.namespace;
+            },
+            onshow: function() {
+                $super.onshow.call(this);
+                if (this.openOnEdit) {
+                    this.__showPopup();
+                    this.list.__scrollToSelectedItem();
+                }
+            },
+            onhide: function() {
+                this.__hidePopup();
+            },
+
+            /**
+             * Show the popup list of options
+             * 
+             * @method
+             * @name RichFaces.ui.InplaceSelect#showPopup
+             */
+            showPopup: function() {
+                $super.__show.call(this);
+
+            },
+            __showPopup: function() {
+                this.popupList.show();
+                this.__hideLabel();
+            },
+
+            /**
+             * Hide the popup list
+             * 
+             * @method
+             * @name RichFaces.ui.InplaceSelect#hidePopup
+             */
+            hidePopup: function() {
+            	$super.__hide.call(this);
+            },
+            __hidePopup: function() {
+                this.popupList.hide();
+                this.__showLabel();
+            },
+
+            onsave: function() {
+                var item = this.list.currentSelectItem();
+                if (item) {
+                    var index = this.list.getSelectedItemIndex();
+                    var clientSelectItem = this.list.getClientSelectItemByIndex(index);
+                    var label = clientSelectItem.label;
+                    if (label == this.__getValue()) {
+                        this.savedIndex = index;
+                        this.saveItemValue(clientSelectItem.value);
+                        this.list.__selectByIndex(this.savedIndex);
+                    } else {
+                        this.list.__selectItemByValue(this.getValue());
+                    }
+                }
+            },
+            oncancel: function() {
+                var item = this.list.getClientSelectItemByIndex(this.savedIndex);
+                var value = item &amp;&amp; item.value ? item.value : this.initialValue;
+                this.saveItemValue(value);
+                this.list.__selectItemByValue(value);
+            },
+            onblur: function(e) {
+                /*
+                 * reset the state; (RF-11402) 
+                 * in IE clicking on the scrollbar triggers blur but doesn't trigger mouseup
+                 * in Chrome clicking on the scrollbar triggers blur when the page is scrolled
+                 */
+                window.clearTimeout(this.timeoutId);
+                this.timeoutId = undefined;
+                if (this.isMouseDown || (this.isMouseUp &amp;&amp; !this.isSaved)) {
+                    this.isMouseDown = false;
+                    this.isMouseUp = false;
+                    this.__setInputFocus();
+                    return;
+                }
+                this.__hidePopup();
+                $super.onblur.call(this);
+            },
+            onfocus: function(e) {
+                if (!this.__isFocused()) {
+                    this.__setFocused(true);
+                    this.focusValue = this.selValueInput.val();
+                    this.invokeEvent.call(this, "focus", document.getElementById(this.id), e);
+                }
+            },
+            processItem: function(item) {
+                var label = $(item).data('clientSelectItem').label;
+                this.__setValue(label);
+
+                this.__setInputFocus();
+                this.__hidePopup();
+
+                if (this.saveOnSelect) {
+                    this.save();
+                }
+
+                this.invokeEvent.call(this, "selectitem", document.getElementById(this.id));
+            },
+            saveItemValue: function(value) {
+                this.selValueInput.val(value);
+
+            },
+            __isValueChanged: function() {
+                return (this.focusValue != this.selValueInput.val());
+            },
+            __keydownHandler: function(e) {
+
+                var code;
+
+                if (e.keyCode) {
+                    code = e.keyCode;
+                } else if (e.which) {
+                    code = e.which;
+                }
+
+                if (this.popupList.isVisible()) {
+                    switch (code) {
+                        case rf.KEYS.DOWN:
+                            e.preventDefault();
+                            this.list.__selectNext();
+                            this.__setInputFocus();
+                            break;
+
+                        case rf.KEYS.UP:
+                            e.preventDefault();
+                            this.list.__selectPrev();
+                            this.__setInputFocus();
+                            break;
+
+                        case rf.KEYS.RETURN:
+                            e.preventDefault();
+                            this.list.__selectCurrent();
+                            this.__setInputFocus();
+                            return false;
+                            break;
+                    }
+                }
+
+                $super.__keydownHandler.call(this, e);
+            },
+            __blurHandler: function(e) {
+                if (this.saveOnSelect || !this.isMouseDown) {
+                    this.isMouseUp = false;
+                    if (this.isEditState()) {
+                        this.timeoutId = window.setTimeout($.proxy(function() {
+                            this.onblur(e);
+                        }, this), 200);
+                    }
+                } else {
+                    this.__setInputFocus();
+                    this.isMouseDown = false;
+                }
+            },
+            __clickHandler: function(e) {
+                this.__showPopup();
+            },
+            __onListMouseDown: function(e) {
+                this.isMouseDown = true;
+            },
+            __onListMouseUp: function(e) {
+                this.isMouseDown = false;
+                this.isMouseUp = !!this.timeoutId; // set only if blur was triggered
+                this.__setInputFocus();
+            },
+            __showLabel: function(e) {
+                this.label.show();
+                this.editContainer.css("position", "absolute");
+                this.inputItem.width(this.inputItemWidth);
+            },
+            __hideLabel: function(e) {
+                this.label.hide();
+                this.editContainer.css("position", "static");
+                if (!this.inputWidthDefined) {
+                    this.inputItem.width(this.label.width());
+                }
+            },
+            getValue: function() {
+                return this.selValueInput.val();
+            },
+            setValue: function(value) {
+                var item = this.list.__selectItemByValue(value);
+                if (!item) {
+                    return;
+                }
+                var clientSelectItem = item.data('clientSelectItem');
+                this.__setValue(clientSelectItem.label);
+                if (this.__isValueChanged()) {
+                    this.save();
+                    this.invokeEvent.call(this, "change", document.getElementById(this.id));
+                }
+            },
+            destroy: function() {
+                this.popupList.destroy();
+                this.popupList = null;
+                $super.destroy.call(this);
+            }
+        };
+
+    })());
+})(RichFaces.jQuery, window.RichFaces);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="RichFaces.module_push.html">push</a></li></ul><h3>Classes</h3><ul><li><a href="RichFaces.ajaxContainer.html">ajaxContainer</a></li><li><a href="RichFaces.BaseComponent.html">BaseComponent</a></li><li><a href="RichFaces.Event.html">Event</a></li><li><a href="RichFaces.queue.html">queue</a></li><li><a href="RichFaces.ui.Accordion.html">Accordion</a></li><li><a href="RichFaces.ui.AccordionItem.html">AccordionItem</a></li><li><a href="RichFaces.ui.Autocomplete.html">Autocomplete</a></li><li><a href="RichFaces.ui.AutocompleteBase.html">AutocompleteBase</a></li><li><a href="RichFaces.ui.Calendar.html">Calendar</a></li><li><a href="RichFaces.ui.Chart.html">Chart</a></li><li><a href="RichFaces.ui.CollapsiblePanel.html">CollapsiblePanel</a></li><li><a href="RichFaces.ui.CollapsiblePanelItem.html">CollapsiblePanelItem</a></li><li><a href="RichFaces.ui.CollapsibleSubTable.html">CollapsibleSubTable</a></li><li><a href="RichFaces.ui.CollapsibleSubTableToggler.html">CollapsibleSubTableToggler</a></li><li><a href="RichFaces.ui.ContextMenu.html">ContextMenu</a></li><li><a href="RichFaces.ui.DataScroller.html">DataScroller</a></li><li><a href="RichFaces.ui.DataTable.html">DataTable</a></li><li><a href="RichFaces.ui.Draggable.html">Draggable</a></li><li><a href="RichFaces.ui.DragIndicator.html">DragIndicator</a></li><li><a href="RichFaces.ui.Droppable.html">Droppable</a></li><li><a href="RichFaces.ui.Editor.html">Editor</a></li><li><a href="RichFaces.ui.ExtendedDataTable.html">ExtendedDataTable</a></li><li><a href="RichFaces.ui.FileUpload.html">FileUpload</a></li><li><a href="RichFaces.ui.Focus.html">Focus</a></li><li><a href="RichFaces.ui.HotKey.html">HotKey</a></li><li><a href="RichFaces.ui.InplaceBase.html">InplaceBase</a></li><li><a href="RichFaces.ui.InplaceInput.html">InplaceInput</a></li><li><a href="RichFaces.ui.InplaceSelect.html">InplaceSelect</a></li><li><a href="RichFaces.ui.InputBase.html">InputBase</a></li><li><a href="RichFaces.ui.InputnumberSlider.html">InputnumberSlider</a></li><li><a href="RichFaces.ui.InputNumberSpinner.html">InputNumberSpinner</a></li><li><a href="RichFaces.ui.List.html">List</a></li><li><a href="RichFaces.ui.ListMulti.html">ListMulti</a></li><li><a href="RichFaces.ui.Menu.html">Menu</a></li><li><a href="RichFaces.ui.MenuBase.html">MenuBase</a></li><li><a href="RichFaces.ui.MenuGroup.html">MenuGroup</a></li><li><a href="RichFaces.ui.MenuItem.html">MenuItem</a></li><li><a href="RichFaces.ui.Message.html">Message</a></li><li><a href="RichFaces.ui.Notify.html">Notify</a></li><li><a href="RichFaces.ui.NotifyMessage.html">NotifyMessage</a></li><li><a href="RichFaces.ui.NotifyStack.html">NotifyStack</a></li><li><a href="RichFaces.ui.OrderingList.html">OrderingList</a></li><li><a href="RichFaces.ui.PanelMenu.html">PanelMenu</a></li><li><a href="RichFaces.ui.PanelMenuGroup.html">PanelMenuGroup</a></li><li><a href="RichFaces.ui.PanelMenuItem.html">PanelMenuItem</a></li><li><a href="RichFaces.ui.PickList.html">PickList</a></li><li><a href="RichFaces.ui.PlaceHolder.html">PlaceHolder</a></li><li><a href="RichFaces.ui.Poll.html">Poll</a></li><li><a href="RichFaces.ui.Popup.html">Popup</a></li><li><a href="RichFaces.ui.PopupList.html">PopupList</a></li><li><a href="RichFaces.ui.PopupPanel.html">PopupPanel</a></li><li><a href="RichFaces.ui.ProgressBar.html">ProgressBar</a></li><li><a href="RichFaces.ui.Select.html">Select</a></li><li><a href="RichFaces.ui.Status.html">Status</a></li><li><a href="RichFaces.ui.Tab.html">Tab</a></li><li><a href="RichFaces.ui.TabPanel.html">TabPanel</a></li><li><a href="RichFaces.ui.TogglePanel.html">TogglePanel</a></li><li><a href="RichFaces.ui.TogglePanelItem.html">TogglePanelItem</a></li><li><a href="RichFaces.ui.Tooltip.html">Tooltip</a></li><li><a href="RichFaces.ui.Tree.html">Tree</a></li><li><a href="RichFaces.ui.TreeNode.html">TreeNode</a></li></ul><h3>Events</h3><ul><li><a href="RichFaces.module_push.html#~event:error">error</a></li><li><a href="RichFaces.module_push.html#~event:push">push</a></li><li><a href="RichFaces.module_push.html#~event:subscribed">subscribed</a></li></ul><h3>Namespaces</h3><ul><li><a href="jQuery.html">jQuery</a></li><li><a href="RichFaces.html">RichFaces</a></li><li><a href="RichFaces.ui.html">ui</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Mon Jun 20 2016 14:53:31 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="EvaluationCreerDlg" 
+                  widgetVar="EvaluationCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)"
+                  closable="false"
+                  visible="#{evaluationCtrl.showCreateDlg}"
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue.evaluation}" 
+                  >
+
+            <h:form id="EvaluationCreerForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="6">
+
+                        <p:outputLabel value="#{langue.classe}" for="classe"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu filter="true" id="classe" value="#{evaluationCtrl.personnelMatiere.id}">
+                                <f:selectItem itemLabel="#{langue.selectLa} #{langue.classe}" itemValue=""/> 
+                                <f:selectItems value="#{evaluationCtrl.personnelClasses}" var="item" itemLabel="#{item.idclasse.nom}" itemValue="#{item.id}"/>
+                                <p:ajax update="matiere"  listener="#{evaluationCtrl.handleMatiereEleveChange()}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.sequence}" for="sequence"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu filter="true" id="sequence" value="#{evaluationCtrl.sequence.idsequencean}">
+                                <f:selectItem itemLabel="#{langue.selectLa} séquence" itemValue=""/> 
+                                <f:selectItems value="#{evaluationCtrl.sequences}" var="item" itemLabel="#{item.idsequence.nom}" itemValue="#{item.idsequencean}"/>
+                                <p:ajax update=":EvaluationValidateForm,:EvaluationListerForm:growl"  listener="#{evaluationCtrl.updateTableau()}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup> 
+
+                        <p:outputLabel value="#{langue.matiere}" for="matiere"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu filter="true" id="matiere" value="#{evaluationCtrl.elementEvaluation}" converter="elementEvaluationConverter">
+                                <f:selectItem itemLabel="#{langue.selectLa} #{langue.matiere}" itemValue=""/> 
+                                <f:selectItems value="#{evaluationCtrl.elementEvaluations}" var="element" itemLabel="#{element.nom}" itemValue="#{element}"/>
+                                <p:ajax update=":EvaluationValidateForm,:EvaluationListerForm:growl"  listener="#{evaluationCtrl.updateTableau()}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup> 
+
+                    </p:panelGrid>
+                </h:panelGroup>  
+            </h:form>
+
+            <p:separator />
+
+            <h:form id="EvaluationValidateForm">
+
+                <p:dataTable id="datalist"
+                             value="#{evaluationCtrl.evaluations1}"
+                             var="item"
+                             paginator="true"
+                             rows="10"
+                             style="text-align: center;"
+                             rowsPerPageTemplate="10,20,30,40,50"
+                             editable="true"
+                             editMode="cell"
+                             >
+
+                    <p:column sortBy="#{item.eleve.nom}" >
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.eleve}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.eleve.nom} #{item.eleve.prenom}"/>
+                    </p:column>
+
+                    <p:column  sortBy="#{item.planningEvaluation.elementEvaluation.elementevaluation.nom}">
+                        <f:facet name="header">
+                            <h:outputText value="Unité d'évaluation"/>
+                        </f:facet>
+                        <h:outputText value="#{item.planningEvaluation.elementEvaluation.elementevaluation.nom}"/>
+                    </p:column>
+
+                    <p:column  sortBy="#{item.planningEvaluation.sequence.idsequence.nom}">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.sequence}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.planningEvaluation.sequence.idsequence.nom}"/>
+                    </p:column>
+
+                    <p:column headerText="Note">
+                        <p:cellEditor>
+                            <f:facet name="output"><p:outputLabel  value="#{item.note}" /></f:facet>
+                            <f:facet name="input"><p:inputText  value="#{item.note}"  /></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:commandButton id="valider" icon="ui-icon-ok" actionListener="#{evaluationCtrl.enregistrerEvaluation()}" value="#{langue['Conv.Enregistrer']}" 
+                                 update=":EvaluationCreerDlg,:EvaluationListerForm:datalist,:EvaluationListerForm:growl, :EvaluationCreerForm" 
+                                 disabled="false"/>
+                <p:commandButton icon="ui-icon-close" update=":EvaluationCreerDlg" value="#{langue.fermer}" actionListener="#{evaluationCtrl.closeDialog()}"/>
+
+            </h:form>            
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

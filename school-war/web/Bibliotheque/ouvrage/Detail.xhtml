@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="LivreDetailDlg" 
+                  widgetVar="LivreDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: #{langue.livre}" closeOnEscape="true">
+
+            <h:form id="LivreDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" style="width: 100%;" >
+
+                        <h:outputText value="#{langue.codeIsbn}"/>
+                        <h:outputText value="#{livreCtrl.selectedLivre.codeisbn}"/>
+
+                        <h:outputText value="#{langue.titre}"/>
+                        <h:outputText value="#{livreCtrl.selectedLivre.titre}"/>
+
+                        <h:outputText value="#{langue.editeur}"/>
+                        <h:outputText value="#{livreCtrl.selectedLivre.idediteur.nom}"/>
+
+                        <h:outputText value="Date de publication"/>
+                        <h:outputText value="#{livreCtrl.selectedLivre.datepublication}"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('LivreDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

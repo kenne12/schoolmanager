@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:include src="/templates/entetesTemplate.xhtml" />
+
+    <!-- END HEAD -->
+    <!-- BEGIN BODY -->
+    <body class="lock">
+        <h:form>   
+            <div class="lock-header">
+                <!-- BEGIN LOGO -->
+                <a class="center" id="logo" href="index.html">
+                    <img class="center" alt="logo" src="#{request.contextPath}/templates/ressources/img/logo.png" />
+                </a>
+                <!-- END LOGO -->
+            </div>
+            <div class="login-wrap">
+                <div class="metro single-size red">
+                    <div class="locked">
+                        <i class="icon-lock"></i>
+                        <span>Login</span>
+                    </div>
+                </div>
+                <div class="metro double-size green">
+
+                    <div class="input-append lock-input">                        
+                        <p:inputText class="" placeholder="UserLogin" value="#{sessionCtrl.login}" />
+                    </div>
+
+                </div>
+                <div class="metro double-size yellow">
+
+                    <div class="input-append lock-input">                        
+                        <p:inputText class="" placeholder="UserPassword" value="#{sessionCtrl.password}"/> 
+                    </div>
+
+                </div>
+                <div class="metro single-size terques login">
+
+                    <button type="submit" class="btn login-btn" onclick="#{sessionCtrl.authentifier()}">
+                        Login
+                        <i class=" icon-long-arrow-right"></i>
+                    </button>
+
+                    <p:commandButton action="#{sessionCtrl.authentifier()}" value="connecter"/> 
+
+                </div>
+                <div class="metro double-size navy-blue ">
+                    <a href="index.html" class="social-link">
+                        <i class="icon-facebook-sign"></i>
+                        <span>Facebook Login</span>
+                    </a>
+                </div>
+                <div class="metro single-size deep-red">
+                    <a href="index.html" class="social-link">
+                        <i class="icon-google-plus-sign"></i>
+                        <span>Google Login</span>
+                    </a>
+                </div>
+                <div class="metro double-size blue">
+                    <a href="index.html" class="social-link">
+                        <i class="icon-twitter-sign"></i>
+                        <span>Twitter Login</span>
+                    </a>
+                </div>
+                <div class="metro single-size purple">
+                    <a href="index.html" class="social-link">
+                        <i class="icon-skype"></i>
+                        <span>Skype Login</span>
+                    </a>
+                </div>
+                <div class="login-footer">
+                    <div class="remember-hint pull-left">
+                        <input type="checkbox" id="" /> Remember Me
+                    </div>
+                    <div class="forgot-hint pull-right">
+                        <a id="forget-password" class="" href="javascript:;">Forgot Password?</a>
+                    </div>
+                </div>
+            </div>
+        </h:form>        
+    </body>
+    <!-- END BODY -->
+</html>

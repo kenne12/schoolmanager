@@ -1,0 +1,57 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/NoteTemplate/principalTemplate.xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    <ui:define name="contenu">
+        <h:form>
+            <h:selectOneMenu value="#{localeManagedBean.language}" onchange="submit()"> 
+                <f:selectItems value="#{localeManagedBean.locales}" />
+            </h:selectOneMenu> 
+        </h:form>
+
+        <p:dialog id="SessionCreerDlg" 
+                  widgetVar="MenuCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)"
+                  closable="false"
+                  visible="#{loginBean.showSessionPanel}"
+                  header="Données de session" 
+                  >
+
+            <h:form id="SessionCreerForm">
+
+                <h:panelGroup id="display" >
+
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue.etablissement}" for="ets" />
+                        <p:selectOneMenu id="ets" value="#{loginBean.etablissementPersonnel.id}" required="true" requiredMessage="Etablissement : réquis">
+                            <f:selectItem itemLabel="#{langue.choisir}"/>
+                            <f:selectItems value="#{loginBean.etablissementPersonnels}" var="item" itemLabel="#{item.etablissement.nom}" itemValue="#{item.id}"/>
+                            <p:ajax update="year" listener="#{loginBean.filterYear()}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{langue.annee}" for="year" />
+                        <p:selectOneMenu id="year" value="#{loginBean.annee.idannee}" required="true" requiredMessage="Année : réquise">
+                            <f:selectItem itemLabel="#{langue.choisir}"/>
+                            <f:selectItems value="#{loginBean.annees}" var="item" itemLabel="#{item.code} / #{item.codefin}" itemValue="#{item.idannee}"/>
+                            <p:ajax/>
+                        </p:selectOneMenu>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{loginBean.initSession()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,SessionCreerForm,:SessionCreerDlg"/> 
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:define>
+
+
+</ui:composition>

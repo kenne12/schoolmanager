@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recu_caisse" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2c7eb03f-d0b5-441e-ad6c-b1be74aa9a5b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="pension" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     pension."montant" AS pension_montant,
+     eleve."matricule" AS eleve_matricule,
+     eleve."nom" AS eleve_nom,
+     eleve."prenom" AS eleve_prenom,
+     eleve."photo" AS eleve_photo,
+     etablissement."nom" AS etablissement_nom,
+     etablissement."logo" AS etablissement_logo,
+     adresse."bp" AS adresse_bp,
+     adresse."contact" AS adresse_contact,
+     adresse."siteweb" AS adresse_siteweb,
+     adresse."email" AS adresse_email,
+     adresse."adresse" AS adresse_adresse,
+     tranche."montant" AS tranche_montant,
+     tranche."datepayement" AS tranche_datepayement,
+     tranche."eleve" AS tranche_eleve,
+     tranche."reste" AS tranche_reste,
+     tranche."montant_paye" AS tranche_montant_paye,
+     tranche."pension" AS tranche_pension,
+     typetranche."nom" AS typetranche_nom,
+     typetranche."prix" AS typetranche_prix,
+     typetranche."etat" AS typetranche_etat,
+     annee."code" AS annee_code,
+     annee."codefin" AS annee_codefin,
+     annee."etablissement" AS annee_etablissement,
+     tranche."id" AS tranche_id,
+     catanneeprix."prix" AS catanneeprix_prix,
+     pension_cumulee."montant_cumule" AS pension_cumulee_montant_cumule,
+     pension_cumulee."reste" AS pension_cumulee_reste
+FROM
+     "public"."eleve" eleve INNER JOIN "public"."pension" pension ON eleve."ideleve" = pension."eleve"
+     INNER JOIN "public"."etablissement" etablissement ON eleve."etablissement" = etablissement."id"
+     INNER JOIN "public"."tranche" tranche ON eleve."ideleve" = tranche."eleve"
+     INNER JOIN "public"."pension_cumulee" pension_cumulee ON eleve."ideleve" = pension_cumulee."eleve"
+     INNER JOIN "public"."annee" annee ON pension_cumulee."annee" = annee."idannee"
+     INNER JOIN "public"."typetranche" typetranche ON annee."idannee" = typetranche."annee"
+     INNER JOIN "public"."catanneeprix" catanneeprix ON annee."idannee" = catanneeprix."idannee"
+     INNER JOIN "public"."categorie" categorie ON catanneeprix."idcategorie" = categorie."idcategorie"
+     AND typetranche."idcategorie" = categorie."idcategorie"
+     AND etablissement."id" = categorie."etablissement"
+     INNER JOIN "public"."adresse" adresse ON etablissement."adresse" = adresse."id"
+     AND tranche."idtypetranche" = typetranche."idtypetranche"
+     AND pension."idpension" = tranche."pension"
+WHERE
+     pension.idpension = $P{pension}]]>
+	</queryString>
+	<field name="pension_montant" class="java.lang.Integer"/>
+	<field name="eleve_matricule" class="java.lang.String"/>
+	<field name="eleve_nom" class="java.lang.String"/>
+	<field name="eleve_prenom" class="java.lang.String"/>
+	<field name="eleve_photo" class="java.lang.String"/>
+	<field name="etablissement_nom" class="java.lang.String"/>
+	<field name="etablissement_logo" class="java.lang.String"/>
+	<field name="adresse_bp" class="java.lang.String"/>
+	<field name="adresse_contact" class="java.lang.String"/>
+	<field name="adresse_siteweb" class="java.lang.String"/>
+	<field name="adresse_email" class="java.lang.String"/>
+	<field name="adresse_adresse" class="java.lang.String"/>
+	<field name="tranche_montant" class="java.lang.Integer"/>
+	<field name="tranche_datepayement" class="java.sql.Date"/>
+	<field name="tranche_eleve" class="java.lang.Integer"/>
+	<field name="tranche_reste" class="java.lang.Integer"/>
+	<field name="tranche_montant_paye" class="java.lang.Integer"/>
+	<field name="tranche_pension" class="java.lang.Long"/>
+	<field name="typetranche_nom" class="java.lang.String"/>
+	<field name="typetranche_prix" class="java.lang.Integer"/>
+	<field name="typetranche_etat" class="java.lang.Boolean"/>
+	<field name="annee_code" class="java.lang.Integer"/>
+	<field name="annee_codefin" class="java.lang.Integer"/>
+	<field name="annee_etablissement" class="java.lang.Integer"/>
+	<field name="tranche_id" class="java.lang.Long"/>
+	<field name="catanneeprix_prix" class="java.lang.Integer"/>
+	<field name="pension_cumulee_montant_cumule" class="java.lang.Integer"/>
+	<field name="pension_cumulee_reste" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="88" splitType="Stretch">
+			<image>
+				<reportElement x="11" y="7" width="99" height="80" uuid="181b288b-e025-4968-bac4-b40ce161a85f"/>
+				<imageExpression><![CDATA["E:\\big-malkus\\photos\\36239_147584225295486_7401651_n.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="124" y="7" width="125" height="20" uuid="c1e18829-bc76-4c2a-aaf0-8408c58e2b8c"/>
+				<textFieldExpression><![CDATA[$F{etablissement_nom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="124" y="27" width="125" height="20" uuid="5f7e478d-c109-416e-9e97-cc69aa76c170"/>
+				<textFieldExpression><![CDATA[$F{adresse_adresse}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="149" y="47" width="100" height="20" uuid="96b8ee32-c43a-4ec4-bb48-17cb8680df53"/>
+				<textFieldExpression><![CDATA[$F{adresse_contact}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="172" y="67" width="100" height="20" uuid="745360e2-4795-420f-8ac7-60613b374fb1"/>
+				<textFieldExpression><![CDATA[$F{adresse_siteweb}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="339" y="7" width="85" height="20" uuid="9d6b90cd-4896-4347-8c20-92b9b312400d"/>
+				<text><![CDATA[Année scolaire : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="424" y="7" width="23" height="20" uuid="46fba0bb-1ebb-4ffa-ada6-c72b6098da08"/>
+				<textFieldExpression><![CDATA[$F{annee_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="454" y="7" width="26" height="20" uuid="e6fbf56d-60cd-496a-b530-eab4fe2d5135"/>
+				<textFieldExpression><![CDATA[$F{annee_codefin}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="448" y="7" width="6" height="20" uuid="7ebd7b87-a1b6-42ab-ada5-30740e144ed3"/>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="301" y="33" width="241" height="34" backcolor="#999999" uuid="d75d9893-8777-4421-b543-2593bf268679"/>
+				<box>
+					<pen lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24"/>
+				</textElement>
+				<textFieldExpression><![CDATA["RECU DE CAISSE"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="124" y="47" width="25" height="20" uuid="0eed1e98-7a29-49ed-ab3a-d8ca85e06244"/>
+				<text><![CDATA[Tél : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="124" y="67" width="48" height="20" uuid="aa62f368-e652-4af5-808a-02a0f431201a"/>
+				<text><![CDATA[Site web : ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="75" splitType="Stretch">
+			<staticText>
+				<reportElement x="9" y="11" width="57" height="20" uuid="8413f662-dac4-409e-b359-510ce7e4a374"/>
+				<text><![CDATA[Nom : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="31" width="57" height="20" uuid="2fba4b45-1df7-4ff2-8edc-c9271ad0f65b"/>
+				<text><![CDATA[Prenom : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="51" width="57" height="18" uuid="c38ffc2f-c2c9-453c-b9c2-52cba8805080"/>
+				<text><![CDATA[Matricule : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="66" y="11" width="100" height="20" uuid="d694aadc-f5b8-43b2-97b4-2e6bf32bb137"/>
+				<textFieldExpression><![CDATA[$F{eleve_nom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="66" y="31" width="100" height="20" uuid="c7699d89-a185-4708-b77a-d5ec46ae6093"/>
+				<textFieldExpression><![CDATA[$F{eleve_prenom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="66" y="49" width="100" height="20" uuid="ff5964c4-70e8-4c50-ae00-baddbebf10d8"/>
+				<textFieldExpression><![CDATA[$F{eleve_matricule}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="11" y="2" width="531" height="1" uuid="a3251377-adca-435a-9e3e-81a8416c33a3"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="301" y="11" width="128" height="18" uuid="52d9d080-81e8-47f1-be2d-426c839ce112"/>
+				<textFieldExpression><![CDATA["Montant total à payer : "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="11" width="82" height="18" uuid="d77e9a6e-33e3-479b-8629-9645e5368f4e"/>
+				<textFieldExpression><![CDATA[$F{catanneeprix_prix}+" Fcfa"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="301" y="29" width="159" height="15" uuid="f6cd234e-bfb4-41ed-90f7-6a365a4091a2"/>
+				<textFieldExpression><![CDATA["Montant total payé à l'échéance :"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="29" width="82" height="15" uuid="3b9e513a-90c3-4568-b697-2ea20ee9f6b1"/>
+				<textFieldExpression><![CDATA[$F{pension_cumulee_montant_cumule}+" Fcfa"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="301" y="45" width="241" height="1" uuid="c08705ae-ab10-4fa0-b017-08abf99868b7"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="302" y="47" width="127" height="15" uuid="a1a1c4b7-e550-4250-b403-8e775904747d"/>
+				<textFieldExpression><![CDATA["Reste à payer : "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="47" width="82" height="15" uuid="d0bd64ca-b5d3-4755-a908-973186e631dd"/>
+				<textFieldExpression><![CDATA[($F{catanneeprix_prix} - $F{pension_cumulee_montant_cumule}  )+" Fcfa"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="9" y="0" width="140" height="25" backcolor="#999999" uuid="a1dc6cde-363d-481f-b463-c1017fdad706"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Tranche]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="149" y="0" width="101" height="25" backcolor="#999999" uuid="d57bd36f-31aa-421c-ac23-2d97c42e731c"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Montant Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="414" y="0" width="128" height="25" backcolor="#999999" uuid="510f17ba-1ee7-43c5-ae13-02974d2afa14"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Reste]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="250" y="0" width="164" height="25" backcolor="#999999" uuid="1a2c4afb-20a6-42d6-9dbd-d18d60f5da44"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[payé a l'echeance]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="414" y="0" width="128" height="20" uuid="a5f8c075-a8c8-4db8-9b0c-64724b51675d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tranche_reste}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="250" y="0" width="164" height="20" backcolor="#CCCCCC" uuid="bdda5201-a4ec-40da-bd04-eee7b2235a3e"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tranche_montant_paye}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="149" y="0" width="101" height="20" uuid="c45238ec-60f8-48a1-8002-d307a15ea11d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{typetranche_prix}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="9" y="0" width="140" height="20" uuid="bb1d76ce-43b8-41e5-a372-fa88ac7c2a49"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{typetranche_nom}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="26" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="198" splitType="Stretch">
+			<staticText>
+				<reportElement x="329" y="26" width="213" height="124" uuid="898618c1-5542-4a1c-b11c-bad6044ca407"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Visa de l'économe]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="149" y="165" width="190" height="19" uuid="676346d9-1e97-4255-adca-d53e44d9b64f"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{etablissement_nom}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="364" y="178" width="158" height="1" uuid="2a1529d5-543c-4cda-b04a-28bc073a3329"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="339" y="165" width="25" height="19" uuid="d3205385-c804-4843-a9c5-0a07e85a19a0"/>
+				<textFieldExpression><![CDATA[" Le"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

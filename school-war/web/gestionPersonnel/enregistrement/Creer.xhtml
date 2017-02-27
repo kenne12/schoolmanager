@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="PersonnelCreerDlg" 
+                  widgetVar="PersonnelCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: du personnel" 
+                  closeOnEscape="true">
+
+            <h:form id="PersonnelCreerForm" enctype="multipart/form-data">
+
+                <h:panelGroup id="display" >
+
+                    <p:panelGrid columnClasses="colum" columns="2">
+
+                        <p:panelGrid columns="2" columnClasses="column">
+
+                            <p:outputLabel value="Martricule" for="matricule" />
+                            <h:panelGroup>
+                                <p:inputText id="matricule" value="#{personnelCtrl.personnel.matriculepersonnel}" required="true" 
+                                             requiredMessage="#{langue['Conv.Code']}: #{langue['Conv.ValeurRequise']}"/>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{langue['Conv.Nom']}" for="nom" />
+                            <h:panelGroup>
+                                <p:inputText id="nom" value="#{personnelCtrl.personnel.nom}" required="true" 
+                                             requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{langue.prenom}" for="prenom" />
+                            <h:panelGroup>
+                                <p:inputText id="prenom" value="#{personnelCtrl.personnel.prenom}" required="true" 
+                                             requiredMessage="#{langue.prenom}: #{langue['Conv.ValeurRequise']}"/>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{langue.adresse}" for="adresse" />
+                            <h:panelGroup>
+                                <p:inputText id="adresse" value="#{personnelCtrl.personnel.adresse}" required="true" 
+                                             requiredMessage="#{langue.adresse} : #{langue['Conv.ValeurRequise']}"/>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{langue.contact}" for="telephone" />
+                            <h:panelGroup>
+                                <p:inputText id="telephone" value="#{personnelCtrl.personnel.telephone}" />
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{langue.email}" for="email" />
+                            <h:panelGroup>
+                                <p:inputText id="email" value="#{personnelCtrl.personnel.email}"/>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="Date de recrutement" for="date" />
+                            <h:panelGroup>
+                                <p:calendar id="date" navigator="true" value="#{personnelCtrl.personnel.daterecrutement}">           
+                                </p:calendar>
+                            </h:panelGroup>
+
+                            <p:outputLabel rendered="#{personnelCtrl.showEtat}" value="Etat" for="etat" />
+                            <h:panelGroup rendered="#{personnelCtrl.showEtat}">
+                                <p:selectBooleanButton id="etat" value="#{personnelCtrl.personnel.etatpersonnel}" onLabel="Active" offLabel="Inactive" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:90px"/>
+                            </h:panelGroup>
+
+                            <h:outputText value="Pourra t-il enseigner ?" />
+                            <p:selectBooleanCheckbox  id="inscriptionMode" value="#{personnelCtrl.personnel.enseignant}">
+                                <p:ajax update="panel,competence,display" listener="#{personnelCtrl.showQualification()}"/>
+                            </p:selectBooleanCheckbox>
+
+                            <h:outputLabel value="#{langue.fonction}" for="fonction" />
+                            <p:selectOneMenu id="fonction" value="#{personnelCtrl.personnel.fonction}" requiredMessage="#{langue.fonction} : Requis" converter="fonctionConverter" required="true">
+                                <f:selectItem itemLabel="#{langue.choisir}"/>
+                                <f:selectItems value="#{personnelCtrl.fonctions}" var="item" itemLabel="#{item.nom}" itemValue="#{item}"/>
+                            </p:selectOneMenu>
+
+
+                        </p:panelGrid>
+
+                        <p:panel id="panel" visible="#{personnelCtrl.showQualificationPanel}" rendered="#{personnelCtrl.showQualificationPanel}" header="#{langue.competences}">                                                        
+                            <p:selectManyCheckbox rendered="#{personnelCtrl.showQualificationPanel}" id="competence" value="#{personnelCtrl.selectedMatieres}" converter="matiereConverter" layout="grid" columns="2">
+                                <f:selectItems value="#{personnelCtrl.matieres}" var="matiere" itemLabel="#{matiere.libelle}" itemValue="#{matiere}" />
+                            </p:selectManyCheckbox>
+                        </p:panel>
+
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{personnelCtrl.enregistrerPersonnel()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:PersonnelListerForm:datalist,:PersonnelListerForm:growl, PersonnelCreerForm" 
+                                     oncomplete="PF('PersonnelCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('PersonnelCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

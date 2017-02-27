@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="MatiereModifierDlg" 
+                  widgetVar="MatiereModifierDialog" modal="true" 
+                  resizable="false"
+                  appendTo="@(body)" header="#{langue['Titre.Dlg.Modification']} : unité d'evaluation" 
+                  closeOnEscape="true">
+
+            <h:form id="MatiereModifierForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" >
+
+                        <p:outputLabel value="#{langue.matiere}" for="matiere" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="matiere" value="#{elementEvaluationCtrl.selected.matiere}" required="true" converter="matiereConverter">
+                                <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/> 
+                                <f:selectItems value="#{elementEvaluationCtrl.matieres}" var="item" itemLabel="#{item.libelle}" itemValue="#{item}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.nom}" for="nom" />
+                        <h:panelGroup>
+                            <p:inputText id="nom" value="#{elementEvaluationCtrl.selected.nom}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+                        
+                        <p:outputLabel value="#{langue.coefficientDefault}" for="coef" />
+                        <p:inputText id="coef" value="#{elementEvaluationCtrl.selected.coeficient}"/>
+                        
+                        <p:outputLabel value="Cette unité sera t-elle evaluée trimestriellement ?" for="trim" />
+                        <p:selectBooleanCheckbox id="trim"  value="#{elementEvaluationCtrl.selected.trimestriel}"/>
+
+                                    
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{elementEvaluationCtrl.edit()}" value="#{langue['Conv.Modifier']}"
+                                     update=":MatiereModifierForm,:MatiereListerForm:datalist,:MatiereListerForm:growl, :actionsForm"
+                                     oncomplete="PF('MatiereModifierDialog').hide()">
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}" message="#{langue['Message.Confirm.Modifier']}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{langue['Conv.Annuler']}" onclick="PF('MatiereModifierDlg').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

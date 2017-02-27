@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="PersonnelModifierDlg" 
+                  widgetVar="PersonnelModifierDialog" modal="true" 
+                  resizable="false"
+                  appendTo="@(body)" header="#{langue['Titre.Dlg.Modification']}: personnel " 
+                  closeOnEscape="true">
+
+            <h:form id="PersonnelModifierForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="4" columnClasses="column" >
+
+                        <p:outputLabel value="#{langue['Conv.Nom']}" for="nom" />
+                        <h:panelGroup>
+                            <p:inputText id="nom" value="#{personnelCtrl.selectedPersonnel.nom}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue['Conv.Nom']}" for="prenom" />
+                        <h:panelGroup>
+                            <p:inputText id="prenom" value="#{personnelCtrl.selectedPersonnel.prenom}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Addresse" for="adresse" />
+                        <h:panelGroup>
+                            <p:inputText id="adresse" value="#{personnelCtrl.selectedPersonnel.adresse}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Telephone" for="telephone" />
+                        <h:panelGroup>
+                            <p:inputText id="telephone" value="#{personnelCtrl.selectedPersonnel.telephone}" />                                          
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Email" for="email" />
+                        <h:panelGroup>
+                            <p:inputText id="email" value="#{personnelCtrl.selectedPersonnel.email}"/>
+                        </h:panelGroup>
+
+
+                        <p:outputLabel value="Date de recrutement" for="date" />
+                        <h:panelGroup>
+                            <p:calendar id="date" value="#{personnelCtrl.selectedPersonnel.daterecrutement}">           
+                            </p:calendar>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Date de recrutement" for="photo" />
+                        <h:panelGroup>
+                            <p:fileUpload id="photo" value="#{personnelCtrl.selectedPersonnel.photo}" mode="simple" disabled="true" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Etat" for="etat" />
+                        <h:panelGroup>
+                            <p:selectBooleanButton id="etat" value="#{personnelCtrl.selectedPersonnel.etatpersonnel}" onLabel="Active" offLabel="Inactive" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:90px">
+                            </p:selectBooleanButton>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Etat" for="admin" />
+                        <h:panelGroup>
+                            <p:selectBooleanButton id="admin" value="#{personnelCtrl.selectedPersonnel.admin}" onLabel="Active" offLabel="Inactive" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:90px">
+                            </p:selectBooleanButton>
+                        </h:panelGroup>
+
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{personnelCtrl.modifier()}" value="#{langue['Conv.Modifier']}"
+                                     update=":PersonnelModifierForm,:PersonnelListerForm:datalist,:PersonnelListerForm:growl, :actionsForm"
+                                     oncomplete="PF('PersonnelModifierDialog').hide()">
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}" message="#{langue['Message.Confirm.Modifier']}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{langue['Conv.Annuler']}" onclick="PF('PersonnelModifierDlg').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

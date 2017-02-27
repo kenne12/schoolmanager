@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="note_sequentiel" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3870c779-e591-4502-aab4-5c534f3462e5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="evaluation" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     eleve."matricule" AS eleve_matricule,
+     eleve."nom" AS eleve_nom,
+     eleve."prenom" AS eleve_prenom,
+     eleve."sexe" AS eleve_sexe,
+     eleve."etateleve" AS eleve_etateleve,
+     evaluation."observation" AS evaluation_observation,
+     evaluation."note" AS evaluation_note,
+     evaluation."valide" AS evaluation_valide,
+     sequence."nom" AS sequence_nom,
+     sequence."numero" AS sequence_numero,
+     classe."nom" AS classe_nom,
+     etablissement."nom" AS etablissement_nom,
+     etablissement."logo" AS etablissement_logo,
+     etablissement."id" AS etablissement_id,
+     adresse."bp" AS adresse_bp,
+     adresse."contact" AS adresse_contact,
+     adresse."siteweb" AS adresse_siteweb,
+     adresse."email" AS adresse_email,
+     adresse."adresse" AS adresse_adresse,
+     classe_elementevaluation."coefficient" AS classe_elementevaluation_coefficient,
+     element_evaluation."nom" AS element_evaluation_nom,
+     matiere."libelle" AS matiere_libelle,
+     annee."code" AS annee_code,
+     annee."codefin" AS annee_codefin
+FROM
+     "public"."eleve" eleve  INNER JOIN "public"."eleveanneeclasse" eleveanneeclasse ON eleve."ideleve" = eleveanneeclasse."eleve"
+     LEFT OUTER JOIN "public"."evaluation" evaluation ON eleve."ideleve" = evaluation."eleve"
+     INNER JOIN "public"."etablissement" etablissement ON eleve."etablissement" = etablissement."id"
+     INNER JOIN "public"."classe" classe ON etablissement."id" = classe."etablissement"
+     INNER JOIN "public"."adresse" adresse ON etablissement."adresse" = adresse."id"
+     INNER JOIN "public"."annee" annee ON etablissement."id" = annee."etablissement"
+     AND annee."idannee" = eleveanneeclasse."idannee"
+     INNER JOIN "public"."sequenceannee" sequenceannee ON annee."idannee" = sequenceannee."idannee"
+     INNER JOIN "public"."planning_evaluation" planning_evaluation ON sequenceannee."idsequencean" = planning_evaluation."sequence"
+     INNER JOIN "public"."sequence" sequence ON sequenceannee."idsequence" = sequence."idsequence"
+     AND evaluation."planning_evaluation" = planning_evaluation."idplanning"
+     INNER JOIN "public"."classe_elementevaluation" classe_elementevaluation ON planning_evaluation."element_evaluation" = classe_elementevaluation."id"
+     AND classe."idclasse" = classe_elementevaluation."classe"
+     INNER JOIN "public"."element_evaluation" element_evaluation ON classe_elementevaluation."elementevaluation" = element_evaluation."idelement"
+     INNER JOIN "public"."matiere" matiere ON element_evaluation."matiere" = matiere."idmatiere"
+     AND classe."idclasse" = eleveanneeclasse."idclasse"
+WHERE planning_evaluation.idplanning = $P{evaluation}
+ORDER BY evaluation.note]]>
+	</queryString>
+	<field name="eleve_matricule" class="java.lang.String"/>
+	<field name="eleve_nom" class="java.lang.String"/>
+	<field name="eleve_prenom" class="java.lang.String"/>
+	<field name="eleve_sexe" class="java.lang.String"/>
+	<field name="eleve_etateleve" class="java.lang.Boolean"/>
+	<field name="evaluation_observation" class="java.lang.String"/>
+	<field name="evaluation_note" class="java.lang.Double"/>
+	<field name="evaluation_valide" class="java.lang.Boolean"/>
+	<field name="sequence_nom" class="java.lang.String"/>
+	<field name="sequence_numero" class="java.lang.Integer"/>
+	<field name="classe_nom" class="java.lang.String"/>
+	<field name="etablissement_nom" class="java.lang.String"/>
+	<field name="etablissement_logo" class="java.lang.String"/>
+	<field name="etablissement_id" class="java.lang.Integer"/>
+	<field name="adresse_bp" class="java.lang.String"/>
+	<field name="adresse_contact" class="java.lang.String"/>
+	<field name="adresse_siteweb" class="java.lang.String"/>
+	<field name="adresse_email" class="java.lang.String"/>
+	<field name="adresse_adresse" class="java.lang.String"/>
+	<field name="classe_elementevaluation_coefficient" class="java.lang.Integer"/>
+	<field name="element_evaluation_nom" class="java.lang.String"/>
+	<field name="matiere_libelle" class="java.lang.String"/>
+	<field name="annee_code" class="java.lang.Integer"/>
+	<field name="annee_codefin" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="88" splitType="Stretch">
+			<textField>
+				<reportElement x="111" y="0" width="125" height="20" uuid="92afe5f1-5d1e-4791-af89-92282fdb2d86"/>
+				<textFieldExpression><![CDATA[$F{etablissement_nom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="111" y="20" width="125" height="20" uuid="9abc1966-3c78-4671-b129-3df89248bbd6"/>
+				<textFieldExpression><![CDATA[$F{adresse_adresse}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="111" y="60" width="48" height="20" uuid="6c4066b6-c951-4b13-a7af-ade06ae03a7f"/>
+				<text><![CDATA[Site web : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="111" y="40" width="25" height="20" uuid="cfe4d766-eeba-451b-930f-498a7c753317"/>
+				<text><![CDATA[Tél : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="136" y="40" width="100" height="20" uuid="3066a16b-648e-4d8a-8e5a-120a1c026347"/>
+				<textFieldExpression><![CDATA[$F{adresse_contact}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="159" y="60" width="100" height="20" uuid="c3a389ff-960d-4922-93e1-921aabf28b70"/>
+				<textFieldExpression><![CDATA[$F{adresse_siteweb}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="12" y="0" width="99" height="80" uuid="37342feb-4949-4f07-b972-0688683ddc0a"/>
+				<imageExpression><![CDATA["E:\\big-malkus\\photos\\36239_147584225295486_7401651_n.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="459" y="10" width="26" height="20" uuid="8cd81f81-c1cf-406e-94c2-233dad3030f5"/>
+				<textFieldExpression><![CDATA[$F{annee_codefin}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="452" y="10" width="6" height="20" uuid="f18732bc-1eb9-4083-8e84-46e1f8884b24"/>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="429" y="10" width="23" height="20" uuid="35cdd561-2716-470b-a2d4-1afab9ef4143"/>
+				<textFieldExpression><![CDATA[$F{annee_code}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="344" y="10" width="85" height="20" uuid="fbad8c6a-356d-444c-aa68-4929695288eb"/>
+				<text><![CDATA[Année Scolaire : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="302" y="35" width="240" height="20" backcolor="#999999" uuid="29436cb4-f64d-46b4-905a-a7e8a46a5d45"/>
+				<box>
+					<pen lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PROCES VERBAL DES NOTES"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="288" y="60" width="254" height="20" uuid="9fe0182f-c242-468d-9dcd-7f85b3a9360f"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Matière :  " +$F{matiere_libelle}+"   " +$F{sequence_nom}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="68" splitType="Stretch">
+			<textField>
+				<reportElement x="11" y="3" width="100" height="20" uuid="55fa3133-06a3-4621-ac17-8636fb70a843"/>
+				<textFieldExpression><![CDATA["Classe : "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="111" y="3" width="100" height="20" uuid="fb1d54b2-e457-454f-abab-ab037dcb66d7"/>
+				<textFieldExpression><![CDATA[$F{classe_nom}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="11" y="2" width="531" height="1" uuid="d57c0cd0-2b80-4830-9909-d79e2764f4cd"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="11" y="23" width="100" height="20" uuid="15cae4ea-077f-4bab-a75c-a4721b1560a9"/>
+				<textFieldExpression><![CDATA["Unité d'évaluation : "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="111" y="23" width="100" height="20" uuid="0d3df044-8978-4440-8ae4-a69c8e43b523"/>
+				<textFieldExpression><![CDATA[$F{element_evaluation_nom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="11" y="43" width="100" height="20" uuid="aca9c223-716a-4df5-b0ad-0074c3cdad55"/>
+				<textFieldExpression><![CDATA["Coefficient  : "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="111" y="43" width="100" height="20" uuid="4f9793e5-94d9-4c39-9e1e-54077fd6b4db"/>
+				<textFieldExpression><![CDATA[$F{classe_elementevaluation_coefficient}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="12" y="1" width="90" height="19" backcolor="#999999" uuid="dc65f1fd-fb0e-42fe-8853-747b47f6d8fb"/>
+				<box>
+					<pen lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Matricule"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="101" y="1" width="270" height="19" backcolor="#999999" uuid="2dce5482-cd91-4fc1-9b54-dd620af5927e"/>
+				<box>
+					<pen lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nom et prénom"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="443" y="1" width="99" height="19" backcolor="#999999" uuid="03d41c83-902d-4a24-bb2c-8e3a854a0578"/>
+				<box>
+					<pen lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Observation"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="371" y="1" width="72" height="19" backcolor="#999999" uuid="ed45141b-f40a-4691-b93a-213a7c40827f"/>
+				<box>
+					<pen lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Note"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="37" splitType="Stretch">
+			<textField>
+				<reportElement x="12" y="0" width="89" height="37" uuid="a007486c-0110-4519-9a28-87bd4ad2fa6c"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{eleve_matricule}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="371" y="0" width="72" height="37" uuid="5f76d28c-964d-4165-a224-5ea241d0a5e7"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{evaluation_note}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="443" y="0" width="99" height="37" uuid="bcf872d5-81ec-4697-abcd-52f285d96ba8"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{evaluation_observation}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="101" y="0" width="270" height="37" uuid="547f38e3-3de0-4bdb-9e2d-3ce385b5ff41"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{eleve_nom} +" "+$F{eleve_prenom}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

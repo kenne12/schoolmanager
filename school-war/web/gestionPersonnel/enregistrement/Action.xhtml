@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="actionsForm">
+        <p:fieldset legend="#{langue['Conv.Actions']}" toggleable="true" toggleSpeed="300">
+            <div class="footer-section">
+
+                <p:commandButton id="creer" 
+                                 icon="ui-icon-plus"   
+                                 value="#{langue['Conv.Creer']}" 
+                                 update=":PersonnelCreerForm, :PersonnelListerForm:growl" 
+                                 actionListener="#{personnelCtrl.prepareCreate()}"
+                                 oncomplete="PF('PersonnelCreerDialog').show()"/>
+                <p:commandButton id="detail"   
+                                 icon="ui-icon-search" 
+                                 value="#{langue['Conv.Detail']}" 
+                                 update=":PersonnelDetailForm" 
+                                 oncomplete="PF('PersonnelDetailDialog').show()" 
+                                 disabled="#{personnelCtrl.detail}"/>
+
+                <p:commandButton id="modifier"   
+                                 icon="ui-icon-pencil" 
+                                 value="#{langue['Conv.Modifier']}" 
+                                 update=":PersonnelCreerForm" 
+                                 actionListener="#{personnelCtrl.prepareEdit()}"
+                                 oncomplete="PF('PersonnelCreerDialog').show()" 
+                                 disabled="#{personnelCtrl.modifier}"/>
+
+                <p:commandButton id="supprimer" 
+                                 icon="ui-icon-trash"  
+                                 value="#{langue['Conv.Supprimer']}" 
+                                 update=":PersonnelListerForm:growl,:PersonnelListerForm:datalist, :actionsForm"
+                                 disabled="#{personnelCtrl.supprimer}"
+                                 actionListener="#{personnelCtrl.supprimer()}">
+                    <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
+                               message="#{langue['Message.Confirm.Supprimer']}?"
+                               icon="ui-icon-alert"/>
+                </p:commandButton>
+
+                <p:commandButton id="addohoto" 
+                                 icon="ui-icon-plus"   
+                                 value="#{langue.ajouter_photo}"
+                                 actionListener="#{personnelCtrl.prepareAddPhoto()}"
+                                 update=":PersonnelPhotosForm,:PersonnelListerForm:growl"                                 
+                                 oncomplete="PF('PersonnelPhotosDialog').show()"
+                                 disabled="#{personnelCtrl.detail}"/>
+
+                <p:commandButton id="galerie" 
+                                 value="Galérie Photo"
+                                 actionListener="#{personnelCtrl.viewGalerie()}"
+                                 update=":galerieForm"                                 
+                                 oncomplete="PF('galerieDlg').show()"
+                                 disabled="#{!empty personnelCtrl.galeries}"
+                                 />
+
+                <p:commandButton id="imprimer" icon="ui-icon-print"  
+                                 value="#{langue['Conv.Imprimer']}" actionListener="#{personnelCtrl.imprimerPersonnelHtml()}"
+                                 update=":PersonnelListerForm:growl,:PersonnelImprimerForm" disabled="#{personnelCtrl.imprimer}" 
+                                 oncomplete="PF('PersonnelImprimerDialog').show()"/>
+
+            </div>
+        </p:fieldset>
+    </h:form>
+</ui:composition>

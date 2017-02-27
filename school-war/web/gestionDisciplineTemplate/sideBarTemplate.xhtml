@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <!-- BEGIN SIDEBAR -->
+    <div class="sidebar-scroll">
+        <div id="sidebar" class="nav-collapse collapse">
+
+            <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+            <div class="navbar-inverse">
+                <form class="navbar-search visible-phone">
+                    <input type="text" class="search-query" placeholder="Search" />
+                </form>
+            </div>
+            <!-- END RESPONSIVE QUICK SEARCH FORM -->
+            <!-- BEGIN SIDEBAR MENU -->
+            <ul class="sidebar-menu">
+
+                <!--Accueil-->
+                <li class="sub-menu" id="menuIndex">
+                    <a class="" href="#{request.contextPath}/index.html">
+                        <span>#{langue.accueil}</span>
+                    </a>
+                </li>
+
+                <!--Logements-->
+                <li class="sub-menu" id="menuLogements">
+                    <a href="javascript:;" class="">
+                        <i class="icon-building"></i>
+                        <span>Discipline Eleves</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionDiscipline/gestionDisciplineEleve/motif.html">Gérer les motifs</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionDiscipline/gestionDisciplineEleve/sanction.html">Gérer les sanctions</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionDiscipline/gestionDisciplineEleve/disciplineEleve.html">Gérer Discipline</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionDiscipline/gestionDisciplineEleve/gererAbsence.html">Gérer Absences</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionDiscipline/gestionDisciplineEleve/rapportDiscipline.html">Rapport Discipline</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionDiscipline/gestionDisciplineEleve/rapportAbsence.html">Rapport D'absence</a></li>
+                    </ul>
+                </li>
+
+                <!--loyers-->
+                <li class="sub-menu" id="menuLoyers">
+                    <a href="javascript:;" class="">
+                        <i class="icon-bell-alt"></i>
+                        <span>Discipline Personnel</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionDiscipline/gestionDisciplinePersonnel/gererMotif.html">Gérer motifs</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionDiscipline/gestionDisciplinePersonnel/gererSanction.html">Gérer Sanction</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionDiscipline/gestionDisciplinePersonnel/disciplinePersonnel.html">Gerer punitions</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionDiscipline/gestionDisciplinePersonnel/rapport.html">Rapport discipline</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- END SIDEBAR MENU -->
+        </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+</ui:composition>

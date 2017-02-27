@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="CompteCreerDlg" 
+                  widgetVar="CompteCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="CREER / MODIFIER UN COMPTE" 
+                  closeOnEscape="true">
+
+            <h:form id="CompteCreerForm">
+
+
+                <h:panelGroup id="display" >
+
+                    <p:panelGrid columns="2" columnClasses="column">
+                        
+                        <p:outputLabel value="Type de compte" for="classe" />
+                        <p:selectOneMenu filter="true" value="#{compteCtrl.typecompte.idtypecompte}">
+                            <f:selectItem itemLabel="#{langue.choisir}"/>
+                            <f:selectItems value="#{compteCtrl.typecomptes}" var="item" itemLabel="#{item.classe} - #{item.libelle}" itemValue="#{item.idtypecompte}"/>
+                            <p:ajax  listener="#{compteCtrl.update()}"  update="classe"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Numero" for="classe" />
+                        <p:inputText required="true" style="width: 100px" requiredMessage="Numéro : obligatoire" id="classe" value="#{compteCtrl.compte.classe}"/>
+
+
+                        <p:outputLabel value="Libellé" for="libelle" />
+                        <p:inputText required="true" style="width: 200px"  requiredMessage="Libellé : obligatoire" id="libelle" value="#{compteCtrl.compte.libelle}"/>
+
+
+                        <p:outputLabel value="Débit" for="debit" />
+                        <p:inputText id="debit" value="#{compteCtrl.compte.debit}"/>
+                        
+                        <p:outputLabel value="Crédit" for="credit" />
+                        <p:inputText id="credit" value="#{compteCtrl.compte.credit}"/>
+
+
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{compteCtrl.saveCompte()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:CompteListerForm:datalist,:CompteListerForm:growl, CompteCreerForm" 
+                                     oncomplete="PF('CompteCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('CompteCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="EnseignerCreerDlg" 
+                  widgetVar="EnseignerCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']} :d'affectation de matiere" 
+                  closeOnEscape="true">
+
+            <h:form id="EnseignerCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+                        
+                        <p:outputLabel value="#{langue.etablissement}" for="etablissement" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="etablissement" value="#{enseignerMatiereCtrl.etablissement}" converter="etablissementConverter">
+                                <f:selectItem itemLabel="#{langue.choisir}" />
+                                <f:selectItems value="#{enseignerMatiereCtrl.etablissements}" var="item" itemLabel="#{item.nom}" itemValue="#{item}"/>
+                                <p:ajax update="annee,personnel" listener="#{enseignerMatiereCtrl.updateAnneePersonnel()}" />
+                            </p:selectOneMenu> 
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.anneeScolaire}" for="annee" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="annee" value="#{enseignerMatiereCtrl.annee.idannee}" >
+                                <f:selectItem itemLabel="#{langue.choisir}"/>
+                                <f:selectItems value="#{enseignerMatiereCtrl.annees}" var="item" itemLabel="#{item.code}" itemValue="#{item.idannee}"/>
+                                <p:ajax update="matiere" listener="#{enseignerMatiereCtrl.update()}"/>
+                            </p:selectOneMenu> 
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.personnel}" for="personnel" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="personnel" value="#{enseignerMatiereCtrl.personnel.idpersonnel}" required="true" 
+                                             requiredMessage="#{langue.personnel} : #{langue['Conv.ValeurRequise']}">
+                                <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/> 
+                                <f:selectItems value="#{enseignerMatiereCtrl.personnels}" var="item" itemLabel="#{item.nom} #{item.prenom}"   itemValue="#{item.idpersonnel}"/>
+                            </p:selectOneMenu> 
+                        </h:panelGroup>
+
+                        
+                        <p:outputLabel value="#{langue.classe}" for="classe" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="classe" value="#{enseignerMatiereCtrl.classe.idclasse}" required="true" 
+                                             requiredMessage="#{langue.classe} : #{langue['Conv.ValeurRequise']}">
+                                <f:selectItem itemLabel="#{langue.choisir}"/> 
+                                <f:selectItems value="#{classeCtrl.classeActives}" var="item" itemLabel="#{item.nom}"   itemValue="#{item.idclasse}"/>
+                                <p:ajax update="matiere" listener="#{enseignerMatiereCtrl.updateMatiere()}"/>
+                            </p:selectOneMenu> 
+                        </h:panelGroup>
+                        
+                        <p:outputLabel value="#{langue.matiere}" for="matiere"/> 
+                        <p:pickList id="matiere" value="#{enseignerMatiereCtrl.dualMatiere}" var="matiere" effect="bounce"
+                                    itemValue="#{matiere}" itemLabel="#{matiere.libelle}" required="true" showSourceControls="true" showTargetControls="true" showCheckbox="false"
+                                    showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="matiereConverter">
+
+                            <f:facet name="sourceCaption">#{langue.matieres} disponibles</f:facet>
+                            <f:facet name="targetCaption">#{langue.matieres} selectionnés</f:facet>                            
+                        </p:pickList>
+
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{enseignerMatiereCtrl.save()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:EnseignerListerForm:datalist,:EnseignerListerForm:growl, EnseignerCreerForm" 
+                                     oncomplete="PF('EnseignerCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('EnseignerCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

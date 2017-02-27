@@ -1,0 +1,17 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/gestionEtatTemplate/principalTemplate.xhtml">
+
+    <ui:define name="scriptCollapse">
+        <script>
+            var el = document.getElementById("bulletin");
+            el.setAttribute("class", "sub-menu active");
+        </script>
+    </ui:define>
+
+    <ui:define name="contenu">
+        <h2>Contenu par défaut du template index</h2>
+    </ui:define>
+
+</ui:composition>

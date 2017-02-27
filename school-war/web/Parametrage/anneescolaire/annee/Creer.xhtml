@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="AnneeCreerDlg" 
+                  widgetVar="AnneeCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']} #{langue.anneeScolaire}" 
+                  closeOnEscape="true">
+
+            <h:form id="AnneeCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue.Anneedebut}" for="debut" />
+                        <h:panelGroup>
+                            <p:inputText id="debut" value="#{anneeCtrl.annee.code}" required="true" 
+                                         requiredMessage="#{langue.Anneedebut} : #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+                        
+                        <p:outputLabel value="#{langue.Anneefin}" for="fin" />
+                        <h:panelGroup>
+                            <p:inputText id="fin" value="#{anneeCtrl.annee.codefin}" required="true" 
+                                         requiredMessage="#{langue.Anneefin} : #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.theme}" for="theme" />
+                        <h:panelGroup>
+                            <p:inputText id="theme" value="#{anneeCtrl.annee.theme}"/>                                         
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.active}" for="etat" />
+                        <h:panelGroup>
+                            <p:selectBooleanCheckbox id="etat" value="#{anneeCtrl.annee.etatannee}"/>
+                        </h:panelGroup>
+
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{anneeCtrl.enregistrerAnnee()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:AnneeListerForm:datalist,:AnneeListerForm:growl, AnneeCreerForm" 
+                                     oncomplete="PF('AnneeCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('AnneeCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

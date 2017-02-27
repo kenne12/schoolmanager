@@ -1,0 +1,23 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/gestionFraisInscriptionTemplate/principalTemplate.xhtml">
+
+    <ui:define name="contenu">
+
+        <ui:include src="gererSolvable/Action.xhtml"/> 
+        <ui:include src="gererSolvable/Lister.xhtml"/>
+        <ui:include src="gererSolvable/Detail.xhtml"/>
+        <ui:include src="gererSolvable/Imprimer.xhtml"/> 
+    </ui:define>
+
+    <ui:define name="scriptCollapse">
+        <script>
+            var el = document.getElementById("menuSolvable");
+            el.setAttribute("class", "sub-menu active");
+        </script>
+    </ui:define>
+
+
+</ui:composition>
+

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="TypeTrancheCreerDlg" 
+                  widgetVar="TypeTrancheCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="Formulaire d'enregistrement des tranches de pensions"
+                  visible="#{trancheCtrl.showDialog}"
+                  closable="false"
+                  >
+
+            <h:panelGrid columns="2">
+
+                <h:form id="TypeTrancheCreerForm">
+                    <p:growl id="msgs" />
+
+                    <p:panel header="Zone de saisie">
+                        <h:panelGrid columns="2" cellpadding="5">
+
+                            <p:outputLabel for="categorie" value="#{langue.categorie}" />
+                            <h:panelGroup>
+                                <p:selectOneMenu id="categorie" value="#{trancheCtrl.tranche.idcategorie}" converter="categorieConverter">
+                                    <f:selectItem itemLabel="#{langue.choisir}"/>
+                                    <f:selectItems value="#{trancheCtrl.categories}" var="item" itemLabel="#{item.nom}" itemValue="#{item}"/>
+                                    <p:ajax update="typetranche" listener="#{trancheCtrl.updateTypeTranche()}"/>
+                                </p:selectOneMenu>                        
+                            </h:panelGroup>
+
+                            <p:outputLabel for="typetranche" value="Type de tranche" />
+                            <p:selectManyCheckbox  id="typetranche" value="#{trancheCtrl.selectedTypetranches}" layout="grid" columns="1" converter="typetrancheConverter" required="true" requiredMessage="Veuillez sélectionner les tranches">
+                                <f:selectItems value="#{trancheCtrl.typetranches}" var="type" itemLabel="#{type.nom}" itemValue="#{type}" />
+                            </p:selectManyCheckbox>
+
+                        </h:panelGrid>
+                        <p:commandButton id="btn_add" value="#{langue.ajouter}" update=":TypeTrancheValidateForm,:TypeTrancheValidateForm:datalist1,TypeTrancheCreerForm msgs @parent" actionListener="#{trancheCtrl.addTypeTranche()}"/>                                
+                    </p:panel>
+                </h:form>
+
+                <h:form id="TypeTrancheValidateForm">
+
+                    <p:outputPanel>
+                        <p:dataTable value="#{trancheCtrl.tranchesTest}" var="item" 
+                                     id="datalist1" editable="true" editMode="cell">
+
+                            <p:column sortBy="#{item.idcategorie.idcategorie}" filterBy="#{item.idcategorie.nom}">
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.categorie}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idcategorie.nom}"/>
+                            </p:column>
+
+                            <p:column  filterBy="#{item.idtypetranche.nom}">
+                                <f:facet name="header">
+                                    <h:outputText value="Motif"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idtypetranche.nom}"/>
+                            </p:column>
+
+                            <p:column headerText="#{langue.montant} (Fcfa)">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.prix}" /></f:facet>
+                                    <f:facet name="input"><h:inputText value="#{item.prix}" required="true" requiredMessage="#{langue.montant} : #{langue.Requis.message}"/> </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+
+                            <p:column headerText="#{langue.dateDebut}">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.datedebut}" /></f:facet>
+                                    <f:facet name="input"><p:calendar navigator="true" required="true" value="#{item.datedebut}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="#{langue.dateFin}">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.datefin}" /></f:facet>
+                                    <f:facet name="input"><p:calendar navigator="true" required="true" value="#{item.datefin}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+
+                            <p:column >
+                                <f:facet name="header">
+                                    <h:outputText value="Supprimer"/>
+                                </f:facet>
+                                <p:commandButton value="Supprimer" icon="ui-icon-trash">
+                                    <p:ajax event="click" listener="#{trancheCtrl.removeTranche(item)}" update="datalist1"  />
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                        <br/>
+                        <p:commandButton value="#{langue.valider}" actionListener="#{trancheCtrl.save()}" update="TypeTrancheValidateForm,:TypeTrancheCreerForm,:TypeTrancheListerForm,:TypeTrancheListerForm:datalist" oncomplete="PF('TypeTrancheCreerDialog').hide()"/>
+                        <p:commandButton value="#{langue.fermer}" actionListener="#{trancheCtrl.closeDialog()}" oncomplete="PF('TypeTrancheCreerDialog').hide()"/>
+
+                    </p:outputPanel>
+                </h:form>
+            </h:panelGrid>
+
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

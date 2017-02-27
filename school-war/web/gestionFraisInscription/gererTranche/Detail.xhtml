@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="TypeTrancheDetailDlg" 
+                  widgetVar="TypeTrancheDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: categorie" closeOnEscape="true">
+
+            <h:form id="TypeTrancheDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" style="width: 100%;" >
+                        <h:outputText value="Id"/>
+                        <h:outputText value="#{typeTrancheCtrl.selectedTypeTranche.idtypetranche}"/>
+
+                        <h:outputText value="Nom : "/>
+                        <h:outputText value="#{typeTrancheCtrl.selectedTypeTranche.nom}"/>
+
+                        <h:outputText value="Categorie : "/>
+                        <h:outputText value="#{typeTrancheCtrl.selectedTypeTranche.idcategorie.nom}"/>
+
+                        <h:outputText value="Prix : "/>
+                        <h:outputText value="#{typeTrancheCtrl.selectedTypeTranche.prix}"/>
+
+                        <h:outputText value="Date de debut : "/>
+                        <h:outputText value="#{typeTrancheCtrl.selectedTypeTranche.datedebut}"/>
+
+                        <h:outputText value="Date de Fin : "/>
+                        <h:outputText value="#{typeTrancheCtrl.selectedTypeTranche.datefin}"/>
+
+                        <h:outputText value="Etat : "/>
+                        <p:selectBooleanCheckbox value="#{typeTrancheCtrl.selectedTypeTranche.etat}" disabled="true"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('TypeTrancheDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

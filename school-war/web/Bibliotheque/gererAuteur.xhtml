@@ -1,0 +1,17 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/BibliothequeTemplate/principalTemplate.xhtml">
+
+    <ui:define name="contenu">
+
+        <ui:include src="auteur/Action.xhtml"/>      
+        <ui:include src="auteur/Lister.xhtml"/>
+        <ui:include src="auteur/Detail.xhtml"/>
+        <ui:include src="auteur/Modifier.xhtml"/>
+        <ui:include src="auteur/Creer.xhtml"/>
+        <ui:include src="auteur/Imprimer.xhtml"/>
+
+    </ui:define>
+
+</ui:composition>

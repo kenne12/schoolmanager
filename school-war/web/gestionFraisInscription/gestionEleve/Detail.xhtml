@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="EleveDetailDlg" 
+                  widgetVar="EleveDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: de eleve" closeOnEscape="true">
+
+            <h:form id="EleveDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" style="width: 100%;" >
+
+                        <f:facet name="header">
+                            <img src="#{request.contextPath}/photos/photo_eleves/#{eleveCtrl.selectedEleve.photo}" alt="school-manager" width="200px;height:200px"/>                              
+                        </f:facet>
+
+                        <h:outputText value="Matricule"/>
+                        <h:outputText value="#{eleveCtrl.selectedEleve.matricule}"/>
+
+                        <h:outputText value="Nom"/>
+                        <h:outputText value="#{eleveCtrl.selectedEleve.nom}"/>
+
+                        <h:outputText value="Prenom"/>
+                        <h:outputText value="#{eleveCtrl.selectedEleve.prenom}"/>
+
+
+                        <h:outputText value="Date de naissance"/>
+                        <h:outputText value="#{eleveCtrl.selectedEleve.datenaissance}"/>
+
+                        <h:outputText value="Lieu de naissance"/>
+                        <h:outputText value="#{eleveCtrl.selectedEleve.lieunaissance}"/>
+
+                        <h:outputText value="Sexe"/>
+                        <h:outputText value="#{eleveCtrl.selectedEleve.sexe}"/>
+
+                        <h:outputText value="Année d'admission"/>
+                        <h:outputText value="#{eleveCtrl.selectedEleve.anneeadmission}"/>
+
+                        <h:outputText value="Etat du eleve"/>
+                        <h:selectBooleanCheckbox id="etat" value="#{eleveCtrl.selectedEleve.etateleve}" disabled="true"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('EleveDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

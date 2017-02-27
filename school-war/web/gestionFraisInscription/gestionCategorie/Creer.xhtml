@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <!--<p:dialog id="kenne" modal="true" header="kenne" appendTo="@(body)" />-->
+        <p:dialog id="CategorieCreerDlg" 
+                  widgetVar="CategorieCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue.categorieEleve}" 
+                  closeOnEscape="true">
+
+            <h:form id="CategorieCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+
+
+                        <p:outputLabel value="#{langue['Conv.Nom']}" for="nom" />
+                        <h:panelGroup>
+                            <p:inputText id="nom" value="#{categorieCtrl.categorie.nom}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.etat}" for="etat" />
+                        <h:panelGroup>
+                            <h:selectBooleanCheckbox id="etat" value="#{categorieCtrl.categorie.etat}" disabled="false"/>
+                        </h:panelGroup>
+
+
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{categorieCtrl.enregistrerCategorie}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:CategorieListerForm:datalist,:CategorieListerForm:growl, CategorieCreerForm" 
+                                     oncomplete="PF('CategorieCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('CategorieCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

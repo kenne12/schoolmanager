@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="EleveListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} de eleve">
+            <p:contextMenu id="EleveDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{eleveCtrl.eleves}"
+                         var="item"
+                         rowKey="#{item.matricule}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{eleveCtrl.eleve}">
+
+                <p:ajax event="rowSelect"   update=":EleveListerForm:EleveDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":EleveListerForm:EleveDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('EleveListerForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.matricule}" width="8%">
+                    <f:facet name="header">
+                        <h:outputText value="Matricule"/>
+                    </f:facet>
+                    <h:outputText value="#{item.matricule}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.nom}" filterBy="#{item.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="Nom"/>
+                    </f:facet>
+                    <h:outputText value="#{item.nom}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.prenom}" filterBy="#{item.prenom}">
+                    <f:facet name="header">
+                        <h:outputText value="Prénom"/>
+                    </f:facet>
+                    <h:outputText value="#{item.prenom}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.datenaissance}" filterBy="#{item.datenaissance}">
+                    <f:facet name="header">
+                        <h:outputText value="Date de naissance"/>
+                    </f:facet>
+                    <h:outputText value="#{item.datenaissance}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.lieunaissance}" filterBy="#{item.lieunaissance}">
+                    <f:facet name="header">
+                        <h:outputText value="Lieu de naissance"/>
+                    </f:facet>
+                    <h:outputText value="#{item.lieunaissance}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.sexe}" filterBy="#{item.sexe}">
+                    <f:facet name="header">
+                        <h:outputText value="Sexe"/>
+                    </f:facet>
+                    <h:outputText value="#{item.sexe}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.anneeadmission}" filterBy="#{item.anneeadmission}">
+                    <f:facet name="header">
+                        <h:outputText value="Date de recrutement"/>
+                    </f:facet>
+                    <h:outputText value="#{item.anneeadmission}"/>
+                </p:column>
+
+            </p:dataTable>
+
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

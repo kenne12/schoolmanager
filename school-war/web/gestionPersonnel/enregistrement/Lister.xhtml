@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="PersonnelListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} de personnel">
+            <p:contextMenu id="PersonnelDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{personnelCtrl.personnels}"
+                         var="item"
+                         rowKey="#{item.matriculepersonnel}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{personnelCtrl.personnel}">
+
+                <p:ajax event="rowSelect"   update=":PersonnelListerForm:PersonnelDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":PersonnelListerForm:PersonnelDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('PersonnelListerForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.matriculepersonnel}" width="8%">
+                    <f:facet name="header">
+                        <h:outputText value="Matricule"/>
+                    </f:facet>
+                    <h:outputText value="#{item.matriculepersonnel}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.nom}" filterBy="#{item.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="Nom"/>
+                    </f:facet>
+                    <h:outputText value="#{item.nom}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.prenom}" filterBy="#{item.prenom}">
+                    <f:facet name="header">
+                        <h:outputText value="Prénom"/>
+                    </f:facet>
+                    <h:outputText value="#{item.prenom}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.telephone}" filterBy="#{item.telephone}">
+                    <f:facet name="header">
+                        <h:outputText value="Téléphone"/>
+                    </f:facet>
+                    <h:outputText value="#{item.telephone}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.email}" filterBy="#{item.email}">
+                    <f:facet name="header">
+                        <h:outputText value="Email"/>
+                    </f:facet>
+                    <h:outputText value="#{item.email}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.adresse}" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue['Conv.Actif']}"/>
+                    </f:facet>
+                    <h:selectBooleanCheckbox id="etat" value="#{item.etatpersonnel}"  disabled="true"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+
+        </p:panel>
+        <ui:include src="/includes/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

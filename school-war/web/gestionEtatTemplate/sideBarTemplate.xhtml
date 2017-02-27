@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <!-- BEGIN SIDEBAR -->
+    <div class="sidebar-scroll">
+        <div id="sidebar" class="nav-collapse collapse">
+
+            <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+            <div class="navbar-inverse">
+                <form class="navbar-search visible-phone">
+                    <input type="text" class="search-query" placeholder="Search" />
+                </form>
+            </div>
+            <!-- END RESPONSIVE QUICK SEARCH FORM -->
+            <!-- BEGIN SIDEBAR MENU -->
+            <ul class="sidebar-menu">
+
+                <!--Accueil-->
+                <li class="sub-menu" id="menuIndex">
+                    <a class="" href="#{request.contextPath}/index.html">
+                        <span>#{langue.accueil}</span>
+                    </a>
+                </li>
+
+                <!--Logements-->
+                <li class="sub-menu" id="bulletin">
+                    <a href="javascript:;" class="">
+                        <i class="icon-building"></i>
+                        <span>Gérer les bulletins</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionEtat/gererBulletin.html">Gérer les bulletins</a></li>                                              
+                    </ul>
+                </li>
+
+
+                <!--Comptes-->
+                <li class="sub-menu" id="menuListe">
+                    <a href="javascript:;" class="">
+                        <i class="icon-tasks"></i>
+                        <span>Gérer les listes</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionEtat/listeClasse.html">liste de classe</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionEtat/listePresence.html">Fiche de presence</a></li>                                             
+                    </ul>
+                </li>
+
+                <!--loyers-->
+                <li class="sub-menu" id="menuLoyers">
+                    <a href="javascript:;" class="">
+                        <i class="icon-bell-alt"></i>
+                        <span>Rapport d'absences</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionEtat/rapportAbsence.html">Gérer les frais</a></li>                      
+                    </ul>
+                </li>
+
+                <!--Habitants-->
+                <li class="sub-menu" id="menuHabitants">
+                    <a href="javascript:;" class="">
+                        <i class="icon-user"></i>
+                        <span>Rapport</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionEtat/rapportDiscipline.html">Rapport de discipline</a></li>                                                
+                    </ul>
+                </li>
+
+                <li class="sub-menu" id="solvabilie">
+                    <a href="javascript:;" class="">
+                        <i class="icon-user"></i>
+                        <span>Rapport de solvabilité</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionEtat/rapportDiscipline.html">Eleves insolvables</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionEtat/rapportDiscipline.html">Eleves solvables</a></li> 
+                    </ul>
+                </li>
+
+            </ul>
+            <!-- END SIDEBAR MENU -->
+        </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+</ui:composition>

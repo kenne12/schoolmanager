@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="AffecterCategorieCreerDlg" 
+                  widgetVar="AffecterCategorieCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: d'affectations" 
+                  closeOnEscape="true">
+
+            <h:form id="AffecterCategorieCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue.anneeScolaire}" for="annee" />
+                        <h:panelGroup>
+                            <p:selectOneMenu value="#{affecterCategorieCtrl.annee.idannee}">
+                                <f:selectItems id="annee" value="#{affecterCategorieCtrl.annees}" var="item" itemLabel="#{item.code}" itemValue="#{item.idannee}"  />
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.personnel}" for="personnel" />
+                        <h:panelGroup>
+                            <p:selectOneMenu value="#{affecterCategorieCtrl.personnel.idpersonnel}">
+                                <f:selectItem itemLabel="#{langue.selectLe} #{langue.personnel}" itemValue=""/> 
+                                <f:selectItems id="personnel" value="#{affecterCategorieCtrl.personnels}" var="item" itemLabel="#{item.nom}"  itemValue="#{item.idpersonnel}" />
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.categorie}" for="categorie" />
+                        <h:panelGroup>
+                            <p:selectOneMenu value="#{affecterCategorieCtrl.categoriePersonnel.idcatpersonnel}">
+                                <f:selectItem itemLabel="#{langue.selectLa} #{langue.categorie}" itemValue=""/> 
+                                <f:selectItems id="categorie" value="#{affecterCategorieCtrl.categoriePersonnels}" var="it" itemLabel="#{it.codecategorie}"  itemValue="#{it.idcatpersonnel}" />
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.fonction}" for="fonction" />
+                        <h:panelGroup>
+                            <p:selectOneMenu value="#{affecterCategorieCtrl.fonction.idfonction}">
+                                <f:selectItem itemLabel="#{langue.selectLa} #{langue.fonction}" itemValue=""/> 
+                                <f:selectItems id="fonction" value="#{affecterCategorieCtrl.fonctions}" var="item" itemLabel="#{item.nom}"  itemValue="#{item.idfonction}" />
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.etat}" for="etat" />
+                        <h:panelGroup>
+                            <p:selectBooleanCheckbox id="etat" value="#{affecterCategorieCtrl.personAnneeCategorie.etat}" disabled="false"/>
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{affecterCategorieCtrl.enregistrerAffectation()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:AffecterCategorieListerForm:datalist,:AffecterCategorieListerForm:growl, AffecterCategorieCreerForm" 
+                                     oncomplete="PF('AffecterCategorieCreerDialog').hide()"/>
+                    <p:commandButton value="Annuler" onclick="PF('AffecterCategorieCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

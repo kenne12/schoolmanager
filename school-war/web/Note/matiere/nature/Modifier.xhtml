@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="NatureMatiereModifierDlg" 
+                  widgetVar="NatureMatiereModifierDialog" modal="true" 
+                  resizable="false"
+                  appendTo="@(body)" header="#{langue['Titre.Dlg.Modification']}: de la nature d'une matière" 
+                  closeOnEscape="true">
+
+            <h:form id="NatureMatiereModifierForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" >
+                        <p:outputLabel value="#{langue['Conv.Code']}" for="libelle" />
+                        <h:panelGroup>
+                            <p:inputText id="libelle" value="#{natureMatiereCtrl.selectedNatureMatiere.libelle}"
+                                         required="true" 
+                                         requiredMessage="#Libellé : #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{natureMatiereCtrl.modifier()}" value="#{langue['Conv.Modifier']}"
+                                     update=":NatureMatiereModifierForm,:NatureMatiereListerForm:datalist,:NatureMatiereListerForm:growl, :actionsForm"
+                                     oncomplete="PF('NatureMatiereModifierDialog').hide()">
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}" message="#{langue['Message.Confirm.Modifier']}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{langue['Conv.Annuler']}" onclick="PF('NatureMatiereModifierDlg').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

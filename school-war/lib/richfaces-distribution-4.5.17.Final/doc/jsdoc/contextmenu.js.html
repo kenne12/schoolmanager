@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: contextmenu.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: contextmenu.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>(function($, rf) {
+    rf.ui = rf.ui || {};
+
+    var defaultOptions = {
+        showEvent : 'contextmenu',
+        cssRoot : "ctx",
+        cssClasses : {},
+        attached : true,
+        showOptions : {},
+        attachToBody : true
+    };
+
+    // constructor definition
+    /**
+     * Backing object for rich:contextMenu
+     * 
+     * @extends RichFaces.ui.Menu
+     * @memberOf! RichFaces.ui
+     * @constructs RichFaces.ui.ContextMenu
+     * 
+     * @param componentId
+     * @param options
+     */
+    rf.ui.ContextMenu = function(componentId, options) {
+        this.options = {};
+        $.extend(this.options, defaultOptions, options || {});
+        $super.constructor.call(this, componentId, this.options);
+        this.id = componentId;
+        this.namespace = this.namespace || "." + rf.Event.createNamespace(this.name, this.id);
+        rf.Event.unbindById(this.id, "mouseenter");
+        rf.Event.unbindById(this.id, "mouseleave");
+        rf.Event.bind(this.popup.popup, "mouseenter", $.proxy(this.__overHandler, this), this);
+        if (!this.options.sticky) {
+            rf.Event.bind(this.popup.popup, "mouseleave", $.proxy(this.__leaveHandler, this), this);
+        }
+        rf.Event.bind('body', 'click' + this.namespace, $.proxy(this.__leaveHandler, this));
+        rf.Event.bindById(this.popup.popup, 'click' + this.namespace, $.proxy(this.__clilckHandler, this));
+    }
+
+    rf.ui.Menu.extend(rf.ui.ContextMenu);
+
+    // define super class link
+    var $super = rf.ui.ContextMenu.$super;
+
+    $.extend(rf.ui.ContextMenu.prototype, (function() {
+        return {
+            name : "ContextMenu",
+
+            getTarget : function() {
+                if (!this.options.attached) {
+                    return null;
+                }
+                var target = typeof this.options.target === 'undefined' ?
+                    this.element.parentNode.id : this.options.target;
+                return target;
+            },
+
+            __showHandler : function(e) {
+                if (this.__isShown()) {
+                    this.hide();
+                }
+                return $super.__showHandler.call(this, e);
+            },
+
+            /**
+             * Show the contextMenu
+             * 
+             * @method
+             * @name RichFaces.ui.ContextMenu#show
+             * @param [event] {Event} event triggering this behavior
+             * @param [opts] {Object} object containing options for the menu
+             */
+            show : function(e, options) {
+                if (e) {
+                    e.stopPropagation();
+                }
+                if (this.menuManager.openedMenu != this.id) {
+                    this.menuManager.shutdownMenu();
+                    this.menuManager.addMenuId(this.id);
+                    this.options.showOptions = options || {};
+                    if (this.options.showOptions.replace) {
+                        this.__replaceOnShow();
+                    }
+                    this.__showPopup(e); // include the event to position the popup at the cursor
+                    var parent = rf.component(this.target);
+                    if (parent &amp;&amp; parent.contextMenuShow) {
+                        parent.contextMenuShow(this, e);
+                    }
+                }
+            },
+
+            __clilckHandler : function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            },
+
+            destroy : function() {
+                rf.Event.unbindById(this.popup.popup, "mouseenter");
+                rf.Event.unbindById(this.popup.popup, "mouseleave");
+                rf.Event.unbind('body', 'click' + this.namespace);
+                rf.Event.unbindById(this.popup.popup, 'click' + this.namespace);
+
+                // call parent's destroy method
+                $super.destroy.call(this);
+            },
+            
+            __replaceOnShow : function() {
+                var labels = this.element.find(".rf-ctx-itm-lbl"),
+                    opts = this.options.showOptions.replace,
+                    first = true;
+
+                for (var o in opts) {
+                    if (opts.hasOwnProperty(o)) {
+                        var re = new RegExp("{" + o + "}", "g");
+                        labels.map(function(index, label) {
+                            var $label = $(label);
+                            if (!$label.attr("data-original")) {
+                                $label.attr("data-original", $label.text());
+                            }
+
+                            var text = first ? $label.attr("data-original") : $label.text();
+                            $label.text(text.replace(re, opts[o]));
+                        });
+                        first = false;
+                    }
+                }
+            }
+        };
+    })());
+
+})(RichFaces.jQuery, RichFaces);</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="RichFaces.module_push.html">push</a></li></ul><h3>Classes</h3><ul><li><a href="RichFaces.ajaxContainer.html">ajaxContainer</a></li><li><a href="RichFaces.BaseComponent.html">BaseComponent</a></li><li><a href="RichFaces.Event.html">Event</a></li><li><a href="RichFaces.queue.html">queue</a></li><li><a href="RichFaces.ui.Accordion.html">Accordion</a></li><li><a href="RichFaces.ui.AccordionItem.html">AccordionItem</a></li><li><a href="RichFaces.ui.Autocomplete.html">Autocomplete</a></li><li><a href="RichFaces.ui.AutocompleteBase.html">AutocompleteBase</a></li><li><a href="RichFaces.ui.Calendar.html">Calendar</a></li><li><a href="RichFaces.ui.Chart.html">Chart</a></li><li><a href="RichFaces.ui.CollapsiblePanel.html">CollapsiblePanel</a></li><li><a href="RichFaces.ui.CollapsiblePanelItem.html">CollapsiblePanelItem</a></li><li><a href="RichFaces.ui.CollapsibleSubTable.html">CollapsibleSubTable</a></li><li><a href="RichFaces.ui.CollapsibleSubTableToggler.html">CollapsibleSubTableToggler</a></li><li><a href="RichFaces.ui.ContextMenu.html">ContextMenu</a></li><li><a href="RichFaces.ui.DataScroller.html">DataScroller</a></li><li><a href="RichFaces.ui.DataTable.html">DataTable</a></li><li><a href="RichFaces.ui.Draggable.html">Draggable</a></li><li><a href="RichFaces.ui.DragIndicator.html">DragIndicator</a></li><li><a href="RichFaces.ui.Droppable.html">Droppable</a></li><li><a href="RichFaces.ui.Editor.html">Editor</a></li><li><a href="RichFaces.ui.ExtendedDataTable.html">ExtendedDataTable</a></li><li><a href="RichFaces.ui.FileUpload.html">FileUpload</a></li><li><a href="RichFaces.ui.Focus.html">Focus</a></li><li><a href="RichFaces.ui.HotKey.html">HotKey</a></li><li><a href="RichFaces.ui.InplaceBase.html">InplaceBase</a></li><li><a href="RichFaces.ui.InplaceInput.html">InplaceInput</a></li><li><a href="RichFaces.ui.InplaceSelect.html">InplaceSelect</a></li><li><a href="RichFaces.ui.InputBase.html">InputBase</a></li><li><a href="RichFaces.ui.InputnumberSlider.html">InputnumberSlider</a></li><li><a href="RichFaces.ui.InputNumberSpinner.html">InputNumberSpinner</a></li><li><a href="RichFaces.ui.List.html">List</a></li><li><a href="RichFaces.ui.ListMulti.html">ListMulti</a></li><li><a href="RichFaces.ui.Menu.html">Menu</a></li><li><a href="RichFaces.ui.MenuBase.html">MenuBase</a></li><li><a href="RichFaces.ui.MenuGroup.html">MenuGroup</a></li><li><a href="RichFaces.ui.MenuItem.html">MenuItem</a></li><li><a href="RichFaces.ui.Message.html">Message</a></li><li><a href="RichFaces.ui.Notify.html">Notify</a></li><li><a href="RichFaces.ui.NotifyMessage.html">NotifyMessage</a></li><li><a href="RichFaces.ui.NotifyStack.html">NotifyStack</a></li><li><a href="RichFaces.ui.OrderingList.html">OrderingList</a></li><li><a href="RichFaces.ui.PanelMenu.html">PanelMenu</a></li><li><a href="RichFaces.ui.PanelMenuGroup.html">PanelMenuGroup</a></li><li><a href="RichFaces.ui.PanelMenuItem.html">PanelMenuItem</a></li><li><a href="RichFaces.ui.PickList.html">PickList</a></li><li><a href="RichFaces.ui.PlaceHolder.html">PlaceHolder</a></li><li><a href="RichFaces.ui.Poll.html">Poll</a></li><li><a href="RichFaces.ui.Popup.html">Popup</a></li><li><a href="RichFaces.ui.PopupList.html">PopupList</a></li><li><a href="RichFaces.ui.PopupPanel.html">PopupPanel</a></li><li><a href="RichFaces.ui.ProgressBar.html">ProgressBar</a></li><li><a href="RichFaces.ui.Select.html">Select</a></li><li><a href="RichFaces.ui.Status.html">Status</a></li><li><a href="RichFaces.ui.Tab.html">Tab</a></li><li><a href="RichFaces.ui.TabPanel.html">TabPanel</a></li><li><a href="RichFaces.ui.TogglePanel.html">TogglePanel</a></li><li><a href="RichFaces.ui.TogglePanelItem.html">TogglePanelItem</a></li><li><a href="RichFaces.ui.Tooltip.html">Tooltip</a></li><li><a href="RichFaces.ui.Tree.html">Tree</a></li><li><a href="RichFaces.ui.TreeNode.html">TreeNode</a></li></ul><h3>Events</h3><ul><li><a href="RichFaces.module_push.html#~event:error">error</a></li><li><a href="RichFaces.module_push.html#~event:push">push</a></li><li><a href="RichFaces.module_push.html#~event:subscribed">subscribed</a></li></ul><h3>Namespaces</h3><ul><li><a href="jQuery.html">jQuery</a></li><li><a href="RichFaces.html">RichFaces</a></li><li><a href="RichFaces.ui.html">ui</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Mon Jun 20 2016 14:53:31 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

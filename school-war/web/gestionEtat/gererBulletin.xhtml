@@ -1,0 +1,15 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/gestionEtatTemplate/bulletinTemplate.xhtml">
+
+    <ui:define name="contenu">        
+        <ui:include src="gererBulletin/Action.xhtml"/>      
+        <ui:include src="gererBulletin/Lister.xhtml"/>
+        <ui:include src="gererBulletin/Detail.xhtml"/>
+        <ui:include src="gererBulletin/Modifier.xhtml"/>
+        <ui:include src="gererBulletin/Creer.xhtml"/>
+        <ui:include src="gererBulletin/Imprimer.xhtml"/>              
+    </ui:define>
+
+</ui:composition>

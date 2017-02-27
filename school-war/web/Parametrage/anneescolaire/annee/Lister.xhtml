@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="AnneeListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} #{langue.anneeScolaire}">
+            <p:contextMenu id="AnneeDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{anneeCtrl.annees}"
+                         var="item"
+                         rowKey="#{item.idannee}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{anneeCtrl.selectedAnnee}">
+
+                <p:ajax event="rowSelect"   update=":AnneeListerForm:AnneeDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":AnneeListerForm:AnneeDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('AnneeListerForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.idannee}" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.identifiant}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idannee}"/>
+                </p:column>
+
+
+                <p:column width="15%"  filterBy="#{item.code}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.Anneedebut}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.code}"/>
+                </p:column>
+                
+                <p:column width="15%"  filterBy="#{item.codefin}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.Anneefin}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.codefin}"/>
+                </p:column>
+
+                <p:column width="30%" filterBy="#{item.theme}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.theme}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.theme}"/>
+                </p:column>
+
+                <p:column width="7%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.etat}"/>
+                    </f:facet>
+                    <p:selectBooleanCheckbox value="#{item.etatannee}" disabled="true"/>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

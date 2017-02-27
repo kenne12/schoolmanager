@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="LogementDetailDlg" 
+                  widgetVar="LogementDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: #{langue['Conv.Logement']}" closeOnEscape="true">
+
+            <h:form id="LogementDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" style="width: 100%;" >
+                        <h:outputText value="#{langue['Conv.typeLogement']}"/>
+                        <h:outputText value="#{logementCtrl.selectedLogement.typeLogement}"/>
+
+                        <h:outputText value="#{langue['Conv.Batiment']}"/>
+                        <h:outputText value="#{logementCtrl.selectedLogement.batiment}"/>
+
+                        <h:outputText value="#{langue['Conv.Reference']}"/>
+                        <h:outputText value="#{logementCtrl.selectedLogement.reference}"/>
+
+                        <h:outputText value="#{langue['Conv.Etat']}"/>
+                        <h:selectBooleanCheckbox id="etat" value="#{logementCtrl.selectedLogement.etat}" disabled="true"/>
+
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('LogementDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

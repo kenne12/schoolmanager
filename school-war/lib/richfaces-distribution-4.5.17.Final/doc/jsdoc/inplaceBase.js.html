@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: inplaceBase.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: inplaceBase.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>(function ($, rf) {
+
+    rf.ui = rf.ui || {};
+
+    /**
+     * Parent object for inplace components
+     * 
+     * @extends RichFaces.ui.InputBase
+     * @memberOf! RichFaces.ui
+     * @constructs RichFaces.ui.InplaceBase
+     * 
+     * @param id
+     * @param options
+     */
+    rf.ui.InplaceBase = function(id, options) {
+        $super.constructor.call(this, id);
+        var mergedOptions = $.extend({}, defaultOptions, options);
+        this.editEvent = mergedOptions.editEvent;
+        this.noneCss = mergedOptions.noneCss;
+        this.changedCss = mergedOptions.changedCss;
+        this.editCss = mergedOptions.editCss;
+        this.defaultLabel = mergedOptions.defaultLabel;
+        this.state = mergedOptions.state;
+
+        this.options = mergedOptions;
+
+        this.element = $(document.getElementById(id));
+        this.editContainer = $(document.getElementById(id + "Edit"));
+        this.element.bind(this.editEvent, $.proxy(this.__editHandler, this));
+        this.isSaved = false;
+        this.useDefaultLabel = false;
+        this.editState = false;
+    };
+
+    rf.ui.InputBase.extend(rf.ui.InplaceBase);
+    var $super = rf.ui.InplaceBase.$super;
+
+    var defaultOptions = {
+        editEvent: "click",
+        state: "ready"
+    };
+
+    $.extend(rf.ui.InplaceBase.prototype, ( function () {
+
+        var STATE = {
+            READY : 'ready',
+            CHANGED: 'changed',
+            DISABLE: 'disable',
+            EDIT: 'edit'
+        };
+
+        return {
+
+            getLabel: function() {
+            },
+
+            setLabel: function(value) {
+            },
+
+            onshow: function() {
+            },
+
+            onhide: function() {
+            },
+
+            onsave: function() {
+            },
+
+            oncancel: function() {
+            },
+
+            /**
+             * Save the value
+             * 
+             * @method
+             * @name RichFaces.ui.InplaceBase#save
+             */
+            save: function() {
+                var value = this.__getValue()
+                if (value.length > 0) {
+                    this.setLabel(value);
+                    this.useDefaultLabel = false;
+                } else {
+                    this.setLabel(this.defaultLabel);
+                    this.useDefaultLabel = true;
+                }
+
+                this.isSaved = true;
+
+                this.__applyChangedStyles();
+                this.onsave();
+            },
+
+            /**
+             * Cancel editing the value
+             * 
+             * @method
+             * @name RichFaces.ui.InplaceBase#cancel
+             */
+            cancel: function() {
+                var text = "";
+                if (!this.useDefaultLabel) {
+                    text = this.getLabel();
+                }
+                this.__setValue(text);
+                this.isSaved = true;
+                this.oncancel();
+            },
+
+            /**
+             * Open the component for editing
+             * 
+             * @method
+             * @name RichFaces.ui.InplaceBase#open
+             */
+            open: function() {
+                this.__editHandler();
+            },
+
+            isValueSaved: function() {
+                return this.isSaved;
+            },
+
+            /**
+             * Returns true if the component is in editing state
+             * 
+             * @method
+             * @name RichFaces.ui.Editor#focus
+             * @return {boolean} true if the component is in editing state
+             */
+            isEditState: function() {
+                return this.editState;
+            },
+
+            __applyChangedStyles: function() {
+                if (this.isValueChanged()) {
+                    this.element.addClass(this.changedCss);
+                } else {
+                    this.element.removeClass(this.changedCss);
+                }
+            },
+
+            __show: function() {
+                this.scrollElements = rf.Event.bindScrollEventHandlers(this.id, this.__scrollHandler, this);
+                this.editState = true;
+                this.onshow();
+            },
+
+            __hide: function() {
+                if (this.scrollElements) {
+                    rf.Event.unbindScrollEventHandlers(this.scrollElements, this);
+                    this.scrollElements = null;
+                }
+                this.editState = false;
+                this.editContainer.addClass(this.noneCss);
+                this.element.removeClass(this.editCss);
+                this.onhide();
+            },
+
+            __editHandler: function(e) {
+                this.isSaved = false;
+                this.element.addClass(this.editCss);
+                this.editContainer.removeClass(this.noneCss);
+                this.__show();
+            },
+            __scrollHandler: function(e) {
+                this.cancel();
+            },
+
+            destroy: function () {
+                $super.destroy.call(this);
+            }
+        }
+
+    })());
+
+})(RichFaces.jQuery, window.RichFaces);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="RichFaces.module_push.html">push</a></li></ul><h3>Classes</h3><ul><li><a href="RichFaces.ajaxContainer.html">ajaxContainer</a></li><li><a href="RichFaces.BaseComponent.html">BaseComponent</a></li><li><a href="RichFaces.Event.html">Event</a></li><li><a href="RichFaces.queue.html">queue</a></li><li><a href="RichFaces.ui.Accordion.html">Accordion</a></li><li><a href="RichFaces.ui.AccordionItem.html">AccordionItem</a></li><li><a href="RichFaces.ui.Autocomplete.html">Autocomplete</a></li><li><a href="RichFaces.ui.AutocompleteBase.html">AutocompleteBase</a></li><li><a href="RichFaces.ui.Calendar.html">Calendar</a></li><li><a href="RichFaces.ui.Chart.html">Chart</a></li><li><a href="RichFaces.ui.CollapsiblePanel.html">CollapsiblePanel</a></li><li><a href="RichFaces.ui.CollapsiblePanelItem.html">CollapsiblePanelItem</a></li><li><a href="RichFaces.ui.CollapsibleSubTable.html">CollapsibleSubTable</a></li><li><a href="RichFaces.ui.CollapsibleSubTableToggler.html">CollapsibleSubTableToggler</a></li><li><a href="RichFaces.ui.ContextMenu.html">ContextMenu</a></li><li><a href="RichFaces.ui.DataScroller.html">DataScroller</a></li><li><a href="RichFaces.ui.DataTable.html">DataTable</a></li><li><a href="RichFaces.ui.Draggable.html">Draggable</a></li><li><a href="RichFaces.ui.DragIndicator.html">DragIndicator</a></li><li><a href="RichFaces.ui.Droppable.html">Droppable</a></li><li><a href="RichFaces.ui.Editor.html">Editor</a></li><li><a href="RichFaces.ui.ExtendedDataTable.html">ExtendedDataTable</a></li><li><a href="RichFaces.ui.FileUpload.html">FileUpload</a></li><li><a href="RichFaces.ui.Focus.html">Focus</a></li><li><a href="RichFaces.ui.HotKey.html">HotKey</a></li><li><a href="RichFaces.ui.InplaceBase.html">InplaceBase</a></li><li><a href="RichFaces.ui.InplaceInput.html">InplaceInput</a></li><li><a href="RichFaces.ui.InplaceSelect.html">InplaceSelect</a></li><li><a href="RichFaces.ui.InputBase.html">InputBase</a></li><li><a href="RichFaces.ui.InputnumberSlider.html">InputnumberSlider</a></li><li><a href="RichFaces.ui.InputNumberSpinner.html">InputNumberSpinner</a></li><li><a href="RichFaces.ui.List.html">List</a></li><li><a href="RichFaces.ui.ListMulti.html">ListMulti</a></li><li><a href="RichFaces.ui.Menu.html">Menu</a></li><li><a href="RichFaces.ui.MenuBase.html">MenuBase</a></li><li><a href="RichFaces.ui.MenuGroup.html">MenuGroup</a></li><li><a href="RichFaces.ui.MenuItem.html">MenuItem</a></li><li><a href="RichFaces.ui.Message.html">Message</a></li><li><a href="RichFaces.ui.Notify.html">Notify</a></li><li><a href="RichFaces.ui.NotifyMessage.html">NotifyMessage</a></li><li><a href="RichFaces.ui.NotifyStack.html">NotifyStack</a></li><li><a href="RichFaces.ui.OrderingList.html">OrderingList</a></li><li><a href="RichFaces.ui.PanelMenu.html">PanelMenu</a></li><li><a href="RichFaces.ui.PanelMenuGroup.html">PanelMenuGroup</a></li><li><a href="RichFaces.ui.PanelMenuItem.html">PanelMenuItem</a></li><li><a href="RichFaces.ui.PickList.html">PickList</a></li><li><a href="RichFaces.ui.PlaceHolder.html">PlaceHolder</a></li><li><a href="RichFaces.ui.Poll.html">Poll</a></li><li><a href="RichFaces.ui.Popup.html">Popup</a></li><li><a href="RichFaces.ui.PopupList.html">PopupList</a></li><li><a href="RichFaces.ui.PopupPanel.html">PopupPanel</a></li><li><a href="RichFaces.ui.ProgressBar.html">ProgressBar</a></li><li><a href="RichFaces.ui.Select.html">Select</a></li><li><a href="RichFaces.ui.Status.html">Status</a></li><li><a href="RichFaces.ui.Tab.html">Tab</a></li><li><a href="RichFaces.ui.TabPanel.html">TabPanel</a></li><li><a href="RichFaces.ui.TogglePanel.html">TogglePanel</a></li><li><a href="RichFaces.ui.TogglePanelItem.html">TogglePanelItem</a></li><li><a href="RichFaces.ui.Tooltip.html">Tooltip</a></li><li><a href="RichFaces.ui.Tree.html">Tree</a></li><li><a href="RichFaces.ui.TreeNode.html">TreeNode</a></li></ul><h3>Events</h3><ul><li><a href="RichFaces.module_push.html#~event:error">error</a></li><li><a href="RichFaces.module_push.html#~event:push">push</a></li><li><a href="RichFaces.module_push.html#~event:subscribed">subscribed</a></li></ul><h3>Namespaces</h3><ul><li><a href="jQuery.html">jQuery</a></li><li><a href="RichFaces.html">RichFaces</a></li><li><a href="RichFaces.ui.html">ui</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Mon Jun 20 2016 14:53:31 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="AffecterMatiereModifierDlg" 
+                  widgetVar="AffecterMatiereModifierDialog" modal="true" 
+                  resizable="false"
+                  appendTo="@(body)" header="#{langue['Titre.Dlg.Modification']} : des unités d'évaluation" 
+                  closeOnEscape="true">
+
+            <h:form id="AffecterMatiereModifierForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" >
+
+                        <p:outputLabel value="#{langue.matiere}"  />
+                        <p:inputText disabled="true"  value="#{classeElementEvaluationCtrl.classeElementevaluation.elementevaluation.matiere.libelle}"/>
+
+                        <p:outputLabel value="Unité d 'évaluation"/>
+                        <p:inputText disabled="true"  value="#{classeElementEvaluationCtrl.classeElementevaluation.elementevaluation.nom}"/>
+
+
+
+
+                        <p:outputLabel value="#{langue.coefficient}" for="coef" />
+                        <p:inputText id="coef" value="#{classeElementEvaluationCtrl.classeElementevaluation.coefficient}" required="true" 
+                                     requiredMessage="#{langue.coefficient} : #{langue['Conv.ValeurRequise']}"/>
+
+
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{classeElementEvaluationCtrl.edit()}" value="#{langue['Conv.Modifier']}"
+                                     update=":AffecterMatiereModifierForm,:AffecterMatiereListerForm:datalist,:AffecterMatiereListerForm:growl, :actionsForm"
+                                     oncomplete="PF('AffecterMatiereModifierDialog').hide()">
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}" message="#{langue['Message.Confirm.Modifier']}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{langue['Conv.Annuler']}" onclick="PF('AffecterMatiereModifierDlg').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

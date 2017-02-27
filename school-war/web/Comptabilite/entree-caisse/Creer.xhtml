@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="EntreecaisseCreerDlg" 
+                  widgetVar="EntreecaisseCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="CREER / MODIFIER DES ENTREES EN CAISSE" 
+                  closeOnEscape="true">
+
+            <h:form id="EntreecaisseCreerForm">
+
+
+                <h:panelGroup id="display" >
+
+                    <p:panelGrid columns="2" columnClasses="column">
+
+
+                        <p:outputLabel value="Type de compte débiteur" for="classe"/>
+                        <p:selectOneMenu autoWidth="false" style="width: 300px"  disabled="#{recetteCtrl.showFilter}"  id="classe" filter="true" value="#{recetteCtrl.typecompte.idtypecompte}">
+                            <f:selectItem itemLabel="#{langue.choisir}"/>
+                            <f:selectItems value="#{recetteCtrl.typecomptes}" var="item" itemLabel="#{item.classe} - #{item.libelle}" itemValue="#{item.idtypecompte}"/>
+                            <p:ajax listener="#{recetteCtrl.updateCompteCredit()}" update="compte,solde"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Compte Débiteur" for="compte"/>
+                        <p:selectOneMenu autoWidth="false" style="width: 300px" disabled="#{recetteCtrl.showFilter}"  id="compte" filter="true" value="#{recetteCtrl.compte.idcompte}">
+                            <f:selectItem itemLabel="#{langue.choisir}"/>
+                            <f:selectItems value="#{recetteCtrl.comptes}" var="compte" itemLabel="#{compte.classe} - #{compte.libelle}" itemValue="#{compte.idcompte}"/>
+                            <p:ajax update="solde" listener="#{recetteCtrl.update()}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Solde" for="solde" />
+                        <p:inputText required="true" disabled="true" style="width: 150px;color: red" id="solde" value="#{recetteCtrl.soldeCrediteur}"/>
+
+
+                        <p:outputLabel value="Libellé de l'opération" for="libelle" />
+                        <p:inputTextarea cols="250" rows="5" required="true"  style="width: 500px" requiredMessage="#{langue.libelle} : #{langue.Requis.message}" id="libelle" value="#{recetteCtrl.recette.libelle}"/>
+
+                        <p:outputLabel value="Montant" for="montant" />
+                        <p:inputText id="montant"  required="true" style="width: 150px" requiredMessage="#{langue.montant} : #{langue.Requis.message}" value="#{recetteCtrl.recette.montant}"/>
+
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{recetteCtrl.saveRecette()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:EntreecaisseListerForm:datalist,:EntreecaisseListerForm:growl, EntreecaisseCreerForm" 
+                                     oncomplete="PF('EntreecaisseCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('EntreecaisseCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

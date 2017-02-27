@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="PunitionCreerDlg" 
+                  widgetVar="PunitionCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: de punitions" 
+                  closeOnEscape="true">
+
+            <h:form id="PunitionCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="Année Scolaire" for="annee" />
+                        <h:panelGroup>
+                            <p:selectOneMenu value="#{punitionCtrl.annee.idannee}" id="annee" required="true">
+                                <f:selectItems value="#{anneeCtrl.anneeCourantes}" var="item" itemLabel="#{item.code}" itemValue="#{item.idannee}"/>
+                            </p:selectOneMenu> 
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Eleve" for="eleve" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="eleve" value="#{punitionCtrl.eleve.ideleve}"  required="true">
+                                <f:selectItem itemLabel="Selectionner un eleve" itemValue=""/> 
+                                <f:selectItems value="#{punitionCtrl.eleves}" var="item" itemLabel="#{item.nom} #{item.prenom}" itemValue="#{item.ideleve}"/>
+                            </p:selectOneMenu> 
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Motif" for="motif" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="motif" value="#{punitionCtrl.motif.idmotif}"  required="true">
+                                <f:selectItem itemLabel="Selectionner une sanction" itemValue=""/> 
+                                <f:selectItems value="#{motifCtrl.motifs}" var="item" itemLabel="#{item.libelle}" itemValue="#{item.idmotif}"/>
+                            </p:selectOneMenu> 
+                        </h:panelGroup>
+
+
+                        <p:outputLabel value="Sanction" for="sanction" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="sanction" value="#{punitionCtrl.sanction.idsanction}"  required="true">
+                                <f:selectItem itemLabel="Selectionner une sanction" itemValue=""/> 
+                                <f:selectItems value="#{sanctionCtrl.sanctions}" var="item" itemLabel="#{item.libelle}" itemValue="#{item.idsanction}"/>
+                            </p:selectOneMenu> 
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Sequence" for="sequence" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="sequence" value="#{punitionCtrl.sequenceAnnee.idsequencean}"  required="true">
+                                <f:selectItem itemLabel="Selectionner une sequence" itemValue=""/> 
+                                <f:selectItems value="#{punitionCtrl.sequenceAnnees}" var="item" itemLabel="#{item.idsequence.nom} #{item.idannee.code}" itemValue="#{item.idsequencean}"/>
+                            </p:selectOneMenu> 
+                        </h:panelGroup>
+
+                        <p:outputLabel  value="Date : " for="date"/>
+                        <h:panelGroup>                         
+                            <p:calendar id="date" value="#{punitionCtrl.punition.datepunition}" required="true" requiredMessage="la date est obligatoire" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Observation" for="observation" />
+                        <h:panelGroup>
+                            <p:inputText id="observation" value="#{punitionCtrl.punition.observation}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{punitionCtrl.enregistrerPunition}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:PunitionListerForm:datalist,:PunitionListerForm:growl, PunitionCreerForm" 
+                                     oncomplete="PF('PunitionCreerDialog').hide()"/>
+                    <p:commandButton value="Annuler" onclick="PF('PunitionCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

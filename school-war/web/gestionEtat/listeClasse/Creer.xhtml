@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="EvaluationCreerDlg" 
+                  widgetVar="EvaluationCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: Impression des liste de classe" 
+                  closeOnEscape="true">
+
+            <h:form id="EvaluationCreerForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="Classe : " for="classe"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu id="classe" value="#{bulletinCtrl.classe}" converter="classeConverter">
+                                <f:selectItem itemLabel="#{langue.selectLa} #{langue.classe}" itemValue=""/> 
+                                <f:selectItems value="#{bulletinCtrl.categories}" var="item" itemLabel="#{item.idclasse.nom}" itemValue="#{item.idclasse}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup> 
+
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{bulletinCtrl.imprimerListeClasse()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:EvaluationListerForm:datalist,:EvaluationListerForm:growl,EvaluationCreerForm,:EvaluationImprimerForm" 
+                                     oncomplete="PF('EvaluationCreerDialog').hide(),PF('EvaluationImprimerDialog').show()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('EvaluationCreerDialog').hide()"/>
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

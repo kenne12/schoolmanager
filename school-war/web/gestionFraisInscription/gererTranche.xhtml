@@ -1,0 +1,24 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/gestionFraisInscriptionTemplate/principalTemplate.xhtml">
+
+    <ui:define name="contenu">
+
+        <ui:include src="gererTranche/Action.xhtml"/>
+
+        <ui:include src="gererTranche/Lister.xhtml"/>
+        <ui:include src="gererTranche/Detail.xhtml"/>
+        <ui:include src="gererTranche/Modifier.xhtml"/>
+        <ui:include src="gererTranche/Creer.xhtml"/>
+        <ui:include src="gererTranche/Imprimer.xhtml"/>
+    </ui:define>
+    
+    <ui:define name="scriptCollapse">
+        <script>
+            var el = document.getElementById("menuTranche");
+            el.setAttribute("class", "sub-menu active");
+        </script>
+    </ui:define>
+
+</ui:composition>

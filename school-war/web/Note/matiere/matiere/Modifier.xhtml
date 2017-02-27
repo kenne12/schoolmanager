@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="TypeMatiereModifierDlg" 
+                  widgetVar="TypeMatiereModifierDialog" modal="true" 
+                  resizable="false"
+                  appendTo="@(body)" header="#{langue['Titre.Dlg.Modification']}: des matières" 
+                  closeOnEscape="true">
+
+            <h:form id="TypeMatiereModifierForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" >
+
+
+                        <p:outputLabel value="Nature Matiere" for="nature"/>
+                        <p:selectOneMenu id="nature" value="#{matiereCtrl.selected.idnaturematiere}" converter="naturematiereConverter" required="true">
+                            <f:selectItem itemValue="" itemLabel="#{langue.choisir}"/>
+                            <f:selectItems value="#{matiereCtrl.listNatureMatiere}" var="item" itemLabel="#{item.libelle}" itemValue="#{item}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{langue.choisir}" for="nom" />
+                        <p:inputText id="nom" value="#{matiereCtrl.selected.libelle}" required="true" 
+                                     requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{matiereCtrl.edit()}" value="#{langue['Conv.Modifier']}"
+                                     update=":TypeMatiereModifierForm,:TypeMatiereListerForm:datalist,:TypeMatiereListerForm:growl, :actionsForm"
+                                     oncomplete="PF('TypeMatiereModifierDialog').hide()">
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}" message="#{langue['Message.Confirm.Modifier']}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{langue['Conv.Annuler']}" onclick="PF('TypeMatiereModifierDlg').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

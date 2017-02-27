@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <ui:include src="/templates/entetesTemplate.xhtml" /> 
+    </head>
+    <body class="lock">
+
+        <div class="lock-header">
+            <!-- BEGIN LOGO -->
+            <a class="center" id="logo" href="index.html">
+                <img class="center" alt="logo" style="width: 60px;height: 60px" src="photos/photo_personnels/#{loginBean.personnel.photo}"/>
+            </a>
+            <!-- END LOGO -->
+        </div>
+        <div class="lock-wrap">
+            <div class="metro single-size gray">
+                <img src="photos/photo_personnels/#{loginBean.personnel.photo}" alt="" style="height: 165px"/>
+            </div>
+            <div class="metro double-size blue">
+                <h1>#{loginBean.personnel.nom}</h1>
+                <p>#{loginBean.personnel.email}</p>
+            </div>
+            <div class="metro double-size green">
+                <form action="index.html">
+                    <div class="input-append lock-input">
+                        <input type="password" class="" placeholder="Password"/>
+                        <button type="submit" class="btn tarquoise"><i class=" icon-arrow-right"></i></button>
+                    </div>
+                </form>
+            </div>
+            <div class="metro single-size terques">
+                <div class="locked">
+                    <i class="icon-lock"></i>
+                    <span>Locked</span>
+                </div>
+            </div>
+            <div class="metro double-size gray ">
+                <a href="login.html" class="user-position">
+                    <i class="icon-user"></i>
+                    <span>Login Another User</span>
+                </a>
+            </div>
+            <div class="metro double-size orange">
+                <a href="javascript:;" class="user-position">
+                    <i class="icon-key"></i>
+                    <span>Forgot Password ?</span>
+                </a>
+            </div>
+        </div> 
+
+
+    </body>
+</html>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="EvaluationListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} #{langue['Conv.Batiment']}">
+            <p:contextMenu id="EvaluationDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{evaluationCtrl.evaluations}"
+                         var="item"
+                         rowKey="#{item.ideval}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{evaluationCtrl.selectedEvaluation}">
+
+                <p:ajax event="rowSelect"   update=":EvaluationListerForm:EvaluationDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":EvaluationListerForm:EvaluationDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('EvaluationListerForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.ideval}" width="7%">
+                    <f:facet name="header">
+                        <h:outputText value="Identifiant"/>
+                    </f:facet>
+                    <h:outputText value="#{item.ideval}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.eleve.nom}" filterBy="#{item.eleve.prenom}">
+                    <f:facet name="header">
+                        <h:outputText value="Elève"/>
+                    </f:facet>
+                    <h:outputText value="#{item.eleve.nom} #{item.eleve.prenom}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.idmatiere.idtypematiere.libelle}" filterBy="#{item.idmatiere.idtypematiere.libelle}">
+                    <f:facet name="header">
+                        <h:outputText value="Matière"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idmatiere.idtypematiere.libelle}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.idtrimestrean.idtrimestre.nom}" filterBy="#{item.idtrimestrean.idtrimestre.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="Trimestre"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idtrimestrean.idtrimestre.nom} / #{item.idtrimestrean.idannee.code}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.idsequencean.idsequence.nom}" filterBy="#{item.idsequencean.idsequence.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="Séquence"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idsequencean.idsequence.nom} / #{item.idsequencean.idannee.code}"/>
+                </p:column>
+
+
+
+                <p:column sortBy="#{item.note}" filterBy="#{item.note}">
+                    <f:facet name="header">
+                        <h:outputText value="Note"/>
+                    </f:facet>
+                    <h:outputText value="#{item.note}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.observation}" filterBy="#{item.observation}">
+                    <f:facet name="header">
+                        <h:outputText value="Observation"/>
+                    </f:facet>
+                    <h:outputText value="#{item.observation}"/>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+        <ui:include src="/includes/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="SolvabiliteDetailDlg" 
+                  widgetVar="SolvabiliteDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: de solvabilite" closeOnEscape="true">
+
+            <h:form id="SolvabiliteDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" columnClasses="column" style="width: 100%;" >
+                        <h:outputText value="Matricule"/>
+                        <h:outputText value="#{solvabiliteCtrl.selectedEleve.matricule}"/>
+
+                        <h:outputText value="Nom"/>
+                        <h:outputText value="#{solvabiliteCtrl.selectedEleve.nom}"/>
+
+                        <h:outputText value="Prenom"/>
+                        <h:outputText value="#{solvabiliteCtrl.selectedEleve}"/>
+
+
+                        <h:outputText value="Date de naissance"/>
+                        <h:outputText value="#{solvabiliteCtrl.selectedEleve.datenaissance}"/>
+
+                        <h:outputText value="Lieu de naissance"/>
+                        <h:outputText value="#{solvabiliteCtrl.selectedEleve.lieunaissance}"/>
+
+                        <h:outputText value="Sexe"/>
+                        <h:outputText value="#{solvabiliteCtrl.selectedEleve.sexe}"/>
+
+                        <h:outputText value="Année d'admission"/>
+                        <h:outputText value="#{solvabiliteCtrl.selectedEleve.anneeadmission}"/>
+
+                        <h:outputText value="Etat de l'élève"/>
+                        <h:selectBooleanCheckbox id="etat" value="#{solvabiliteCtrl.selectedEleve.etateleve}" disabled="true"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('SolvabiliteDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

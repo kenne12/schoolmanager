@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="AffectationListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} #{langue.affectation}">
+            <p:contextMenu id="AffectationDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{affecterClasseCtrl.listAffectation}"
+                         var="item"
+                         rowKey="#{item.id}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{affecterClasseCtrl.selectedAffectation}">
+
+                <p:ajax event="rowSelect"   update=":AffectationListerForm:AffectationDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":AffectationListerForm:AffectationDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('AffectationListerForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.id}" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.identifiant}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.id}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.idsalle.code}" filterBy="#{item.idsalle.code}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue['Conv.Code']} de la salle"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idsalle.code}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.idclasse.nom}" filterBy="#{item.idclasse.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue['Conv.Nom']} de la classe"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idclasse.nom}"/>
+                </p:column>
+
+                <p:column sortBy="#{item.etat}" filterBy="#{item.etat}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.active}"/>
+                    </f:facet>
+                    <h:selectBooleanCheckbox id="etat" value="#{item.etat}" disabled="true"/>
+                </p:column>
+
+            </p:dataTable>
+
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

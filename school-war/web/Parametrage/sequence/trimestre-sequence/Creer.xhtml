@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="AffecterSequenceCreerDlg" 
+                  widgetVar="AffecterSequenceCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue.affectation}" 
+                  closeOnEscape="true">
+
+            <h:form id="AffecterSequenceCreerForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue.trimestre}" for="trimestre"/>
+                        <p:selectOneMenu id="trimestre" value="#{affecterSeqCtrl.trimesteannee}" converter="trimestreAnneeConverter">
+                            <f:selectItem itemLabel="#{langue.choisir}"/>
+                            <f:selectItems value="#{affecterSeqCtrl.trimesteannees}" var="item" itemLabel="#{item.idtrimestre.nom}" itemValue="#{item}"/>
+                            <p:ajax update="sequence" listener="#{affecterSeqCtrl.updateSequence()}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{langue.sequence}" for="sequence"/> 
+                        <p:pickList id="sequence" value="#{affecterSeqCtrl.dualsSequence}" var="seq" effect="bounce"
+                                    itemValue="#{seq}" itemLabel="#{seq.nom}" showSourceControls="true" showTargetControls="true" showCheckbox="false"
+                                    showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="sequencConverter">
+
+                            <f:facet name="sourceCaption">#{langue.sequence} disponibles</f:facet>
+                            <f:facet name="targetCaption">#{langue.sequence} selectionnés</f:facet>                            
+                        </p:pickList> 
+
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{affecterSeqCtrl.save()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:AffecterSequenceListerForm:datalist,:AffecterSequenceListerForm:growl, AffecterSequenceCreerForm" 
+                                     oncomplete="PF('AffecterSequenceCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('AffecterSequenceCreerDialog').hide()"/>
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

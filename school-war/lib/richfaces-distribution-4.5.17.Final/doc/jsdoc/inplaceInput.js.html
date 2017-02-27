@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: inplaceInput.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: inplaceInput.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>(function ($, rf) {
+
+    rf.ui = rf.ui || {};
+
+    /**
+     * Backing object for rich:inplaceInput
+     * 
+     * @extends RichFaces.ui.InplaceBase
+     * @memberOf! RichFaces.ui
+     * @constructs RichFaces.ui.InplaceInput
+     * 
+     * @param id
+     * @param options
+     */
+    rf.ui.InplaceInput = function(id, options) {
+        var mergedOptions = $.extend({}, defaultOptions, options);
+        $super.constructor.call(this, id, mergedOptions);
+        this.label = $(document.getElementById(id + "Label"));
+        var labelText = this.label.text();
+        var inputLabel = this.__getValue();
+        this.initialLabel = (labelText == inputLabel) ? labelText : "";
+        this.useDefaultLabel = labelText != inputLabel
+        this.saveOnBlur = mergedOptions.saveOnBlur;
+        this.showControls = mergedOptions.showControls;
+        this.getInput().bind("focus", $.proxy(this.__editHandler, this));
+        if (this.showControls) {
+            var btnContainer = document.getElementById(id + "Btn");
+            if (btnContainer) {
+                btnContainer.tabIndex = -1;
+            }
+            this.okbtn = $(document.getElementById(id + "Okbtn"));
+            this.cancelbtn = $(document.getElementById(id + "Cancelbtn"));
+            this.okbtn.bind("mousedown", $.proxy(this.__saveBtnHandler, this));
+            this.cancelbtn.bind("mousedown", $.proxy(this.__cancelBtnHandler, this));
+        }
+    };
+
+    rf.ui.InplaceBase.extend(rf.ui.InplaceInput);
+    var $super = rf.ui.InplaceInput.$super;
+
+    var defaultOptions = {
+        defaultLabel: "",
+        saveOnBlur: true,
+        showControl: true,
+        noneCss: "rf-ii-none",
+        readyCss: "rf-ii",
+        editCss: "rf-ii-act",
+        changedCss: "rf-ii-chng"
+    };
+
+    $.extend(rf.ui.InplaceInput.prototype, ( function () {
+
+        return {
+
+            name : "inplaceInput",
+            defaultLabelClass : "rf-ii-dflt-lbl",
+
+            getName: function() {
+                return this.name;
+            },
+
+            getNamespace: function() {
+                return this.namespace;
+            },
+
+            __keydownHandler: function(e) {
+                this.tabBlur = false;
+                switch (e.keyCode || e.which) {
+                    case rf.KEYS.ESC:
+                        e.preventDefault();
+                        this.cancel();
+                        this.onblur(e);
+                        break;
+                    case rf.KEYS.RETURN:
+                        e.preventDefault();
+                        this.save();
+                        this.onblur(e);
+                        break;
+                    case rf.KEYS.TAB:
+                        this.tabBlur = true;
+                        break;
+                }
+            },
+
+            __blurHandler: function(e) {
+                this.onblur(e);
+            },
+
+            __isSaveOnBlur: function() {
+                return this.saveOnBlur;
+            },
+
+            __setInputFocus: function() {
+                this.getInput().unbind("focus", this.__editHandler);
+                this.getInput().focus();
+            },
+
+            __saveBtnHandler: function(e) {
+                this.cancelButton = false;
+                this.save();
+                this.onblur(e);
+            },
+
+            __cancelBtnHandler: function(e) {
+                this.cancelButton = true;
+                this.cancel();
+                this.onblur(e);
+            },
+
+            __editHandler: function(e) {
+                $super.__editHandler.call(this, e);
+                this.onfocus(e);
+            },
+
+            getLabel: function() {
+                return this.label.text();
+            },
+
+            setLabel: function(value) {
+                this.label.text(value);
+                if (value == this.defaultLabel) {
+                    this.label.addClass(this.defaultLabelClass);
+                } else {
+                    this.label.removeClass(this.defaultLabelClass);
+                }
+            },
+
+            /**
+             * Returns true if the value has changed from default
+             * 
+             * @method
+             * @name RichFaces.ui.InplaceInput#isValueChanged
+             * @return {boolean} true if the value has changed
+             */
+            isValueChanged: function () {
+                return (this.__getValue() != this.initialLabel);
+            },
+
+            onshow: function() {
+                this.__setInputFocus();
+            },
+
+            onhide: function() {
+                if (this.tabBlur) {
+                    this.tabBlur = false;
+                } else {
+                    this.getInput().focus();
+                }
+            },
+
+            onfocus: function(e) {
+                if (!this.__isFocused()) {
+                    this.__setFocused(true);
+                    this.focusValue = this.__getValue();
+                    this.invokeEvent.call(this, "focus", document.getElementById(this.id), e);
+                }
+            },
+
+            onblur: function(e) {
+                if (this.__isFocused()) {
+                    this.__setFocused(false);
+                    this.invokeEvent.call(this, "blur", document.getElementById(this.id), e);
+
+                    if (this.isValueSaved() || this.__isSaveOnBlur()) {
+                        this.save();
+                    } else {
+                        this.cancel();
+                    }
+
+                    this.__hide();
+
+                    if (!this.cancelButton) {
+                        if (this.__isValueChanged()) {
+                            this.invokeEvent.call(this, "change", document.getElementById(this.id), e);
+                        }
+                    }
+                    var _this = this;
+                    window.setTimeout(function() {
+                        _this.getInput().bind("focus", $.proxy(_this.__editHandler, _this));
+                    }, 1);
+                }
+            },
+
+            __isValueChanged: function() {
+                return (this.focusValue != this.__getValue());
+            },
+
+            __setFocused: function(focused) {
+                this.focused = focused;
+            },
+
+            __isFocused: function() {
+                return this.focused;
+            },
+            /**
+             * Set new value
+             * 
+             * @method
+             * @name RichFaces.ui.InplaceInput#setValue
+             * @param value {string} new value
+             */
+            setValue: function(value) {
+                this.__setValue(value);
+                this.save();
+            }
+        }
+    })());
+
+})(RichFaces.jQuery, window.RichFaces);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="RichFaces.module_push.html">push</a></li></ul><h3>Classes</h3><ul><li><a href="RichFaces.ajaxContainer.html">ajaxContainer</a></li><li><a href="RichFaces.BaseComponent.html">BaseComponent</a></li><li><a href="RichFaces.Event.html">Event</a></li><li><a href="RichFaces.queue.html">queue</a></li><li><a href="RichFaces.ui.Accordion.html">Accordion</a></li><li><a href="RichFaces.ui.AccordionItem.html">AccordionItem</a></li><li><a href="RichFaces.ui.Autocomplete.html">Autocomplete</a></li><li><a href="RichFaces.ui.AutocompleteBase.html">AutocompleteBase</a></li><li><a href="RichFaces.ui.Calendar.html">Calendar</a></li><li><a href="RichFaces.ui.Chart.html">Chart</a></li><li><a href="RichFaces.ui.CollapsiblePanel.html">CollapsiblePanel</a></li><li><a href="RichFaces.ui.CollapsiblePanelItem.html">CollapsiblePanelItem</a></li><li><a href="RichFaces.ui.CollapsibleSubTable.html">CollapsibleSubTable</a></li><li><a href="RichFaces.ui.CollapsibleSubTableToggler.html">CollapsibleSubTableToggler</a></li><li><a href="RichFaces.ui.ContextMenu.html">ContextMenu</a></li><li><a href="RichFaces.ui.DataScroller.html">DataScroller</a></li><li><a href="RichFaces.ui.DataTable.html">DataTable</a></li><li><a href="RichFaces.ui.Draggable.html">Draggable</a></li><li><a href="RichFaces.ui.DragIndicator.html">DragIndicator</a></li><li><a href="RichFaces.ui.Droppable.html">Droppable</a></li><li><a href="RichFaces.ui.Editor.html">Editor</a></li><li><a href="RichFaces.ui.ExtendedDataTable.html">ExtendedDataTable</a></li><li><a href="RichFaces.ui.FileUpload.html">FileUpload</a></li><li><a href="RichFaces.ui.Focus.html">Focus</a></li><li><a href="RichFaces.ui.HotKey.html">HotKey</a></li><li><a href="RichFaces.ui.InplaceBase.html">InplaceBase</a></li><li><a href="RichFaces.ui.InplaceInput.html">InplaceInput</a></li><li><a href="RichFaces.ui.InplaceSelect.html">InplaceSelect</a></li><li><a href="RichFaces.ui.InputBase.html">InputBase</a></li><li><a href="RichFaces.ui.InputnumberSlider.html">InputnumberSlider</a></li><li><a href="RichFaces.ui.InputNumberSpinner.html">InputNumberSpinner</a></li><li><a href="RichFaces.ui.List.html">List</a></li><li><a href="RichFaces.ui.ListMulti.html">ListMulti</a></li><li><a href="RichFaces.ui.Menu.html">Menu</a></li><li><a href="RichFaces.ui.MenuBase.html">MenuBase</a></li><li><a href="RichFaces.ui.MenuGroup.html">MenuGroup</a></li><li><a href="RichFaces.ui.MenuItem.html">MenuItem</a></li><li><a href="RichFaces.ui.Message.html">Message</a></li><li><a href="RichFaces.ui.Notify.html">Notify</a></li><li><a href="RichFaces.ui.NotifyMessage.html">NotifyMessage</a></li><li><a href="RichFaces.ui.NotifyStack.html">NotifyStack</a></li><li><a href="RichFaces.ui.OrderingList.html">OrderingList</a></li><li><a href="RichFaces.ui.PanelMenu.html">PanelMenu</a></li><li><a href="RichFaces.ui.PanelMenuGroup.html">PanelMenuGroup</a></li><li><a href="RichFaces.ui.PanelMenuItem.html">PanelMenuItem</a></li><li><a href="RichFaces.ui.PickList.html">PickList</a></li><li><a href="RichFaces.ui.PlaceHolder.html">PlaceHolder</a></li><li><a href="RichFaces.ui.Poll.html">Poll</a></li><li><a href="RichFaces.ui.Popup.html">Popup</a></li><li><a href="RichFaces.ui.PopupList.html">PopupList</a></li><li><a href="RichFaces.ui.PopupPanel.html">PopupPanel</a></li><li><a href="RichFaces.ui.ProgressBar.html">ProgressBar</a></li><li><a href="RichFaces.ui.Select.html">Select</a></li><li><a href="RichFaces.ui.Status.html">Status</a></li><li><a href="RichFaces.ui.Tab.html">Tab</a></li><li><a href="RichFaces.ui.TabPanel.html">TabPanel</a></li><li><a href="RichFaces.ui.TogglePanel.html">TogglePanel</a></li><li><a href="RichFaces.ui.TogglePanelItem.html">TogglePanelItem</a></li><li><a href="RichFaces.ui.Tooltip.html">Tooltip</a></li><li><a href="RichFaces.ui.Tree.html">Tree</a></li><li><a href="RichFaces.ui.TreeNode.html">TreeNode</a></li></ul><h3>Events</h3><ul><li><a href="RichFaces.module_push.html#~event:error">error</a></li><li><a href="RichFaces.module_push.html#~event:push">push</a></li><li><a href="RichFaces.module_push.html#~event:subscribed">subscribed</a></li></ul><h3>Namespaces</h3><ul><li><a href="jQuery.html">jQuery</a></li><li><a href="RichFaces.html">RichFaces</a></li><li><a href="RichFaces.ui.html">ui</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Mon Jun 20 2016 14:53:31 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

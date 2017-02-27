@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+    <ui:composition>
+
+        <p:dialog id="EleveCreerDlg" 
+                  widgetVar="EleveCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue.eleve}" 
+                  closeOnEscape="true">
+
+            <h:form id="EleveCreerForm" enctype="multipart/form-data">
+
+                <h:panelGroup id="display">
+
+                    <p:panelGrid columnClasses="column" columns="3">
+
+                        <p:tabView>
+                            <p:tab title="INFORMATIONS GENERALES" >
+
+
+                                <p:panelGrid columns="2" columnClasses="column">
+
+                                    <p:outputLabel value="#{langue['Conv.Matricule']}" for="matricule" />
+                                    <h:panelGroup>
+                                        <p:inputText id="matricule" value="#{eleveCtrl.eleve.matricule}" required="true" 
+                                                     requiredMessage="#{langue['Conv.Matricule']}: #{langue['Conv.ValeurRequise']}"/>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel value="#{langue['Conv.Nom']}" for="nom" />
+                                    <h:panelGroup>
+                                        <p:inputText id="nom" value="#{eleveCtrl.eleve.nom}" required="true" 
+                                                     requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel value="#{langue['Conv.Prenom']}" for="prenom" />
+                                    <h:panelGroup>
+                                        <p:inputText id="prenom" value="#{eleveCtrl.eleve.prenom}" required="true" 
+                                                     requiredMessage="#{langue['Conv.Prenom']}: #{langue['Conv.ValeurRequise']}"/>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel value="#{langue['Conv.DateNaiss']}" for="dateNaiss" />
+                                    <h:panelGroup>
+                                        <p:calendar id="dateNaiss" navigator="true" value="#{eleveCtrl.eleve.datenaissance}" required="true" requiredMessage="la date de naissance est requise !">           
+                                        </p:calendar>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel value="#{langue['Conv.LieuNaiss']}" for="lieuNaiss" />
+                                    <h:panelGroup>
+                                        <p:inputText id="lieuNaiss" value="#{eleveCtrl.eleve.lieunaissance}" required="true" 
+                                                     requiredMessage="#{langue['Conv.LieuNaiss']}: #{langue['Conv.ValeurRequise']}"/>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel value="#{langue['Conv.Sexe']}" for="sexe" />
+                                    <h:panelGroup>
+                                        <p:selectOneMenu value="#{eleveCtrl.eleve.sexe}" required="true" id="sexe">
+                                            <f:selectItem itemLabel="#{langue.selectLe} #{langue.sexe}" itemValue=""/>
+                                            <f:selectItem itemLabel="#{langue.masculin}" itemValue="M"/>
+                                            <f:selectItem itemLabel="#{langue.feminin}" itemValue="F"/>
+                                        </p:selectOneMenu>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel value="Année d'admission" for="date" />
+                                    <h:panelGroup>
+                                        <p:calendar id="date" navigator="true" value="#{eleveCtrl.eleve.anneeadmission}" required="true" requiredMessage="la date d'admission est remise">           
+                                        </p:calendar>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel rendered="#{eleveCtrl.showEtateleve}" value="#{langue.etat}" />
+                                    <p:selectBooleanCheckbox value="#{eleveCtrl.eleve.etateleve}" rendered="#{eleveCtrl.showEtateleve}" /> 
+
+
+                                </p:panelGrid>
+
+                            </p:tab>
+
+                            <p:tab title="INFORMATIONS D'INSCRIPTION">
+
+                                <p:panelGrid id="info" columns="2">
+
+                                    <p:outputLabel for="inscriptionMode" value="Voulez vous selectionnez une classe ?" />
+                                    <p:selectOneRadio id="inscriptionMode" value="#{eleveCtrl.inscriptionMode}">
+                                        <f:selectItem itemLabel="Oui" itemValue="oui" />
+                                        <f:selectItem itemLabel="Non" itemValue="non" />
+                                        <p:ajax update="info" listener="#{eleveCtrl.activateInscriptionMode()}"/>
+                                    </p:selectOneRadio>
+
+                                    <p:outputLabel rendered="#{eleveCtrl.show}" id="anneeLabel" value="#{langue.anneeScolaire}" for="annee" />
+                                    <p:selectOneMenu rendered="#{eleveCtrl.show}" value="#{eleveCtrl.annee}" required="true" id="annee" converter="anneeConverter">
+                                        <f:selectItem itemLabel="#{langue.selectL} #{langue.anneeScolaire}" />
+                                        <f:selectItems value="#{eleveCtrl.annees}" var="obj1" itemLabel="#{obj1.code} - #{obj1.codefin}" itemValue="#{obj1}"/>
+                                    </p:selectOneMenu>
+
+
+                                    <p:outputLabel rendered="#{eleveCtrl.show}" id="classeLabel" value="#{langue.classe}" for="classe" />
+                                    <p:selectOneMenu rendered="#{eleveCtrl.show}" value="#{eleveCtrl.classe}" id="classe" required="true" converter="classeConverter">
+                                        <f:selectItem itemLabel="#{langue.selectLa} #{langue.classe}" />
+                                        <f:selectItems value="#{eleveCtrl.classes}" var="item" itemLabel="#{item.nom}" itemValue="#{item}"/>
+                                    </p:selectOneMenu>
+                                </p:panelGrid>
+
+                            </p:tab>
+
+                            <p:tab title="Addresse des  Parents ou Tuteurs">
+
+                                <p:panelGrid columns="2">
+
+                                    <p:outputLabel value="#{langue.nom}" for="parentNom" />
+                                    <h:panelGroup>
+                                        <p:inputText id="parentNom" value="#{eleveCtrl.parent.nom}"/>                                                
+                                    </h:panelGroup>
+
+                                    <p:outputLabel value="#{langue.prenom}" for="parentPrenom"/>
+                                    <h:panelGroup>
+                                        <p:inputText id="parentPrenom" value="#{eleveCtrl.parent.prenom}" />                                                
+                                    </h:panelGroup>
+
+                                    <p:outputLabel value="#{langue.telephone}" for="telephone" />
+                                    <h:panelGroup>
+                                        <p:inputText id="telephone" value="#{eleveCtrl.parent.telephone}" required="true" 
+                                                     requiredMessage="#{langue['Conv.Prenom']}: #{langue['Conv.ValeurRequise']}"/>
+                                    </h:panelGroup>
+
+
+                                    <p:outputLabel value="#{langue.email}" for="email" />
+                                    <h:panelGroup>
+                                        <p:inputText id="email" value="#{eleveCtrl.parent.email}"/>                                                 
+                                    </h:panelGroup>
+
+                                </p:panelGrid>
+
+                            </p:tab>
+
+                            <p:tab title="Addresse des  Parents ou Tuteurs">
+
+
+                                <rich:fileUpload fileUploadListener="#{fileUploadBean.listener}" id="upload" acceptedTypes=".jpg, .gif, .png, .bmp"
+                                                 ontyperejected="alert('Only JPG, GIF, PNG and BMP files are accepted');" maxFilesQuantity="5">
+                                    <a4j:ajax event="uploadcomplete" execute="@none" render="info" />
+                                </rich:fileUpload>
+
+                            </p:tab>
+
+
+
+                        </p:tabView>
+                    </p:panelGrid>
+
+                    <p:commandButton icon="ui-icon-floppy" actionListener="#{eleveCtrl.enregistrerEleve()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:EleveListerForm:datalist,:EleveListerForm:growl, EleveCreerForm" 
+                                     oncomplete="PF('EleveCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('EleveCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

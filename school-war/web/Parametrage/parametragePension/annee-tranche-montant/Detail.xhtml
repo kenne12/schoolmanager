@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="TypeTrancheDetailDlg" 
+                  widgetVar="TypeTrancheDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: tranche de pension" closeOnEscape="true">
+
+            <h:form id="TypeTrancheDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" style="width: 100%;" >
+
+                        <h:outputText value="#{langue.nom}"/>
+                        <h:outputText value="#{trancheCtrl.selectedTranche.nom}"/>
+
+                        <h:outputText value="#{langue.categorie}"/>
+                        <h:outputText value="#{trancheCtrl.selectedTranche.idcategorie.nom}"/>
+
+                        <h:outputText value="#{langue.prix}"/>
+                        <h:outputText value="#{trancheCtrl.selectedTranche.prix}"/>
+
+                        <h:outputText value="#{langue.dateDebut}"/>
+                        <h:outputText value="#{trancheCtrl.selectedTranche.datedebut}"/>
+
+                        <h:outputText value="#{langue.dateFin}"/>
+                        <h:outputText value="#{trancheCtrl.selectedTranche.datefin}"/>
+
+                        <h:outputText value="#{langue.etat}"/>
+                        <p:selectBooleanCheckbox value="#{trancheCtrl.selectedTranche.etat}" disabled="true"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('TypeTrancheDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

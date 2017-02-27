@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:rich="http://richfaces.org/rich">
+
+    <ui:composition>
+        <p:dialog id="PlanningEvaluationModifierDlg" 
+                  widgetVar="PlanningEvaluationModifierDialog" modal="true" 
+                  resizable="false"
+                  appendTo="@(body)" header="#{langue['Titre.Dlg.Modification']} : du planning des evaluations" 
+                  closeOnEscape="true">
+
+            <h:form id="PlanningEvaluationModifierForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  rendered="#{planningEvaluationCtrl.planningEvaluation!=null}" columns="2" columnClasses="column" >
+
+                        <p:outputLabel value="#{langue.sequence}"  />
+                        <p:inputText style="color: blue" disabled="true"  value="#{planningEvaluationCtrl.planningEvaluation.sequence.idsequence.nom}"/>
+
+                        <p:outputLabel value="Unité d 'évaluation"/>
+                        <p:inputText style="color: blue" disabled="true"  value="#{planningEvaluationCtrl.planningEvaluation.elementEvaluation.elementevaluation.nom}"/>
+
+                        <p:outputLabel value="#{langue.date}" for="date" />
+                        <p:calendar id="date" value="#{planningEvaluationCtrl.planningEvaluation.dateEvaluation}" navigator="true"/>
+                                                            
+
+                    </p:panelGrid>
+                    <p:commandButton icon="ui-icon-check" actionListener="#{planningEvaluationCtrl.edit()}" value="#{langue['Conv.Modifier']}"
+                                     update=":PlanningEvaluationModifierForm,:PlanningEvaluationListerForm:datalist,:PlanningEvaluationListerForm:growl, :actionsForm"
+                                     oncomplete="PF('PlanningEvaluationModifierDialog').hide()">
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}" message="#{langue['Message.Confirm.Modifier']}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-close" value="#{langue['Conv.Annuler']}" onclick="PF('PlanningEvaluationModifierDlg').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

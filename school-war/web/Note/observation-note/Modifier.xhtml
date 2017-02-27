@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="TypetrancheModifierDlg" 
+                  widgetVar="TypetrancheModifierDialog" modal="true" 
+                  resizable="false"
+                  appendTo="@(body)" header="#{langue['Titre.Dlg.Modification']} : #{langue.trimestre} " 
+                  closeOnEscape="true">
+
+            <h:form id="TypetrancheModifierForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" >
+
+
+                        <p:outputLabel value="Borne inferieur" for="noteinf" />
+                        <h:panelGroup>
+                            <p:inputText id="noteinf" value="#{observationnoteCtrl.selectedObservationnote.borneinferieur}" required="true" 
+                                         requiredMessage="Borne inferieur: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+                        
+                        <p:outputLabel value="Borne superieur" for="notesup" />
+                        <h:panelGroup>
+                            <p:inputText id="notesup" value="#{observationnoteCtrl.selectedObservationnote.bornesuperieur}" required="true" 
+                                         requiredMessage="Borne Superieur : #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+                        
+                        <p:outputLabel value="Avis" for="avis" />
+                        <h:panelGroup>
+                            <p:inputText id="avis" value="#{observationnoteCtrl.selectedObservationnote.avis}"/>                                           
+                        </h:panelGroup>
+
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{selectedObservationnote.modifier()}" value="#{langue['Conv.Modifier']}"
+                                     update=":TypetrancheModifierForm,:TypetrancheListerForm:datalist,:TypetrancheListerForm:growl, :actionsForm"
+                                     oncomplete="PF('TypetrancheModifierDialog').hide()">
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}" message="#{langue['Message.Confirm.Modifier']}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{langue['Conv.Annuler']}" onclick="PF('TypetrancheModifierDlg').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

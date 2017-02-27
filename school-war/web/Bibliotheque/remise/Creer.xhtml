@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="RemiseCreerDlg" 
+                  widgetVar="RemiseCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: Remise" 
+                  closeOnEscape="true">
+
+            <h:form id="RemiseCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue.eleve}" for="eleve" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="eleve" value="#{retourCtrl.eleve.ideleve}" >
+                                <f:selectItem itemLabel="#{langue.selectL} #{langue.eleve}" itemValue="" />
+                                <f:selectItems value="#{retourCtrl.eleves}" var="item" 
+                                               itemLabel="#{item.nom} #{item.prenom}" 
+                                               itemValue="#{item.ideleve}"/>
+                                <p:ajax update="livre,RemiseCreerForm" listener="#{retourCtrl.handleEleveChange()}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.livre}" for="livre"/> 
+                        <p:pickList id="livre" value="#{retourCtrl.dualLivre}" var="item" effect="bounce"
+                                    itemValue="#{item}" itemLabel="#{item.titre}" showSourceControls="true" showTargetControls="true" showCheckbox="false"
+                                    showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="livreConverter">
+
+                            <f:facet name="sourceCaption">#{langue.livreDisponible}</f:facet>
+                            <f:facet name="targetCaption">#{langue.livreSelectionne}</f:facet>                            
+                        </p:pickList>
+
+                    </p:panelGrid><br/>
+                    <p:commandButton actionListener="#{retourCtrl.enregistrerRetour()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:RemiseListerForm:datalist,:RemiseListerForm:growl, RemiseCreerForm" 
+                                     oncomplete="PF('RemiseCreerDialog').hide()" disabled="#{retourCtrl.canretour}"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('RemiseCreerDialog').hide()"/>
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

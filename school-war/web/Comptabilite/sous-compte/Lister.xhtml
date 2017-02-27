@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="CompteListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} : des Comptes">
+            <p:contextMenu id="CompteDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>                
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{compteCtrl.comptes}"
+                         var="item"
+                         rowKey="#{item.idcompte}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{compteCtrl.compte}">
+
+                <p:ajax event="rowSelect"   update=":CompteListerForm:CompteDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":CompteListerForm:CompteDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('CompteListerForm:viewButton').click();"/>
+
+
+                <p:column filterBy="#{item.idtypecompte.classe}" style="width: 13%">
+                    <f:facet name="header">
+                        <h:outputText value="Grande Classe"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idtypecompte.classe}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.classe}" style="width: 13%">
+                    <f:facet name="header">
+                        <h:outputText value="Numero de compte"/>
+                    </f:facet>
+                    <h:outputText value="#{item.classe}"/>
+                </p:column>
+
+
+                <p:column style="width: 38%;text-align: left">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.libelle}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.libelle}"/>
+                </p:column>
+
+                <p:column style="width:10%">
+                    <f:facet name="header">
+                        <h:outputText value="Débit"/>
+                    </f:facet>
+                    <h:outputText value="#{item.debit}">
+                        <f:convertNumber/>   
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width:10%">
+                    <f:facet name="header">
+                        <h:outputText value="Crédit"/>
+                    </f:facet>
+                    <h:outputText value="#{item.credit}">
+                        <f:convertNumber/>   
+                    </h:outputText>
+                </p:column>
+
+
+                <p:column style="width:10%">
+                    <f:facet name="header">
+                        <h:outputText value="Solde"/>
+                    </f:facet>
+                    <h:outputText value="#{item.credit - item.debit}">
+                        <f:convertNumber/>   
+                    </h:outputText>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

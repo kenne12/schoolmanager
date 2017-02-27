@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="LogementCreerDlg" 
+                  widgetVar="LogementCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue['Conv.Logement']}" 
+                  closeOnEscape="true">
+
+            <h:form id="LogementCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue['Conv.TypeLogement']}" for="typeLogement" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="typeLogement" value="#{logementCtrl.logement.typeLogement.id}" required="true">
+                                <f:selectItem itemLabel="Selectionner un type de logement" itemValue="" />
+                                <f:selectItems value="#{logementCtrl.typesLogements}" var="typelogement" 
+                                               itemLabel="#{typelogement.code}" 
+                                               itemValue="#{typelogement.id}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue['Conv.Batiment']}" for="batiment" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="batiment" value="#{logementCtrl.logement.batiment.id}" >
+                                <f:selectItem itemLabel="Selectionner le batiment" itemValue="" />
+                                <f:selectItems value="#{logementCtrl.batiments}" var="batiment" 
+                                               itemLabel="#{batiment.code}" 
+                                               itemValue="#{batiment.id}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue['Conv.Reference']}" for="reference" />
+                        <h:panelGroup>
+                            <p:inputText id="reference" value="#{logementCtrl.logement.reference}" required="true" 
+                                         requiredMessage="#{langue['Conv.Reference']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue['Conv.Description']}" for="description" />
+                        <h:panelGroup>
+                            <p:inputText id="description" value="#{logementCtrl.logement.description}" required="true" 
+                                         requiredMessage="#{langue['Conv.Description']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                    </p:panelGrid><br/>
+                    <p:commandButton actionListener="#{logementCtrl.enregistrerLogement}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:LogementListerForm:datalist,:LogementListerForm:growl, LogementCreerForm" 
+                                     oncomplete="PF('LogementCreerDialog').hide()"/>
+                    <p:commandButton value="Annuler" onclick="PF('LogementCreerDialog').hide()"/>
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

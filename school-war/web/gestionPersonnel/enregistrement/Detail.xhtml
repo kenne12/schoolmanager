@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PersonnelDetailDlg" 
+                  widgetVar="PersonnelDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: de personnel" closeOnEscape="true">
+
+            <h:form id="PersonnelDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="4" columnClasses="column" style="width: 100%;" >
+                        <h:outputText value="Matricule"/>
+                        <h:outputText value="#{personnelCtrl.selectedPersonnel.matriculepersonnel}"/>
+
+                        <h:outputText value="Nom"/>
+                        <h:outputText value="#{personnelCtrl.selectedPersonnel.nom}"/>
+
+                        <h:outputText value="Prenom"/>
+                        <h:outputText value="#{personnelCtrl.selectedPersonnel.prenom}"/>
+
+                        <h:outputText value="Adresse"/>
+                        <h:outputText value="#{personnelCtrl.selectedPersonnel.adresse}"/>
+
+                        <h:outputText value="Téléphone"/>
+                        <h:outputText value="#{personnelCtrl.selectedPersonnel.telephone}"/>
+
+                        <h:outputText value="Email"/>
+                        <h:outputText value="#{personnelCtrl.selectedPersonnel.email}"/>
+
+
+
+                        <h:outputText value="Date de recrutement"/>
+                        <h:outputText value="#{personnelCtrl.selectedPersonnel.daterecrutement}"/>
+
+                        <h:outputText value="Etat du personnel"/>
+                        <h:selectBooleanCheckbox id="etat" value="#{personnelCtrl.selectedPersonnel.etatpersonnel}" disabled="true"/>
+
+                        <h:outputText value="Administrateur"/>
+                        <h:selectBooleanCheckbox value="#{personnelCtrl.selectedPersonnel.admin}" disabled="true"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('PersonnelDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

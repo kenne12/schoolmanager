@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="actionsForm">
+        <p:fieldset legend="#{langue['Conv.Actions']}" toggleable="true" toggleSpeed="300">
+            <div class="footer-section">
+
+                <p:commandButton id="creer" 
+                                 icon="ui-icon-plus"   
+                                 value="#{langue['Conv.Creer']}" 
+                                 update=":CategorieAnPrixCreerForm,:CategorieAnPrixCreerForm:categorie,:ValidateForm,:CategorieAnPrixListerForm:growl" 
+                                 actionListener="#{categorieAnneePrixCtrl.prepareCreate()}"
+                                 oncomplete="PF('CategorieAnPrixCreerDialog').show()"/>
+                <p:commandButton id="detail"   
+                                 icon="ui-icon-search" 
+                                 value="#{langue['Conv.Detail']}" 
+                                 update=":CategorieAnPrixDetailForm" 
+                                 oncomplete="PF('CategorieAnPrixDetailDialog').show()" 
+                                 disabled="#{categorieAnneePrixCtrl.detail}"/>
+
+                <p:commandButton id="modifier"   
+                                 icon="ui-icon-pencil" 
+                                 value="#{langue['Conv.Modifier']}" 
+                                 update=":CategorieAnPrixModifierForm" 
+                                 oncomplete="PF('CategorieAnPrixModifierDialog').show()" 
+                                 disabled="#{categorieAnneePrixCtrl.modifier}"/>
+
+                <p:commandButton id="supprimer" 
+                                 icon="ui-icon-trash"  
+                                 value="#{langue['Conv.Supprimer']}" 
+                                 update=":CategorieAnPrixListerForm:growl,:CategorieAnPrixListerForm:datalist, :actionsForm"
+                                 disabled="#{categorieAnneePrixCtrl.supprimer}"
+                                 actionListener="#{categorieAnneePrixCtrl.delete()}">
+                    <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
+                               message="#{langue['Message.Confirm.Supprimer']}?"
+                               icon="ui-icon-alert"/>
+                </p:commandButton>
+
+
+
+
+                <p:commandButton id="imprimer" icon="ui-icon-print"  
+                                 value="#{langue['Conv.Imprimer']}" actionListener="#{categorieAnneePrixCtrl.imprimerAffectationHtml()}"
+                                 update=":CategorieAnPrixListerForm:growl,:CategorieAnPrixImprimerForm" disabled="#{categorieAnneePrixCtrl.imprimer}" 
+                                 oncomplete="PF('CategorieAnPrixImprimerDialog').show()"/>
+
+            </div>
+        </p:fieldset>
+    </h:form>
+</ui:composition>

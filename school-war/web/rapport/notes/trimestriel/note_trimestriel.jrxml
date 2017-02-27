@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="note_trimestriel" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a36e1850-a9e0-448e-8443-fb4cc15eee24">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<queryString>
+		<![CDATA[SELECT
+     evaluation."ideval" AS evaluation_ideval,
+     evaluation."observation" AS evaluation_observation,
+     evaluation."eleve" AS evaluation_eleve,
+     evaluation."note" AS evaluation_note,
+     evaluation."valide" AS evaluation_valide,
+     planning_evaluation."sequence" AS planning_evaluation_sequence,
+     classe_elementevaluation."id" AS classe_elementevaluation_id,
+     classe_elementevaluation."classe" AS classe_elementevaluation_classe,
+     classe_elementevaluation."elementevaluation" AS classe_elementevaluation_elementevaluation,
+     classe_elementevaluation."coefficient" AS classe_elementevaluation_coefficient,
+     element_evaluation."nom" AS element_evaluation_nom,
+     element_evaluation."coeficient" AS element_evaluation_coeficient,
+     matiere."libelle" AS matiere_libelle,
+     sequence."nom" AS sequence_nom,
+     trimesteannee."idtrimestrean" AS trimesteannee_idtrimestrean,
+     trimesteannee."idtrimestre" AS trimesteannee_idtrimestre,
+     trimestre."nom" AS trimestre_nom,
+     annee."idannee" AS annee_idannee,
+     annee."code" AS annee_code,
+     annee."codefin" AS annee_codefin,
+     etablissement."nom" AS etablissement_nom,
+     etablissement."logo" AS etablissement_logo,
+     adresse."bp" AS adresse_bp,
+     adresse."contact" AS adresse_contact,
+     adresse."siteweb" AS adresse_siteweb,
+     adresse."email" AS adresse_email,
+     adresse."adresse" AS adresse_adresse,
+     eleveanneeclasse."id" AS eleveanneeclasse_id,
+     eleveanneeclasse."idclasse" AS eleveanneeclasse_idclasse,
+     eleveanneeclasse."idannee" AS eleveanneeclasse_idannee,
+     eleveanneeclasse."eleve" AS eleveanneeclasse_eleve,
+     eleve."nom" AS eleve_nom,
+     eleve."prenom" AS eleve_prenom,
+     eleve."matricule" AS eleve_matricule
+FROM
+     "public"."planning_evaluation" planning_evaluation INNER JOIN "public"."evaluation" evaluation ON planning_evaluation."idplanning" = evaluation."planning_evaluation"
+     INNER JOIN "public"."classe_elementevaluation" classe_elementevaluation ON planning_evaluation."element_evaluation" = classe_elementevaluation."id"
+     INNER JOIN "public"."sequenceannee" sequenceannee ON planning_evaluation."sequence" = sequenceannee."idsequencean"
+     INNER JOIN "public"."sequence" sequence ON sequenceannee."idsequence" = sequence."idsequence"
+     INNER JOIN "public"."trimesteannee" trimesteannee ON sequenceannee."trimestre" = trimesteannee."idtrimestrean"
+     INNER JOIN "public"."annee" annee ON sequenceannee."idannee" = annee."idannee"
+     AND annee."idannee" = trimesteannee."idannee"
+     INNER JOIN "public"."etablissement" etablissement ON annee."etablissement" = etablissement."id"
+     INNER JOIN "public"."eleveanneeclasse" eleveanneeclasse ON annee."idannee" = eleveanneeclasse."idannee"
+     INNER JOIN "public"."eleve" eleve ON eleveanneeclasse."eleve" = eleve."ideleve"
+     AND etablissement."id" = eleve."etablissement"
+     AND eleve."ideleve" = evaluation."eleve"
+     INNER JOIN "public"."adresse" adresse ON etablissement."adresse" = adresse."id"
+     INNER JOIN "public"."trimestre" trimestre ON trimesteannee."idtrimestre" = trimestre."idtrimestre"
+     INNER JOIN "public"."element_evaluation" element_evaluation ON classe_elementevaluation."elementevaluation" = element_evaluation."idelement"
+     INNER JOIN "public"."matiere" matiere ON element_evaluation."matiere" = matiere."idmatiere"]]>
+	</queryString>
+	<field name="evaluation_ideval" class="java.lang.Long"/>
+	<field name="evaluation_observation" class="java.lang.String"/>
+	<field name="evaluation_eleve" class="java.lang.Integer"/>
+	<field name="evaluation_note" class="java.lang.Double"/>
+	<field name="evaluation_valide" class="java.lang.Boolean"/>
+	<field name="planning_evaluation_sequence" class="java.lang.Integer"/>
+	<field name="classe_elementevaluation_id" class="java.lang.Integer"/>
+	<field name="classe_elementevaluation_classe" class="java.lang.Integer"/>
+	<field name="classe_elementevaluation_elementevaluation" class="java.lang.Integer"/>
+	<field name="classe_elementevaluation_coefficient" class="java.lang.Integer"/>
+	<field name="element_evaluation_nom" class="java.lang.String"/>
+	<field name="element_evaluation_coeficient" class="java.lang.Integer"/>
+	<field name="matiere_libelle" class="java.lang.String"/>
+	<field name="sequence_nom" class="java.lang.String"/>
+	<field name="trimesteannee_idtrimestrean" class="java.lang.Integer"/>
+	<field name="trimesteannee_idtrimestre" class="java.lang.Integer"/>
+	<field name="trimestre_nom" class="java.lang.String"/>
+	<field name="annee_idannee" class="java.lang.Integer"/>
+	<field name="annee_code" class="java.lang.Integer"/>
+	<field name="annee_codefin" class="java.lang.Integer"/>
+	<field name="etablissement_nom" class="java.lang.String"/>
+	<field name="etablissement_logo" class="java.lang.String"/>
+	<field name="adresse_bp" class="java.lang.String"/>
+	<field name="adresse_contact" class="java.lang.String"/>
+	<field name="adresse_siteweb" class="java.lang.String"/>
+	<field name="adresse_email" class="java.lang.String"/>
+	<field name="adresse_adresse" class="java.lang.String"/>
+	<field name="eleveanneeclasse_id" class="java.lang.Long"/>
+	<field name="eleveanneeclasse_idclasse" class="java.lang.Integer"/>
+	<field name="eleveanneeclasse_idannee" class="java.lang.Integer"/>
+	<field name="eleveanneeclasse_eleve" class="java.lang.Integer"/>
+	<field name="eleve_nom" class="java.lang.String"/>
+	<field name="eleve_prenom" class="java.lang.String"/>
+	<field name="eleve_matricule" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="88" splitType="Stretch">
+			<textField>
+				<reportElement x="109" y="20" width="125" height="20" uuid="77fada52-9d08-4d6f-9fc7-fb78d7dd40b9"/>
+				<textFieldExpression><![CDATA[$F{adresse_adresse}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="134" y="40" width="100" height="20" uuid="24e53cea-f6bc-436e-81ea-f0067a790a24"/>
+				<textFieldExpression><![CDATA[$F{adresse_contact}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="110" y="60" width="48" height="20" uuid="d4c00080-18be-4e51-b780-d56b539bc2cf"/>
+				<text><![CDATA[Site web : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="158" y="60" width="100" height="20" uuid="0c58d196-9eb4-46d9-86e2-c1f427041b7a"/>
+				<textFieldExpression><![CDATA[$F{adresse_siteweb}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="109" y="0" width="125" height="20" uuid="71e66ee2-289a-4ad3-98b0-84a3f92aeaac"/>
+				<textFieldExpression><![CDATA[$F{etablissement_nom}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="109" y="40" width="25" height="20" uuid="e52756ef-4cea-48c6-bfa3-2e914dc25bdd"/>
+				<text><![CDATA[Tél : ]]></text>
+			</staticText>
+			<image>
+				<reportElement x="10" y="0" width="99" height="80" uuid="786fa211-ea3e-4d08-a1a2-625055b21e5d"/>
+				<imageExpression><![CDATA["E:\\big-malkus\\photos\\36239_147584225295486_7401651_n.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="303" y="35" width="240" height="20" backcolor="#999999" uuid="5425967f-6747-4f79-be45-320af4d07b3c"/>
+				<box>
+					<pen lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PROCES VERBAL DES NOTES"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="345" y="10" width="85" height="20" uuid="941eb58b-c9e1-45ca-8fce-fee698fe3b7d"/>
+				<text><![CDATA[Année Scolaire : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="430" y="10" width="23" height="20" uuid="0a40ca6b-5a27-41e2-ab9d-0fad2c57fc83"/>
+				<textFieldExpression><![CDATA[$F{annee_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="60" width="254" height="20" uuid="262b5946-5027-4764-8747-02bb05d748c9"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Matière :  " +$F{matiere_libelle}+"   " +$F{sequence_nom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="10" width="26" height="20" uuid="4618b7cf-1f5e-454b-af33-29b81c8b95d6"/>
+				<textFieldExpression><![CDATA[$F{annee_codefin}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="453" y="10" width="6" height="20" uuid="59df3e96-d97e-4579-a19a-3570bc658f8b"/>
+				<text><![CDATA[/]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="24" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="19" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="225" splitType="Stretch"/>
+	</summary>
+</jasperReport>

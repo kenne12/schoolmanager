@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="AffecterTrimestreModifierDlg" 
+                  widgetVar="AffecterTrimestreModifierDialog" modal="true" 
+                  resizable="false"
+                  appendTo="@(body)" header="#{langue['Titre.Dlg.Modification']}: #{langue.affectation}" 
+                  closeOnEscape="true">
+
+            <h:form id="AffecterTrimestreModifierForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" >
+
+                        <p:outputLabel value="#{langue.annee}" for="annee" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="annee" value="#{affecterTrimCtrl.selectedTrimesteAnnee.idannee}" converter="anneeConverter" disabled="true">
+                                <f:selectItems value="#{affecterTrimCtrl.annees}" var="item" itemLabel="#{item.code}" itemValue="#{item}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.trimestre}" for="trimestre"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu id="trimestre" value="#{affecterTrimCtrl.selectedTrimesteAnnee.idtrimestre}" converter="trimestreConverter" disabled="true">
+                                <f:selectItems value="#{affecterTrimCtrl.trimestreSource}" var="item" itemLabel="#{item.nom}" itemValue="#{item}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.active}"/>
+                        <h:panelGroup>                             
+                            <h:selectBooleanCheckbox id="etat" value="#{affecterTrimCtrl.selectedTrimesteAnnee.etat}" disabled="false"/>
+                        </h:panelGroup>
+
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{affecterTrimCtrl.modifier()}" value="#{langue['Conv.Modifier']}"
+                                     update=":AffecterTrimestreModifierForm,:AffecterTrimestreListerForm:datalist,:AffecterTrimestreListerForm:growl, :actionsForm"
+                                     oncomplete="PF('AffecterTrimestreModifierDialog').hide()">
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}" message="#{langue['Message.Confirm.Modifier']}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{langue['Conv.Annuler']}" onclick="PF('AffecterTrimestreModifierDlg').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

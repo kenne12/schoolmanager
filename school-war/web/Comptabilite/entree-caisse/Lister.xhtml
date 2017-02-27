@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="EntreecaisseListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} : des Recettes">
+            <p:contextMenu id="EntreecaisseDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>                
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{recetteCtrl.recettes}"
+                         var="item"
+                         rowKey="#{item.idrecette}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{recetteCtrl.recette}">
+
+                <p:ajax event="rowSelect"   update=":EntreecaisseListerForm:EntreecaisseDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":EntreecaisseListerForm:EntreecaisseDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('EntreecaisseListerForm:viewButton').click();"/>
+
+
+                <p:column filterBy="#{item.idoperation.idcompte.libelle}" style="width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="Compte crédité"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idoperation.idcompte.classe}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.code}" style="width: 15%">
+                    <f:facet name="header">
+                        <h:outputText value="Code opération"/>
+                    </f:facet>
+                    <h:outputText value="#{item.code}"/>
+                </p:column>
+
+                <p:column style="width: 50%;text-align: left">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.libelle}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.libelle}"/>
+                </p:column>
+
+
+                <p:column filterBy="#{item.montant}" style="width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="Montant"/>
+                    </f:facet>
+                    <h:outputText value="#{item.montant}">
+                        <f:convertNumber/>   
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width:10%">
+                    <f:facet name="header">
+                        <h:outputText value="Date"/>
+                    </f:facet>
+                    <h:outputText value="#{item.daterecette}">
+
+                    </h:outputText>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

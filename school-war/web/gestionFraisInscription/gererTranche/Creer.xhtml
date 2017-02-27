@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="TypeTrancheCreerDlg" 
+                  widgetVar="TypeTrancheCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="Formulaire de parametrage des tranches de pensions" 
+                  closeOnEscape="true">
+
+            <h:form id="TypeTrancheCreerForm">
+
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue.anneeScolaire}" />
+                        <h:panelGroup>
+                            <p:selectOneMenu value="#{typeTrancheCtrl.annee.idannee}">
+                                <f:selectItems value="#{anneeCtrl.anneeCourantes}" var="item" itemLabel="#{item.code}" itemValue="#{item.idannee}"/>
+                            </p:selectOneMenu>                        
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.categorie}" />
+                        <h:panelGroup>
+                            <p:selectOneMenu value="#{typeTrancheCtrl.categorie.idcategorie}">
+                                <f:selectItems value="#{typeTrancheCtrl.categories}" var="item" itemLabel="#{item.nom}" itemValue="#{item.idcategorie}"/>
+                            </p:selectOneMenu>                        
+                        </h:panelGroup>
+
+
+                        <p:outputLabel value="#{langue.nom}" for="nom" />
+                        <h:panelGroup>
+                            <p:inputText id="nom" value="#{typeTrancheCtrl.typeTranche.nom}" requiredMessage="Libellé obligatoire"/>                       
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.prix} " for="montant" />
+                        <h:panelGroup>
+                            <p:inputText id="montant" value="#{typeTrancheCtrl.typeTranche.prix}"/>                       
+                        </h:panelGroup>
+
+                        <p:outputLabel  value="#{langue.dateDebut} : " />
+                        <h:panelGroup>                         
+                            <p:calendar id="dateDebut" value="#{typeTrancheCtrl.typeTranche.datedebut}" />
+                        </h:panelGroup>
+
+                        <p:outputLabel  value="#{langue.dateFin} " />
+                        <h:panelGroup>                         
+                            <p:calendar id="dateFin" value="#{typeTrancheCtrl.typeTranche.datefin}" />
+                        </h:panelGroup>
+
+
+                        <p:outputLabel  value="#{langue.active}" />
+                        <h:panelGroup>                         
+                            <p:selectBooleanButton id="etat" value="#{typeTrancheCtrl.typeTranche.etat}" onLabel="Active" offLabel="Inactive" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:90px">
+                            </p:selectBooleanButton>
+                        </h:panelGroup>
+
+                        <!-- <h:outputText value="Etat"  />
+                        <p:selectBooleanButton id="etat" value="#{typeTrancheCtrl.typeTranche.etat}" onLabel="Active" offLabel="Inactive" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:70px">
+                               
+                        </p:selectBooleanButton>-->
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{typeTrancheCtrl.enregistrerTypeTranche()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:TypeTrancheListerForm:datalist,:TypeTrancheListerForm:growl, TypeTrancheCreerForm" 
+                                     oncomplete="PF('TypeTrancheCreerDialog').hide()"/>
+                    <p:commandButton value="Annuler" onclick="PF('TypeTrancheCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="InscriptionDetailDlg" 
+                  widgetVar="InscriptionDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: #{langue.categorie}" closeOnEscape="true">
+
+            <h:form id="InscriptionDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" style="width: 100%;" >
+
+                        <h:outputText value="#{langue.anneeScolaire} : "/>
+                        <h:outputText value="#{inscriptionCtrl.selectedPension.idannee.code}"/> 
+
+                        <h:outputText value="#{langue.eleve}"/>
+                        <h:outputText value="#{inscriptionCtrl.selectedPension.eleve.nom} #{inscriptionCtrl.selectedPension.eleve.prenom}"/>
+
+
+                        <h:outputText value="Motif de payement : "/>
+                        <h:outputText value="#{inscriptionCtrl.selectedPension.idtranche.nom}"/>
+
+                        <h:outputText value="#{langue.prix}"/>
+                        <h:outputText value="#{inscriptionCtrl.selectedPension.montant}"/>
+
+                        <h:outputText value="#{langue.date}"/>
+                        <h:outputText value="#{inscriptionCtrl.selectedPension.datepayement}"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('InscriptionDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

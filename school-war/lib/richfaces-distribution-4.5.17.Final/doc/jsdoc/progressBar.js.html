@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: progressBar.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: progressBar.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>(function ($, rf) {
+
+    rf.ui = rf.ui || {};
+
+    var defaultOptions = {
+        interval: 1000,
+        minValue: 0,
+        maxValue: 100
+    };
+
+    var stateSelectors = {
+        initial: '> .rf-pb-init',
+        progress: '> .rf-pb-rmng',
+        finish: '> .rf-pb-fin'
+    };
+
+    // Constructor definition
+    /**
+     * Backing object for rich:progressBar
+     * 
+     * @extends RichFaces.BaseComponent
+     * @memberOf! RichFaces.ui
+     * @constructs RichFaces.ui.ProgressBar
+     * 
+     * @param componentId
+     * @param options
+     */
+    rf.ui.ProgressBar = function(componentId, options) {
+        // call constructor of parent class
+        $super.constructor.call(this, componentId);
+        this.__elt = this.attachToDom();
+        this.options = $.extend(this.options, defaultOptions, options || {});
+        this.enabled = this.options.enabled;
+        this.minValue = this.options.minValue;
+        this.maxValue = this.options.maxValue;
+
+        this.__setValue(this.options.value || this.options.minValue /* TODO - check with Ilya */);
+
+        if (this.options.resource) {
+            this.__poll();
+        } else if (this.options.submitFunction) {
+            this.submitFunction = new Function("beforeUpdateHandler", "afterUpdateHandler", "params", "event", this.options.submitFunction);
+            this.__poll();
+        }
+
+        if (this.options.onfinish) {
+            rf.Event.bind(this.__elt, "finish", new Function("event", this.options.onfinish));
+        }
+    };
+
+    // Extend component class and add protected methods from parent class to our container
+    rf.BaseComponent.extend(rf.ui.ProgressBar);
+
+    // define super class link
+    var $super = rf.ui.ProgressBar.$super;
+
+    $.extend(rf.ui.ProgressBar.prototype, (function() {
+        return {
+            name: "ProgressBar",
+
+            __isInitialState: function() {
+                return parseFloat(this.value) &lt; parseFloat(this.getMinValue());
+            },
+
+            __isProgressState: function() {
+                return !this.__isInitialState() &amp;&amp; !this.__isFinishState();
+            },
+
+            __isFinishState: function() {
+                return parseFloat(this.value) >= parseFloat(this.getMaxValue());
+            },
+
+            __beforeUpdate: function(event) {
+                if (event.componentData &amp;&amp; typeof event.componentData[this.id] != 'undefined') {
+                    this.setValue(event.componentData[this.id]);
+                }
+            },
+
+            __afterUpdate: function(event) {
+                this.__poll();
+            },
+
+            __onResourceDataAvailable: function(data) {
+                var parsedData = rf.parseJSON(data);
+                if (parsedData instanceof Number || typeof parsedData == 'number') {
+                    this.setValue(parsedData);
+                }
+
+                this.__poll();
+            },
+
+            __submit: function() {
+                if (this.submitFunction) {
+                    this.submitFunction.call(this, $.proxy(this.__beforeUpdate, this), $.proxy(this.__afterUpdate, this),
+                        this.__params || {});
+                } else {
+                    $.get(this.options.resource, this.__params || {}, $.proxy(this.__onResourceDataAvailable, this), 'text');
+                }
+            },
+
+            __poll: function(immediate) {
+                if (this.enabled) {
+                    if (immediate) {
+                        this.__submit();
+                    } else {
+                        this.__pollTimer = setTimeout($.proxy(this.__submit, this), this.options.interval);
+                    }
+                }
+            },
+
+            __calculatePercent: function(v) {
+                var min = parseFloat(this.getMinValue());
+                var max = parseFloat(this.getMaxValue());
+                var value = parseFloat(v);
+                if (min &lt; value &amp;&amp; value &lt; max) {
+                    return (100 * (value - min)) / (max - min);
+                } else if (value &lt;= min) {
+                    return 0;
+                } else if (value >= max) {
+                    return 100;
+                }
+            },
+
+            __getPropertyOrObject: function(obj, propName) {
+                if ($.isPlainObject(obj) &amp;&amp; obj.propName) {
+                    return obj.propName;
+                }
+
+                return obj;
+            },
+
+            /**
+             * Get current value
+             *
+             * @method
+             * @name RichFaces.ui.ProgressBar#getValue
+             * @return {int} current value
+             */
+            getValue: function() {
+                return this.value;
+            },
+
+            __showState: function (state) {
+                var stateElt = $(stateSelectors[state], this.__elt);
+
+                if (stateElt.length == 0 &amp;&amp; (state == 'initial' || state == 'finish')) {
+                    stateElt = $(stateSelectors['progress'], this.__elt)
+                }
+
+                stateElt.show().siblings().hide();
+            },
+
+            __setValue: function(val, initialStateSetup) {
+                this.value = parseFloat(this.__getPropertyOrObject(val, "value"));
+
+                if (this.__isFinishState() || this.__isInitialState()) {
+                    this.disable();
+                }
+            },
+
+            __updateVisualState: function() {
+                if (this.__isInitialState()) {
+                    this.__showState("initial");
+                } else if (this.__isFinishState()) {
+                    this.__showState("finish");
+                } else {
+                    this.__showState("progress");
+                }
+
+                var p = this.__calculatePercent(this.value);
+                $(".rf-pb-prgs", this.__elt).css('width', p + "%");
+            },
+
+            /**
+             * Set new value
+             *
+             * @method
+             * @name RichFaces.ui.ProgressBar#setValue
+             * @param value {int} new value
+             */
+            setValue: function(val) {
+                var wasInFinishState = this.__isFinishState();
+
+                this.__setValue(val);
+                this.__updateVisualState();
+
+                if (!wasInFinishState &amp;&amp; this.__isFinishState()) {
+                    rf.Event.callHandler(this.__elt, "finish");
+                }
+            },
+
+            /**
+             * Get max value of the progress bar
+             *
+             * @method
+             * @name RichFaces.ui.ProgressBar#getMaxValue
+             * @return {int} max value
+             */
+            getMaxValue: function() {
+                return this.maxValue;
+            },
+
+            /**
+             * Get min value of the progress bar
+             *
+             * @method
+             * @name RichFaces.ui.ProgressBar#getMinValue
+             * @return {int} min value
+             */
+            getMinValue: function() {
+                return this.minValue;
+            },
+
+            isAjaxMode: function () {
+                return !!this.submitFunction || !!this.options.resource;
+            },
+
+            /**
+             * Disable the progress bar
+             *
+             * @method
+             * @name RichFaces.ui.ProgressBar#disable
+             */
+            disable: function () {
+                this.__params = null;
+                if (this.__pollTimer) {
+                    clearTimeout(this.__pollTimer);
+                    this.__pollTimer = null;
+                }
+
+                this.enabled = false;
+            },
+
+            /**
+             * Enable the progress bar
+             *
+             * @method
+             * @name RichFaces.ui.ProgressBar#enable
+             */
+            enable: function (params) {
+                if (this.isEnabled()) {
+                    return;
+                }
+
+                this.__params = params;
+                this.enabled = true;
+
+                if (this.isAjaxMode()) {
+                    this.__poll(true);
+                }
+
+            },
+
+            /**
+             * Returns true if the progress bar is enabled
+             *
+             * @method
+             * @name RichFaces.ui.ProgressBar#isEnabled
+             * @return {boolean} true if the progress bar is enabled
+             */
+            isEnabled: function() {
+                return this.enabled;
+            },
+
+            destroy: function() {
+                this.disable();
+                this.__elt = null;
+                $super.destroy.call(this);
+            }
+        }
+    }()));
+
+})(RichFaces.jQuery, RichFaces);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="RichFaces.module_push.html">push</a></li></ul><h3>Classes</h3><ul><li><a href="RichFaces.ajaxContainer.html">ajaxContainer</a></li><li><a href="RichFaces.BaseComponent.html">BaseComponent</a></li><li><a href="RichFaces.Event.html">Event</a></li><li><a href="RichFaces.queue.html">queue</a></li><li><a href="RichFaces.ui.Accordion.html">Accordion</a></li><li><a href="RichFaces.ui.AccordionItem.html">AccordionItem</a></li><li><a href="RichFaces.ui.Autocomplete.html">Autocomplete</a></li><li><a href="RichFaces.ui.AutocompleteBase.html">AutocompleteBase</a></li><li><a href="RichFaces.ui.Calendar.html">Calendar</a></li><li><a href="RichFaces.ui.Chart.html">Chart</a></li><li><a href="RichFaces.ui.CollapsiblePanel.html">CollapsiblePanel</a></li><li><a href="RichFaces.ui.CollapsiblePanelItem.html">CollapsiblePanelItem</a></li><li><a href="RichFaces.ui.CollapsibleSubTable.html">CollapsibleSubTable</a></li><li><a href="RichFaces.ui.CollapsibleSubTableToggler.html">CollapsibleSubTableToggler</a></li><li><a href="RichFaces.ui.ContextMenu.html">ContextMenu</a></li><li><a href="RichFaces.ui.DataScroller.html">DataScroller</a></li><li><a href="RichFaces.ui.DataTable.html">DataTable</a></li><li><a href="RichFaces.ui.Draggable.html">Draggable</a></li><li><a href="RichFaces.ui.DragIndicator.html">DragIndicator</a></li><li><a href="RichFaces.ui.Droppable.html">Droppable</a></li><li><a href="RichFaces.ui.Editor.html">Editor</a></li><li><a href="RichFaces.ui.ExtendedDataTable.html">ExtendedDataTable</a></li><li><a href="RichFaces.ui.FileUpload.html">FileUpload</a></li><li><a href="RichFaces.ui.Focus.html">Focus</a></li><li><a href="RichFaces.ui.HotKey.html">HotKey</a></li><li><a href="RichFaces.ui.InplaceBase.html">InplaceBase</a></li><li><a href="RichFaces.ui.InplaceInput.html">InplaceInput</a></li><li><a href="RichFaces.ui.InplaceSelect.html">InplaceSelect</a></li><li><a href="RichFaces.ui.InputBase.html">InputBase</a></li><li><a href="RichFaces.ui.InputnumberSlider.html">InputnumberSlider</a></li><li><a href="RichFaces.ui.InputNumberSpinner.html">InputNumberSpinner</a></li><li><a href="RichFaces.ui.List.html">List</a></li><li><a href="RichFaces.ui.ListMulti.html">ListMulti</a></li><li><a href="RichFaces.ui.Menu.html">Menu</a></li><li><a href="RichFaces.ui.MenuBase.html">MenuBase</a></li><li><a href="RichFaces.ui.MenuGroup.html">MenuGroup</a></li><li><a href="RichFaces.ui.MenuItem.html">MenuItem</a></li><li><a href="RichFaces.ui.Message.html">Message</a></li><li><a href="RichFaces.ui.Notify.html">Notify</a></li><li><a href="RichFaces.ui.NotifyMessage.html">NotifyMessage</a></li><li><a href="RichFaces.ui.NotifyStack.html">NotifyStack</a></li><li><a href="RichFaces.ui.OrderingList.html">OrderingList</a></li><li><a href="RichFaces.ui.PanelMenu.html">PanelMenu</a></li><li><a href="RichFaces.ui.PanelMenuGroup.html">PanelMenuGroup</a></li><li><a href="RichFaces.ui.PanelMenuItem.html">PanelMenuItem</a></li><li><a href="RichFaces.ui.PickList.html">PickList</a></li><li><a href="RichFaces.ui.PlaceHolder.html">PlaceHolder</a></li><li><a href="RichFaces.ui.Poll.html">Poll</a></li><li><a href="RichFaces.ui.Popup.html">Popup</a></li><li><a href="RichFaces.ui.PopupList.html">PopupList</a></li><li><a href="RichFaces.ui.PopupPanel.html">PopupPanel</a></li><li><a href="RichFaces.ui.ProgressBar.html">ProgressBar</a></li><li><a href="RichFaces.ui.Select.html">Select</a></li><li><a href="RichFaces.ui.Status.html">Status</a></li><li><a href="RichFaces.ui.Tab.html">Tab</a></li><li><a href="RichFaces.ui.TabPanel.html">TabPanel</a></li><li><a href="RichFaces.ui.TogglePanel.html">TogglePanel</a></li><li><a href="RichFaces.ui.TogglePanelItem.html">TogglePanelItem</a></li><li><a href="RichFaces.ui.Tooltip.html">Tooltip</a></li><li><a href="RichFaces.ui.Tree.html">Tree</a></li><li><a href="RichFaces.ui.TreeNode.html">TreeNode</a></li></ul><h3>Events</h3><ul><li><a href="RichFaces.module_push.html#~event:error">error</a></li><li><a href="RichFaces.module_push.html#~event:push">push</a></li><li><a href="RichFaces.module_push.html#~event:subscribed">subscribed</a></li></ul><h3>Namespaces</h3><ul><li><a href="jQuery.html">jQuery</a></li><li><a href="RichFaces.html">RichFaces</a></li><li><a href="RichFaces.ui.html">ui</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Mon Jun 20 2016 14:53:31 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

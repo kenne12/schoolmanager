@@ -1,0 +1,19 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/ComptabiliteTemplate/principalTemplate.xhtml">
+
+    <ui:define name="contenu">       
+        <ui:include src="sous-compte/Action.xhtml"/>       
+        <ui:include src="sous-compte/Lister.xhtml"/>
+        <ui:include src="sous-compte/Creer.xhtml"/>
+    </ui:define>
+
+    <ui:define name="scriptCollapse">
+        <script>
+            var el = document.getElementById("compte");
+            el.setAttribute("class", "sub-menu active");
+        </script>
+    </ui:define>
+
+</ui:composition>

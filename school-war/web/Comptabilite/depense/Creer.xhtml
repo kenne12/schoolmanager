@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="DepenseCreerDlg" 
+                  widgetVar="DepenseCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="CREER / MODIFIER UNE DEPENSE" 
+                  closeOnEscape="true">
+
+            <h:form id="DepenseCreerForm">
+
+
+                <h:panelGroup id="display" >
+
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:panelGrid columns="2" columnClasses="column">
+
+                            <p:outputLabel value="Type de compte débiteur" for="classe"/>
+                            <p:selectOneMenu autoWidth="false" style="width: 250px"  disabled="#{depenseCtrl.showFilter}"  id="classe" filter="true" value="#{depenseCtrl.typecompte.idtypecompte}">
+                                <f:selectItem itemLabel="#{langue.choisir}"/>
+                                <f:selectItems value="#{depenseCtrl.typecomptes}" var="item" itemLabel="#{item.classe} - #{item.libelle}" itemValue="#{item.idtypecompte}"/>
+                                <p:ajax listener="#{depenseCtrl.updateCompteDebit()}" update="compte,solde"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Compte Débiteur" for="compte"/>
+                            <p:selectOneMenu autoWidth="false" style="width: 250px" disabled="#{depenseCtrl.showFilter}"  id="compte" filter="true" value="#{depenseCtrl.compte.idcompte}">
+                                <f:selectItem itemLabel="#{langue.choisir}"/>
+                                <f:selectItems value="#{depenseCtrl.comptes}" var="compte" itemLabel="#{compte.classe} - #{compte.libelle}" itemValue="#{compte.idcompte}"/>
+                                <p:ajax update="solde" listener="#{depenseCtrl.update()}" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Solde" for="solde" />
+                            <p:inputText required="true" disabled="true" style="width: 150px;color: red" id="solde" value="#{depenseCtrl.soldeDediteur}"/>
+
+
+                        </p:panelGrid>
+
+                        <p:panelGrid columns="2" columnClasses="column">
+
+                            <p:outputLabel value="Type de compte crediteur" for="classe1"/>
+                            <p:selectOneMenu autoWidth="false" style="width: 250px" disabled="#{depenseCtrl.showFilter}"  id="classe1" filter="true" value="#{depenseCtrl.typecompte1.idtypecompte}">
+                                <f:selectItem itemLabel="#{langue.choisir}"/>
+                                <f:selectItems value="#{depenseCtrl.typecomptes}" var="item" itemLabel="#{item.classe} - #{item.libelle}" itemValue="#{item.idtypecompte}"/>
+                                <p:ajax listener="#{depenseCtrl.updateCompteCredit()}" update="compte1,solde1"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Compte créditeur" for="compte1"/>
+                            <p:selectOneMenu autoWidth="false" style="width: 250px" disabled="#{depenseCtrl.showFilter}" id="compte1" filter="true" value="#{depenseCtrl.compte1.idcompte}">
+                                <f:selectItem itemLabel="#{langue.choisir}"/>
+                                <f:selectItems value="#{depenseCtrl.comptes2}" var="compte" itemLabel="#{compte.classe} - #{compte.libelle}" itemValue="#{compte.idcompte}"/>
+                                <p:ajax update="solde1" listener="#{depenseCtrl.update2()}" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Solde" for="solde1" />
+                            <p:inputText  required="true" disabled="true" style="width: 150px;color: red" id="solde1" value="#{depenseCtrl.soldeCrediteur}"/>
+
+
+                        </p:panelGrid>
+
+                        <p:outputLabel value="Motif de la dépense" for="libelle" />
+                        <p:inputTextarea cols="250" rows="5" required="true"  style="width: 500px" requiredMessage="#{langue.libelle} : #{langue.Requis.message}" id="libelle" value="#{depenseCtrl.depense.libelle}"/>
+
+                        <p:outputLabel value="Montant" for="montant" />
+                        <p:inputText id="montant"  required="true" style="width: 150px" requiredMessage="#{langue.montant} : #{langue.Requis.message}" value="#{depenseCtrl.depense.montant}"/>
+
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{depenseCtrl.saveDepense()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:DepenseListerForm:datalist,:DepenseListerForm:growl, DepenseCreerForm" 
+                                     oncomplete="PF('DepenseCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('DepenseCreerDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

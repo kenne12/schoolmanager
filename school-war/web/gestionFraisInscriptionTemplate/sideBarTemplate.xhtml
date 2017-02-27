@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <!-- BEGIN SIDEBAR -->
+    <div class="sidebar-scroll">
+        <div id="sidebar" class="nav-collapse collapse">
+
+            <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+            <div class="navbar-inverse">
+                <form class="navbar-search visible-phone">
+                    <input type="text" class="search-query" placeholder="Search" />
+                </form>
+            </div>
+            <!-- END RESPONSIVE QUICK SEARCH FORM -->
+            <!-- BEGIN SIDEBAR MENU -->
+            <ul class="sidebar-menu">
+
+                <!--Accueil-->
+                <li class="sub-menu" id="menuIndex">
+                    <a class="" href="#{request.contextPath}/index.html">
+                        <span>#{langue.accueil}</span>
+                    </a>
+                </li>
+
+                <!--Logements-->
+                <li class="sub-menu" id="menuTranche">
+                    <a href="javascript:;" class="">
+                        <i class="icon-building"></i>
+                        <span>Gérer les tranches</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/gererCategorie.html">Gérer les categorie</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/gererTranche.html">Gérer les tranche</a></li>                       
+                    </ul>
+                </li>
+
+
+                <!--Comptes-->
+                <li class="sub-menu" id="menuEleve">
+                    <a href="javascript:;" class="">
+                        <i class="icon-tasks"></i>
+                        <span>Gérer les élèves</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        
+                        
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/gererClasse.html">Gérer les classes</a></li> 
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/gererCategorie.html">Gérer les catégories</a></li>                        
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/affecterCategorie.html">Affecter les categories</a></li>                         
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/gererEleve.html">enregistrer les eleves</a></li>
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/repartirClasse.html">Repartir les classes</a></li> 
+                    </ul>
+                </li>
+
+                <!--loyers-->
+                <li class="sub-menu" id="menuFrais">
+                    <a href="javascript:;" class="">
+                        <i class="icon-dollar"></i>
+                        <span>Gestion des frais</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/gererInscription.html">Gérer les frais</a></li>                      
+                    </ul>
+                </li>
+
+                <!--Habitants-->
+                <li class="sub-menu" id="menuSolvable">
+                    <a href="javascript:;" class="">
+                        <i class="icon-ok-circle"></i>
+                        <span>Gestion solvabilités</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/listeInsolvable.html">Elèves Insolvables</a></li>     
+                        <li><a class="" href="#{request.contextPath}/gestionFraisInscription/listeSolvable.html">Elèves Solvables</a></li>                                           
+                    </ul>
+                </li>
+
+            </ul>
+            <!-- END SIDEBAR MENU -->
+        </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+</ui:composition>

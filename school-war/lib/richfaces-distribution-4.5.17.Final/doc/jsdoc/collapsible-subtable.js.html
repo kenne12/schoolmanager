@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: collapsible-subtable.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: collapsible-subtable.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>(function ($, rf) {
+
+    rf.ui = rf.ui || {};
+
+    /**
+     * Backing object for rich:collapsibleSubTable
+     * 
+     * @extends RichFaces.BaseComponent
+     * @memberOf! RichFaces.ui
+     * @constructs RichFaces.ui.CollapsibleSubTable
+     * 
+     * @param id
+     * @param f
+     * @param options
+     */
+    rf.ui.CollapsibleSubTable = function(id, f, options) {
+        this.id = id;
+        this.options = $.extend(this.options, options || {});
+        this.stateInput = options.stateInput;
+        this.optionsInput = options.optionsInput;
+        this.expandMode = options.expandMode || rf.ui.CollapsibleSubTable.MODE_CLNT;
+        this.eventOptions = options.eventOptions;
+        this.formId = f;
+        this.isNested = options.isNested;
+
+        if (! this.isNested) {
+            var self = this;
+            var tbody = $(document.getElementById(this.id)).parent();
+            tbody.find(".rf-dt-c-srt").each(function() {
+                $(this).bind("click", {sortHandle: this}, $.proxy(self.sortHandler, self));
+            });
+            tbody.find(".rf-dt-flt-i").each(function() {
+                $(this).bind("blur", {filterHandle: this}, $.proxy(self.filterHandler, self));
+                $(this).bind("keyup", {filterHandle: this}, $.proxy(self.filterHandler, self));
+            });
+
+        }
+
+        this.attachToDom();
+    };
+
+    $.extend(rf.ui.CollapsibleSubTable, {
+            MODE_AJAX: "ajax",
+            MODE_SRV: "server",
+            MODE_CLNT: "client",
+            collapse: 0,
+            expand: 1,
+            SORTING: "rich:sorting",
+            FILTERING: "rich:filtering"
+        });
+
+    rf.BaseComponent.extend(rf.ui.CollapsibleSubTable);
+    var $super = rf.ui.CollapsibleSubTable.$super;
+
+    $.extend(rf.ui.CollapsibleSubTable.prototype, (function () {
+
+        var invoke = function(event, attributes) {
+            rf.ajax(this.id, event, {"parameters" : attributes});
+        };
+
+        var createParameters = function(type, id, arg1, arg2) {
+            var parameters = {};
+            var key = this.id + type;
+            parameters[key] = (id + ":" + (arg1 || "") + ":" + arg2);
+
+            var eventOptions = this.options.ajaxEventOption;
+            for (key in eventOptions) {
+                if (eventOptions.hasOwnProperty(key) &amp;&amp; !parameters[key]) {
+                    parameters[key] = eventOptions[key];
+                }
+            }
+            return parameters;
+        };
+
+        var element = function() {
+                // use parent tbody as parent dom elem
+            return $(document.getElementById(this.id)).parent();
+        };
+        
+        var nestedElements = function() {
+                // return children rows - id contains the id of parent
+            var childrenRegex = new RegExp("^" + this.id + "\\:\\d+\\:");
+            return $(document.getElementById(this.id)).parent().find("tr").filter(function() {
+                return this.id.match(childrenRegex);
+            });
+        };
+
+        var stateInputElem = function() {
+            return $(document.getElementById(this.stateInput));
+        };
+
+        var optionsInputElem = function() {
+            return $(document.getElementById(this.optionsInput));
+        };
+
+        var ajax = function(e, options) {
+            this.__switchState();
+            rf.ajax(this.id, e, options);
+        };
+
+        var server = function(options) {
+            this.__switchState();
+            $(document.getElementById(this.formId)).submit();
+        };
+
+        var client = function(options) {
+            if (this.isExpanded()) {
+                this.collapse(options);
+            } else {
+                this.expand(options);
+            }
+        };
+
+
+        return {
+
+            name: "CollapsibleSubTable",
+
+            /**
+             * Sort a table column
+             * 
+             * @method
+             * @name RichFaces.ui.CollapsibleSubDataTable#sort
+             * @param columnId {string} short column id
+             * @param [direction] {string} sort direction ("ascending", "descending", "unsorted")
+             *          if not provided and the column is sorted the direction switches, if it's unsorted it will be sorted in ascending sirection
+             * @param [isClear] {boolean} whether or not to clear the previous sort, default - false
+             */
+            sort: function(columnId, direction, isClear) {
+                invoke.call(this, null, createParameters.call(this, rf.ui.CollapsibleSubTable.SORTING, columnId, direction, isClear));
+            },
+
+            /**
+             * Clear any sorting currently applied to the table
+             * 
+             * @method
+             * @name RichFaces.ui.CollapsibleSubDataTable#clearSorting
+             */
+            clearSorting: function() {
+                this.sort("", "", true);
+            },
+
+            sortHandler: function(event) {
+                var sortHandle = $(event.data.sortHandle);
+                var button = sortHandle.find('.rf-dt-srt-btn');
+                var columnId = button.data('columnid');
+                var sortOrder = button.hasClass('rf-dt-srt-asc') ? 'descending' : 'ascending';
+                this.sort(columnId, sortOrder, false);
+            },
+
+            /**
+             * Filter a table column
+             * 
+             * @method
+             * @name RichFaces.ui.CollapsibleSubDataTable#filter
+             * @param columnId {string} short column id
+             * @param filterValue {string} value to filter by
+             * @param [isClear] {boolean} whether or not to clear the previous filter, default - false
+             */
+            filter: function(columnId, filterValue, isClear) {
+                invoke.call(this, null, createParameters.call(this, rf.ui.CollapsibleSubTable.FILTERING, columnId, filterValue, isClear));
+            },
+
+            /**
+             * Clear any filtering currently applied to the table
+             * 
+             * @method
+             * @name RichFaces.ui.CollapsibleSubDataTable#clearFiltering
+             */
+            clearFiltering: function() {
+                this.filter("", "", true);
+            },
+
+            filterHandler: function(event) {
+                if (event.type == "keyup" &amp;&amp; event.keyCode != 13) {
+                    return;
+                }
+                var filterHandle = $(event.data.filterHandle);
+                var columnId = filterHandle.data('columnid');
+                var filterValue = filterHandle.val();
+                this.filter(columnId, filterValue, false);
+            },
+
+            switchState: function(e, options) {
+                if (this.expandMode == rf.ui.CollapsibleSubTable.MODE_AJAX) {
+                    ajax.call(this, e, this.eventOptions, options);
+                } else if (this.expandMode == rf.ui.CollapsibleSubTable.MODE_SRV) {
+                    server.call(this, options);
+                } else if (this.expandMode == rf.ui.CollapsibleSubTable.MODE_CLNT) {
+                    client.call(this, options);
+                }
+            },
+
+            /**
+             * Collapse this subtable
+             * 
+             * @method
+             * @name RichFaces.ui.CollapsibleSubDataTable#collapse
+             */
+            collapse: function(options) {
+                this.setState(rf.ui.CollapsibleSubTable.collapse);
+                if (this.isNested) {
+                    nestedElements.call(this).hide();
+                }
+                else {
+                    element.call(this).hide();
+                }
+            },
+
+            /**
+             * Expand this subtable
+             * 
+             * @method
+             * @name RichFaces.ui.CollapsibleSubDataTable#expand
+             */
+            expand: function(options) {
+                this.setState(rf.ui.CollapsibleSubTable.expand);
+                
+                if (!this.isNested) {
+                    element.call(this).show();
+                }
+                else {
+                        // return first level children only
+                    var subtableRegex = new RegExp("^" + this.id + "\\:\\d+\\:[^\\:]+$");
+                    nestedElements.call(this).filter(function () {
+                        return this.id.match(subtableRegex);
+                    }).each(function() {
+                        if (this.rf) { // is a nested subtable, show content if necessary
+                            if (this.rf.component.isExpanded()) {
+                                this.rf.component.expand();
+                            }
+                        }
+                        else { // is a subtable toggler, always show
+                            $(this).show();
+                        }
+                    });
+                }
+            },
+
+            /**
+             * Returns true if this subtable is expanded
+             * 
+             * @method
+             * @name RichFaces.ui.CollapsibleSubDataTable#isExpanded
+             * @return {boolean} true if this subtable is expanded
+             */
+            isExpanded: function() {
+                return (parseInt(this.getState()) == rf.ui.CollapsibleSubTable.expand);
+            },
+
+            __switchState: function(options) {
+                var state = this.isExpanded() ? rf.ui.CollapsibleSubTable.collapse : rf.ui.CollapsibleSubTable.expand;
+                this.setState(state);
+            },
+
+            getState: function() {
+                return stateInputElem.call(this).val();
+            },
+
+            setState: function(state) {
+                stateInputElem.call(this).val(state)
+            },
+
+            setOption: function(option) {
+                optionsInputElem.call(this).val(option);
+            },
+
+            getMode: function() {
+                return this.expandMode;
+            },
+            destroy: function() {
+                $super.destroy.call(this);
+            }
+        };
+
+    })());
+
+})(RichFaces.jQuery, window.RichFaces);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="RichFaces.module_push.html">push</a></li></ul><h3>Classes</h3><ul><li><a href="RichFaces.ajaxContainer.html">ajaxContainer</a></li><li><a href="RichFaces.BaseComponent.html">BaseComponent</a></li><li><a href="RichFaces.Event.html">Event</a></li><li><a href="RichFaces.queue.html">queue</a></li><li><a href="RichFaces.ui.Accordion.html">Accordion</a></li><li><a href="RichFaces.ui.AccordionItem.html">AccordionItem</a></li><li><a href="RichFaces.ui.Autocomplete.html">Autocomplete</a></li><li><a href="RichFaces.ui.AutocompleteBase.html">AutocompleteBase</a></li><li><a href="RichFaces.ui.Calendar.html">Calendar</a></li><li><a href="RichFaces.ui.Chart.html">Chart</a></li><li><a href="RichFaces.ui.CollapsiblePanel.html">CollapsiblePanel</a></li><li><a href="RichFaces.ui.CollapsiblePanelItem.html">CollapsiblePanelItem</a></li><li><a href="RichFaces.ui.CollapsibleSubTable.html">CollapsibleSubTable</a></li><li><a href="RichFaces.ui.CollapsibleSubTableToggler.html">CollapsibleSubTableToggler</a></li><li><a href="RichFaces.ui.ContextMenu.html">ContextMenu</a></li><li><a href="RichFaces.ui.DataScroller.html">DataScroller</a></li><li><a href="RichFaces.ui.DataTable.html">DataTable</a></li><li><a href="RichFaces.ui.Draggable.html">Draggable</a></li><li><a href="RichFaces.ui.DragIndicator.html">DragIndicator</a></li><li><a href="RichFaces.ui.Droppable.html">Droppable</a></li><li><a href="RichFaces.ui.Editor.html">Editor</a></li><li><a href="RichFaces.ui.ExtendedDataTable.html">ExtendedDataTable</a></li><li><a href="RichFaces.ui.FileUpload.html">FileUpload</a></li><li><a href="RichFaces.ui.Focus.html">Focus</a></li><li><a href="RichFaces.ui.HotKey.html">HotKey</a></li><li><a href="RichFaces.ui.InplaceBase.html">InplaceBase</a></li><li><a href="RichFaces.ui.InplaceInput.html">InplaceInput</a></li><li><a href="RichFaces.ui.InplaceSelect.html">InplaceSelect</a></li><li><a href="RichFaces.ui.InputBase.html">InputBase</a></li><li><a href="RichFaces.ui.InputnumberSlider.html">InputnumberSlider</a></li><li><a href="RichFaces.ui.InputNumberSpinner.html">InputNumberSpinner</a></li><li><a href="RichFaces.ui.List.html">List</a></li><li><a href="RichFaces.ui.ListMulti.html">ListMulti</a></li><li><a href="RichFaces.ui.Menu.html">Menu</a></li><li><a href="RichFaces.ui.MenuBase.html">MenuBase</a></li><li><a href="RichFaces.ui.MenuGroup.html">MenuGroup</a></li><li><a href="RichFaces.ui.MenuItem.html">MenuItem</a></li><li><a href="RichFaces.ui.Message.html">Message</a></li><li><a href="RichFaces.ui.Notify.html">Notify</a></li><li><a href="RichFaces.ui.NotifyMessage.html">NotifyMessage</a></li><li><a href="RichFaces.ui.NotifyStack.html">NotifyStack</a></li><li><a href="RichFaces.ui.OrderingList.html">OrderingList</a></li><li><a href="RichFaces.ui.PanelMenu.html">PanelMenu</a></li><li><a href="RichFaces.ui.PanelMenuGroup.html">PanelMenuGroup</a></li><li><a href="RichFaces.ui.PanelMenuItem.html">PanelMenuItem</a></li><li><a href="RichFaces.ui.PickList.html">PickList</a></li><li><a href="RichFaces.ui.PlaceHolder.html">PlaceHolder</a></li><li><a href="RichFaces.ui.Poll.html">Poll</a></li><li><a href="RichFaces.ui.Popup.html">Popup</a></li><li><a href="RichFaces.ui.PopupList.html">PopupList</a></li><li><a href="RichFaces.ui.PopupPanel.html">PopupPanel</a></li><li><a href="RichFaces.ui.ProgressBar.html">ProgressBar</a></li><li><a href="RichFaces.ui.Select.html">Select</a></li><li><a href="RichFaces.ui.Status.html">Status</a></li><li><a href="RichFaces.ui.Tab.html">Tab</a></li><li><a href="RichFaces.ui.TabPanel.html">TabPanel</a></li><li><a href="RichFaces.ui.TogglePanel.html">TogglePanel</a></li><li><a href="RichFaces.ui.TogglePanelItem.html">TogglePanelItem</a></li><li><a href="RichFaces.ui.Tooltip.html">Tooltip</a></li><li><a href="RichFaces.ui.Tree.html">Tree</a></li><li><a href="RichFaces.ui.TreeNode.html">TreeNode</a></li></ul><h3>Events</h3><ul><li><a href="RichFaces.module_push.html#~event:error">error</a></li><li><a href="RichFaces.module_push.html#~event:push">push</a></li><li><a href="RichFaces.module_push.html#~event:subscribed">subscribed</a></li></ul><h3>Namespaces</h3><ul><li><a href="jQuery.html">jQuery</a></li><li><a href="RichFaces.html">RichFaces</a></li><li><a href="RichFaces.ui.html">ui</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Mon Jun 20 2016 14:53:31 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

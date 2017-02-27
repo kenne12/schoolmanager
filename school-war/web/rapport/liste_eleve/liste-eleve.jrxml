@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="liste-eleve" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8b33cd51-a4c1-4c61-84c8-8f73f0f0c25b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idclasse" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     adresse."bp" AS adresse_bp,
+     adresse."contact" AS adresse_contact,
+     adresse."siteweb" AS adresse_siteweb,
+     adresse."email" AS adresse_email,
+     adresse."adresse" AS adresse_adresse,
+     etablissement."nom" AS etablissement_nom,
+     etablissement."logo" AS etablissement_logo,
+     etablissement."devise" AS etablissement_devise,
+     eleve."matricule" AS eleve_matricule,
+     eleve."nom" AS eleve_nom,
+     eleve."prenom" AS eleve_prenom,
+     eleve."datenaissance" AS eleve_datenaissance,
+     eleve."lieunaissance" AS eleve_lieunaissance,
+     eleve."sexe" AS eleve_sexe,
+     eleve."anneeadmission" AS eleve_anneeadmission,
+     annee."code" AS annee_code,
+     annee."codefin" AS annee_codefin,
+     eleveanneeclasse."eleve" AS eleveanneeclasse_eleve,
+     eleveanneeclasse."redoublant" AS eleveanneeclasse_redoublant,
+     classe."nom" AS classe_nom,
+     classe."etat" AS classe_etat
+FROM
+     "public"."adresse" adresse INNER JOIN "public"."etablissement" etablissement ON adresse."id" = etablissement."adresse"
+     INNER JOIN "public"."eleve" eleve ON etablissement."id" = eleve."etablissement"
+     INNER JOIN "public"."annee" annee ON etablissement."id" = annee."etablissement"
+     INNER JOIN "public"."classe" classe ON etablissement."id" = classe."etablissement"
+     INNER JOIN "public"."eleveanneeclasse" eleveanneeclasse ON classe."idclasse" = eleveanneeclasse."idclasse"
+     AND annee."idannee" = eleveanneeclasse."idannee"
+     AND eleve."ideleve" = eleveanneeclasse."eleve"
+WHERE classe.idclasse = $P{idclasse}
+ORDER BY eleve_nom,eleve_prenom]]>
+	</queryString>
+	<field name="adresse_bp" class="java.lang.String"/>
+	<field name="adresse_contact" class="java.lang.String"/>
+	<field name="adresse_siteweb" class="java.lang.String"/>
+	<field name="adresse_email" class="java.lang.String"/>
+	<field name="adresse_adresse" class="java.lang.String"/>
+	<field name="etablissement_nom" class="java.lang.String"/>
+	<field name="etablissement_logo" class="java.lang.String"/>
+	<field name="etablissement_devise" class="java.lang.String"/>
+	<field name="eleve_matricule" class="java.lang.String"/>
+	<field name="eleve_nom" class="java.lang.String"/>
+	<field name="eleve_prenom" class="java.lang.String"/>
+	<field name="eleve_datenaissance" class="java.sql.Date"/>
+	<field name="eleve_lieunaissance" class="java.lang.String"/>
+	<field name="eleve_sexe" class="java.lang.String"/>
+	<field name="eleve_anneeadmission" class="java.sql.Date"/>
+	<field name="annee_code" class="java.lang.Integer"/>
+	<field name="annee_codefin" class="java.lang.Integer"/>
+	<field name="eleveanneeclasse_eleve" class="java.lang.Integer"/>
+	<field name="eleveanneeclasse_redoublant" class="java.lang.Boolean"/>
+	<field name="classe_nom" class="java.lang.String"/>
+	<field name="classe_etat" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="123" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="527" y="3" width="30" height="20" backcolor="#CCFFFF" uuid="a5a2b41c-8ed1-40a5-9439-f15f4c2e1624"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="103" width="136" height="13" uuid="40b55ca4-7950-4752-96a7-cb7d29d4b825"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Paix - Travail - Patrie"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="24" width="137" height="13" uuid="1b5f4fbe-2346-41d7-a347-70591de2c8d0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["REPUBLIQUE DU CAMEROUN"]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="450" y="39" width="63" height="60" uuid="d7c9005c-201f-485c-959c-979e9966eacb"/>
+				<imageExpression><![CDATA["E:\\big-malkus\\photos\\36239_147584225295486_7401651_n.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="31" y="3" width="496" height="20" backcolor="#CCCCFF" uuid="456f25ba-bf69-4336-aa3b-bf4aadcc7b49"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MINISTERE DES ENSEIGNEMENTS SECONDAIRES"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="92" width="275" height="24" uuid="d511459f-7d33-4c72-a441-c1912b0ef123"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{annee_code}+" / " +$F{annee_codefin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="32" width="275" height="20" uuid="3ff45304-8351-427a-9929-3c9d94e347c5"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{etablissement_nom}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="41" y="39" width="63" height="60" uuid="b8f1f88a-95ef-4e9e-bf5d-bcca0a6d1c9c"/>
+				<imageExpression><![CDATA["E:\\big-malkus\\photos\\36239_147584225295486_7401651_n.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="3" width="30" height="20" backcolor="#CCFFFF" uuid="98e100dd-8dc5-4a60-b964-9fa1c8b69682"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="413" y="102" width="142" height="14" uuid="bfaa4242-6002-4e3b-b22b-b30533d83d94"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Peace - Work - Fatherland"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="72" width="275" height="20" uuid="05a02acc-a976-410a-8764-552a7782b2a0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" Site web : "+$F{adresse_siteweb}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="52" width="275" height="20" uuid="51e739f5-b82c-42b9-a510-6efe0d4f0165"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Tél ; "+$F{adresse_contact}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="413" y="24" width="143" height="13" uuid="6573d525-2214-41d9-839a-f00f6a54f58f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["REPUBLIC OF  CAMEROON"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="36" splitType="Stretch">
+			<textField>
+				<reportElement mode="Transparent" x="31" y="6" width="493" height="20" backcolor="#999999" uuid="800459cf-d437-47f7-a90f-9dba4c2611f3"/>
+				<box>
+					<pen lineColor="#999999"/>
+					<topPen lineWidth="0.25" lineColor="#33FFCC"/>
+					<leftPen lineWidth="0.5" lineColor="#33FFCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#33FFCC"/>
+					<rightPen lineWidth="0.5" lineColor="#33FFCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["LISTE NOMMINATIVE DES ELEVES : "+$F{classe_nom}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="6" width="555" height="1" uuid="aa54b7a2-ebb5-4031-813c-110f8cdb093f"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#33FFCC"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement x="466" y="0" width="90" height="21" uuid="5652389d-36e3-4855-a29a-d4336347dec6"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Lieu de naissance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="0" width="31" height="21" uuid="d37b3ad9-8b1a-43ae-b81a-7fe93a12ddb7"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Sexe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="375" y="0" width="91" height="21" uuid="cd1d8965-3c8e-4c1d-b827-fae25329e589"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Date de naissance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="78" y="0" width="133" height="21" uuid="f5d35aba-1797-46b0-88db-281cd392427e"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Nom]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="211" y="0" width="133" height="21" uuid="c1b7c60e-71f0-4f54-bcdf-c395fb54b437"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Prénom]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="78" height="21" uuid="fc84fa63-0a7c-4371-b44d-4d2eeeebcf2f"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Matricule]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="78" height="30" uuid="602b6bc5-44c4-48ea-92b4-d2d027677584"/>
+				<box leftPadding="3" rightPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eleve_matricule}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="78" y="0" width="133" height="30" uuid="910572a1-de74-4cfb-817d-66b23394aa4f"/>
+				<box leftPadding="3" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eleve_nom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="211" y="0" width="133" height="30" uuid="be24db03-cb50-4ad6-a3f5-cc6a70da3356"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eleve_prenom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="344" y="0" width="31" height="30" uuid="717eb639-1af4-4660-a4f7-af295806c3f6"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eleve_sexe}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement x="375" y="0" width="91" height="30" uuid="ba895ff4-97aa-440a-bc4d-8c8f92a71060"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eleve_datenaissance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="466" y="0" width="90" height="30" uuid="528a6908-63e1-4740-8bec-4953dafed9cc"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eleve_lieunaissance}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

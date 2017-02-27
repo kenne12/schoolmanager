@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="ClasseCreerDlg" 
+                  widgetVar="ClasseCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue.classe}" 
+                  closeOnEscape="true">
+
+            <h:form id="ClasseCreerForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{langue.branche}" for="branche"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu id="branche" value="#{classeCtrl.branche.idbranche}">
+                                <f:selectItems value="#{classeCtrl.listBranches}" var="item" itemLabel="#{item.nom}" itemValue="#{item.idbranche}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.cycle}" for="cycle"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu id="cycle" value="#{classeCtrl.cycle.idcycle}">
+                                <f:selectItems value="#{classeCtrl.listCycles}" var="item" itemLabel="#{item.nom}" itemValue="#{item.idcycle}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.nom} " for="nom" />
+                        <h:panelGroup>
+                            <p:inputText id="nom" value="#{classeCtrl.classe.nom}" required="true" 
+                                         requiredMessage="#{langue['Conv.Code']}: #{langue['Conv.ValeurRequise']}"/>
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{langue.etat}" for="etat" />
+                        <h:panelGroup>                            
+                            <h:selectBooleanCheckbox id="etat" value="#{classeCtrl.classe.etat}" disabled="false"/>
+                        </h:panelGroup>                                     
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{classeCtrl.enregistrerClasse()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:ClasseListerForm:datalist,:ClasseListerForm:growl, ClasseCreerForm" 
+                                     oncomplete="PF('ClasseCreerDialog').hide()"/>
+                    <p:commandButton value="#{langue.annuler}" onclick="PF('ClasseCreerDialog').hide()"/>
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

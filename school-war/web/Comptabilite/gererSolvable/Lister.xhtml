@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="SolvabiliteListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} #{langue.eleve} SOLVABLES">
+
+            <h:form id="search">
+                <h:panelGroup id="display"> 
+                    <p:panelGrid columns="5" >
+
+                        <h:outputLabel value="Mode"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu value="#{solvabiliteCtrl.showTranche}">
+                                <f:selectItem itemLabel="Recherche par tranche" itemValue="true"/>
+                                <f:selectItem itemLabel="Recherche Globale" itemValue="false"/>
+                                <p:ajax update="tranche,display" listener="#{solvabiliteCtrl.changeMode()}"/> 
+                            </p:selectOneMenu>                        
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+                            <p:selectOneMenu value="#{solvabiliteCtrl.categorie.id}">
+                                <f:selectItem itemLabel="#{langue.selectLa} #{langue.classe}"/> 
+                                <f:selectItems value="#{solvabiliteCtrl.categories}" var="item" itemLabel="#{item.idclasse.nom}" itemValue="#{item.id}"/>
+                                <p:ajax update="tranche" listener="#{solvabiliteCtrl.handleClasseChange()}" />  
+                            </p:selectOneMenu>                        
+                        </h:panelGroup>
+
+
+                        <p:selectOneMenu rendered="#{solvabiliteCtrl.showTranche}" id="tranche" value="#{solvabiliteCtrl.tranche.idtranche}">
+                            <f:selectItem itemLabel="#{langue.selectLa} tranche"/> 
+                            <f:selectItems value="#{solvabiliteCtrl.tranches}" var="item" itemLabel="#{item.nom}" itemValue="#{item.idtranche}"/>
+                        </p:selectOneMenu>                        
+
+
+                        <p:commandButton   actionListener="#{solvabiliteCtrl.searchInsolvable()}" value="#{langue.rechercher}" 
+                                           update=":actionsForm,search,display,:SolvabiliteListerForm:datalist,:SolvabiliteListerForm:growl"/>
+                    </p:panelGrid>
+                </h:panelGroup> 
+            </h:form>    
+
+            
+            <p:dataTable id="datalist"
+                         value="#{solvabiliteCtrl.solvabilites1}"
+                         var="item"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50">
+                         
+
+                <p:column sortBy="#{item.eleve.matricule}" width="8%">
+                    <f:facet name="header">
+                        <h:outputText value="Matricule"/>
+                    </f:facet>
+                    <h:outputText value="#{item.eleve.matricule}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.eleve.nom}" filterBy="#{item.eleve.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.nom}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.eleve.nom}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.eleve.prenom}" filterBy="#{item.eleve.prenom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.prenom}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.eleve.prenom}"/>
+                </p:column>
+
+
+                <p:column  filterBy="#{item.paye}">
+                    <f:facet name="header">
+                        <h:outputText value="Montant payé"/>
+                    </f:facet>
+                    <h:outputText value="#{item.paye}"/>
+                </p:column>
+
+
+                <p:column filterBy="#{item.reste}">
+                    <f:facet name="header">
+                        <h:outputText value="Reste"/>
+                    </f:facet>
+                    <h:outputText value="#{item.reste}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

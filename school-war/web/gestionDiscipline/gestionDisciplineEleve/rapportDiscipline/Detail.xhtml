@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="PunitionDetailDlg" 
+                  widgetVar="PunitionDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: d'un punition" closeOnEscape="true">
+
+            <h:form id="PunitionDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" style="width: 100%;" >
+
+                        <h:outputText value="Responsable"/>                        
+                        <h:outputText value="#{punitionCtrl.selectedPunition.personnel.nom} #{punitionCtrl.selectedPunition.personnel.prenom}  "/> 
+
+                        <h:outputText value="Eleve"/>                        
+                        <h:outputText value="#{punitionCtrl.selectedPunition.eleve.nom} #{punitionCtrl.selectedPunition.eleve.prenom}  "/>
+
+                        <h:outputText value="Motif"/>
+                        <h:outputText value="#{punitionCtrl.selectedPunition.idmotif.libelle}"/>
+
+                        <h:outputText value="Sequence"/>
+                        <h:outputText value="#{punitionCtrl.selectedPunition.sequence.idsequence.nom} #{punitionCtrl.selectedPunition.idannee.code}"/>
+
+                        <h:outputText value="Date"/>
+                        <h:outputText value="#{punitionCtrl.selectedPunition.datepunition}"/> 
+
+                        <h:outputText value="Observation"/>
+                        <h:outputText value="#{punitionCtrl.selectedPunition.observation}"/>
+
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('PunitionDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

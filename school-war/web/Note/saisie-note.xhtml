@@ -1,0 +1,24 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/NoteTemplate/principalTemplate.xhtml">
+
+    <ui:define name="contenu">
+
+        <ui:include src="saisie-note/Action.xhtml"/>     
+        <ui:include src="saisie-note/Lister.xhtml"/>
+        <ui:include src="saisie-note/Detail.xhtml"/>
+        <ui:include src="saisie-note/Modifier.xhtml"/>
+        <ui:include src="saisie-note/Creer.xhtml"/>
+        <ui:include src="saisie-note/Imprimer.xhtml"/>
+
+    </ui:define>
+    
+    <ui:define name="scriptCollapse">
+        <script>
+            var el = document.getElementById("menuNotes");
+            el.setAttribute("class", "sub-menu active");
+        </script>
+    </ui:define>
+
+</ui:composition>

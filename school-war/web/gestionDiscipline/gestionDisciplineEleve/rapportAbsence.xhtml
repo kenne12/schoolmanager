@@ -1,0 +1,14 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/gestionDisciplineTemplate/principalTemplate.xhtml">
+
+    <ui:define name="contenu">        
+        <ui:include src="rapportAbsence/Action.xhtml"/>       
+        <ui:include src="rapportAbsence/Lister.xhtml"/>
+        <ui:include src="rapportAbsence/Detail.xhtml"/>
+        <ui:include src="rapportAbsence/Modifier.xhtml"/>
+        <ui:include src="rapportAbsence/Creer.xhtml"/>
+        <ui:include src="rapportAbsence/Imprimer.xhtml"/> 
+    </ui:define>    
+</ui:composition>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="AbsenceDetailDlg" 
+                  widgetVar="AbsenceDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: d'un absence" closeOnEscape="true">
+
+            <h:form id="AbsenceDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" style="width: 100%;" >
+
+                        <h:outputText value="Responsable"/>                        
+                        <h:outputText value="#{absenceCtrl.selectedAbsence.personnel.nom} #{absenceCtrl.selectedAbsence.personnel.prenom}  "/> 
+
+                        <h:outputText value="Eleve"/>                        
+                        <h:outputText value="#{absenceCtrl.selectedAbsence.eleve.nom} #{absenceCtrl.selectedAbsence.eleve.prenom}  "/>
+
+
+                        <h:outputText value="Sequence"/>
+                        <h:outputText value="#{absenceCtrl.selectedAbsence.sequence.idsequence.nom} #{absenceCtrl.selectedAbsence.idannee.code}"/>
+
+                        <h:outputText value="Nombre heure"/>
+                        <h:outputText value="#{absenceCtrl.selectedAbsence.nombreheure} heure(s)"/> 
+
+                        <h:outputText value="Date"/>
+                        <h:outputText value="#{absenceCtrl.selectedAbsence.datejour}"/> 
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('AbsenceDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
